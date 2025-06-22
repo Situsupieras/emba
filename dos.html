@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STSNutricion - Si Tú Supieras</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'green-deep': '#4CAF50',
+                        'white-pure': '#FFFFFF',
+                        'gray-light': '#E0E0E0',
+                        'yellow-soft': '#FFEB3B',
+                        'green-light': '#8BC34A',
+                        'gray-dark': '#333333',
+                    },
+                    fontFamily: {
+                        montserrat: ['Montserrat', 'sans-serif'],
+                        lato: ['Lato', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Lato:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="min-h-screen flex flex-col items-center">
+    <div class="relative w-full max-w-md bg-white-pure dark:bg-gray-dark shadow-lg rounded-xl overflow-hidden my-4 md:my-8 flex flex-col" style="min-height: 90vh;">
+        <header class="bg-white-pure dark:bg-gray-dark p-4 flex items-center justify-between border-b border-gray-light dark:border-gray-dark">
+            <div class="flex items-center">
+                <svg class="logo-leaf-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17 6c-2.206 0-4 1.794-4 4 0 2.206 1.794 4 4 4 2.206 0 4-1.794 4-4 0-2.206-1.794-4-4-4zm-4 4c0 1.654 1.346 3 3 3s3-1.346 3-3-1.346-3-3-3-3 1.346-3 3zm-2.735 9c-3.141 0-5.659-1.921-5.659-4.298C4.606 12.164 7.124 10.24 10.265 10.24c.484 0 .937.072 1.365.204C11.393 8.847 11.233 7.828 11.233 7c0-2.206 1.794-4 4-4 .192 0 .38.016.564.041C15.018 3.014 14.514 3 14 3c-5.836 0-8.914 4.743-8.914 8.793 0 4.05 3.078 8.011 8.914 8.011 1.096 0 2.155-.207 3.123-.591-.793.633-1.777 1.002-2.758 1.002z"/>
+                </svg>
+                <h1 class="font-montserrat text-2xl font-bold text-green-deep">STS<span class="font-lato text-gray-dark dark:text-white-pure font-normal">Nutrición</span></h1>
+            </div>
+            <img src="/images/nutri-mascot.png" alt="Mascota Nutri" class="nutri-mascot rounded-full shadow-md">
+            <button id="darkModeToggle" class="p-2 rounded-full bg-gray-light dark:bg-gray-dark text-gray-dark dark:text-white-pure shadow-sm">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                </svg>
+            </button>
+        </header>
+
+        <main id="appContent" class="flex-grow p-4 overflow-y-auto">
+            <section id="dashboard" class="space-y-6">
+                <div class="card p-4 rounded-xl flex items-center justify-between text-gray-dark dark:text-white-pure">
+                    <p class="font-lato text-sm italic">
+                        <span class="font-montserrat font-bold text-green-deep text-lg">STS del Día:</span> <span id="stsDelDiaText"></span>
+                    </p>
+                    <button id="saveStsDelDia" class="ml-2 p-2 rounded-full bg-yellow-soft hover:bg-green-light transition-colors duration-300">
+                        <svg class="w-5 h-5 text-gray-dark" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 4a2 2 0 00-2 2v6a2 2 0 002 2h8a2 2 0 002-2V6a2 2 0 00-2-2H5zm0 2h8v6H5V6z"></path></svg>
+                    </button>
+                </div>
+
+                <div class="card p-6 rounded-xl text-center">
+                    <h2 class="font-montserrat text-xl font-bold text-gray-dark dark:text-white-pure mb-4">Tu Progreso de 90 Días</h2>
+                    <div class="relative w-full h-32 flex items-center justify-center">
+                        <svg class="w-full h-full absolute" viewBox="0 0 100 100">
+                            <circle class="progress-circle-bg" cx="50" cy="50" r="45" stroke-width="8" fill="none"></circle>
+                            <circle id="progressCircle" class="progress-circle-fill" cx="50" cy="50" r="45" stroke-width="8" fill="none"
+                                stroke-dasharray="282.7" stroke-dashoffset="282.7" transform="rotate(-90 50 50)"></circle>
+                        </svg>
+                        <div class="absolute text-center">
+                            <p class="font-montserrat text-4xl font-bold text-green-deep" id="progressPercentage">0%</p>
+                            <p class="font-lato text-gray-dark dark:text-white-pure text-sm">Completado</p>
+                        </div>
+                    </div>
+                    <p class="font-lato text-gray-dark dark:text-white-pure mt-4">Meta: Perder 20 libras</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="card p-4 rounded-xl">
+                        <h3 class="font-montserrat text-lg font-bold text-gray-dark dark:text-white-pure mb-2">Calorías Hoy</h3>
+                        <p class="font-lato text-4xl font-bold text-green-deep">1500 <span class="text-gray-dark dark:text-white-pure text-sm font-normal">/ 1800 kcal</span></p>
+                    </div>
+                    <div class="card p-4 rounded-xl">
+                        <h3 class="font-montserrat text-lg font-bold text-gray-dark dark:text-white-pure mb-2">Macronutrientes</h3>
+                        <div class="flex justify-between items-center text-gray-dark dark:text-white-pure">
+                            <div class="text-center">
+                                <p class="font-lato text-2xl font-bold">50g</p>
+                                <p class="font-lato text-xs">Prot.</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="font-lato text-2xl font-bold">150g</p>
+                                <p class="font-lato text-xs">Carb.</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="font-lato text-2xl font-bold">45g</p>
+                                <p class="font-lato text-xs">Grasas</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <button class="flex flex-col items-center p-4 bg-green-light text-white-pure rounded-xl shadow-md hover:bg-green-deep transition-colors duration-300 transform hover:scale-105">
+                        <svg class="w-8 h-8 mb-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V3a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
+                        <span class="font-lato text-sm font-bold">Comida de hoy</span>
+                    </button>
+                    <button class="flex flex-col items-center p-4 bg-yellow-soft text-gray-dark rounded-xl shadow-md hover:bg-orange-400 transition-colors duration-300 transform hover:scale-105">
+                        <svg class="w-8 h-8 mb-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                        <span class="font-lato text-sm font-bold">Ejercicio</span>
+                    </button>
+                </div>
+                <button class="w-full flex items-center justify-center p-4 bg-gray-light dark:bg-gray-dark text-gray-dark dark:text-white-pure rounded-xl shadow-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-300 transform hover:scale-105">
+                    <svg class="w-8 h-8 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18H4v-3a6 6 0 0112 0v3z"></path></svg>
+                    <span class="font-lato text-sm font-bold">Comunidad</span>
+                </button>
+            </section>
+
+            <section id="mealPlan" class="hidden">
+                <h2 class="font-montserrat text-xl font-bold text-gray-dark dark:text-white-pure mb-4">Plan de Comidas</h2>
+                <p class="font-lato text-gray-dark dark:text-white-pure">Aquí iría tu calendario semanal de comidas.</p>
+                <div class="card p-4 rounded-xl mt-4">
+                    <img src="/images/recipe-placeholder.png" alt="Receta de muestra" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="font-montserrat text-lg font-bold text-gray-dark dark:text-white-pure mb-2">Salmón al Horno con Espárragos</h3>
+                    <p class="font-lato text-gray-dark dark:text-white-pure text-sm mb-4">Una receta deliciosa y nutritiva para tu cena.</p>
+                    <button class="w-full bg-green-deep text-white-pure p-3 rounded-lg font-bold hover:bg-green-light transition-colors duration-300">Prepárate</button>
+                </div>
+            </section>
+
+            <section id="shoppingList" class="hidden">
+                <h2 class="font-montserrat text-xl font-bold text-gray-dark dark:text-white-pure mb-4">Lista de Compras</h2>
+                <div class="card p-4 rounded-xl">
+                    <h3 class="font-montserrat text-lg font-bold text-gray-dark dark:text-white-pure mb-2">Frutas y Verduras</h3>
+                    <ul class="list-disc list-inside space-y-1 text-gray-dark dark:text-white-pure">
+                        <li>Aguacates</li>
+                        <li>Espinacas <input type="checkbox" class="ml-2"></li>
+                        <li>Brócoli <input type="checkbox" class="ml-2"></li>
+                    </ul>
+                    <button class="mt-4 w-full bg-gray-light dark:bg-gray-dark text-gray-dark dark:text-white-pure p-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-300">Añadir personalizado</button>
+                </div>
+            </section>
+
+            <section id="tracker" class="hidden">
+                <h2 class="font-montserrat text-xl font-bold text-gray-dark dark:text-white-pure mb-4">Rastreador de Progreso</h2>
+                <div class="card p-4 rounded-xl">
+                    <h3 class="font-montserrat text-lg font-bold text-gray-dark dark:text-white-pure mb-2">Gráfico de Peso (últimos 90 días)</h3>
+                    <img src="/images/progress-chart-placeholder.png" alt="Gráfico de progreso de peso" class="w-full rounded-md mb-4">
+                    <div class="flex justify-around mt-4">
+                        <button class="bg-green-deep text-white-pure p-2 rounded-lg font-bold text-sm hover:bg-green-light transition-colors duration-300">Antes y Después</button>
+                        <button class="bg-yellow-soft text-gray-dark p-2 rounded-lg font-bold text-sm hover:bg-orange-400 transition-colors duration-300">Actualizar Medidas</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="rewards" class="hidden">
+                <h2 class="font-montserrat text-xl font-bold text-gray-dark dark:text-white-pure mb-4">Recompensas y Logros</h2>
+                <div class="card p-4 rounded-xl text-center">
+                    <h3 class="font-montserrat text-lg font-bold text-gray-dark dark:text-white-pure mb-2">¡Has ganado la medalla "Estrella Saludable"!</h3>
+                    <img src="/images/medal-placeholder.png" alt="Medalla de logro" class="mx-auto my-4 rounded-full">
+                    <p class="font-lato text-gray-dark dark:text-white-pure text-sm">Próxima recompensa: ¡Sesión de coaching extra!</p>
+                    <div class="w-full bg-gray-light dark:bg-gray-dark rounded-full h-2.5 mt-2">
+                        <div class="bg-green-deep h-2.5 rounded-full" style="width: 75%"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <nav class="bg-white-pure dark:bg-gray-dark border-t border-gray-light dark:border-gray-dark p-2 flex justify-around items-center rounded-b-xl">
+            <button class="nav-item flex flex-col items-center p-2 rounded-lg text-gray-dark dark:text-white-pure hover:bg-gray-light dark:hover:bg-gray-600 transition-colors duration-300 active" data-target="dashboard">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                <span class="font-lato text-xs">Inicio</span>
+            </button>
+            <button class="nav-item flex flex-col items-center p-2 rounded-lg text-gray-dark dark:text-white-pure hover:bg-gray-light dark:hover:bg-gray-600 transition-colors duration-300" data-target="mealPlan">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-10a2 2 0 01-2-2V5zm11 1H6v4h8V6zm-3 7a1 1 0 00-1 1v.5a1 1 0 001 1h1a1 1 0 001-1V14a1 1 0 00-1-1h-1z" clip-rule="evenodd"></path></svg>
+                <span class="font-lato text-xs">Comidas</span>
+            </button>
+            <button class="nav-item flex flex-col items-center p-2 rounded-lg text-gray-dark dark:text-white-pure hover:bg-gray-light dark:hover:bg-gray-600 transition-colors duration-300" data-target="shoppingList">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1zM4 5a2 2 0 00-2 2v4a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-4a1 1 0 00-1 1v3a1 1 0 11-2 0V6a1 1 0 00-1-1H4zm10 4a1 1 0 100 2h3a1 1 0 100-2h-3zm-3 2a1 1 0 100 2h.01a1 1 0 100-2H11z" clip-rule="evenodd"></path></svg>
+                <span class="font-lato text-xs">Compras</span>
+            </button>
+            <button class="nav-item flex flex-col items-center p-2 rounded-lg text-gray-dark dark:text-white-pure hover:bg-gray-light dark:hover:bg-gray-600 transition-colors duration-300" data-target="tracker">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-5.707-1.707a1 1 0 00-1.414 1.414A10 10 0 0110 2c2.76 0 5.253 1.122 7.071 2.929a1 1 0 00-1.414 1.414A8 8 0 0010 4a8 8 0 00-5.707 12.293zM10 6a1 1 0 011 1v3a1 1 0 11-2 0V7a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
+                <span class="font-lato text-xs">Progreso</span>
+            </button>
+            <button class="nav-item flex flex-col items-center p-2 rounded-lg text-gray-dark dark:text-white-pure hover:bg-gray-light dark:hover:bg-gray-600 transition-colors duration-300" data-target="rewards">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 12.586l4.243 4.243a1 1 0 001.414-1.414L11.414 11l4.243-4.243a1 1 0 10-1.414-1.414L10 9.586 5.757 5.343a1 1 0 00-1.414 1.414L8.586 11l-4.243 4.243a1 1 0 101.414 1.414L10 12.586z"></path></svg>
+                <span class="font-lato text-xs">Logros</span>
+            </button>
+        </nav>
+    </div>
+    <script src="/js/script.js"></script>
+</body>
+</html>

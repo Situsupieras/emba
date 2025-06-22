@@ -1,0 +1,635 @@
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Dimensions,
+  Animated,
+  Image,
+} from 'react-native';
+import {
+  Card,
+  Title,
+  Paragraph,
+  Button,
+  Chip,
+  List,
+  Searchbar,
+  SegmentedButtons,
+  Dialog,
+  Portal,
+  TextInput,
+  Divider,
+  Badge,
+} from 'react-native-paper';
+import { theme, customColors } from '../theme';
+import { Product, Supplement, User } from '../types';
+import { mockProducts, mockSupplements, mockUser } from '../data/mockData';
+
+const { width } = Dimensions.get('window');
+
+export default function StoreScreen() {
+  const [user, setUser] = useState<User>(mockUser);
+  const [products, setProducts] = useState<Product[]>(mockProducts);
+  const [supplements, setSupplements] = useState<Supplement[]>(mockSupplements);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedSupplement, setSelectedSupplement] = useState<Supplement | null>(null);
+  const [productDialogVisible, setProductDialogVisible] = useState(false);
+  const [supplementDialogVisible, setSupplementDialogVisible] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [cart, setCart] = useState<Array<{id: string, type: 'product' | 'supplement', quantity: number}>>([]);
+  const [fadeAnim] = useState(new Animated.Value(0));
+
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 800,
+      useNativeDriver: true,
+    }).start();
+  }, []);
+
+  const showProductDetails = (product: Product) => {
+    setSelectedProduct(product);
+    setProductDialogVisible(true);
+  };
+
+  const showSupplementDetails = (supplement: Supplement) => {
+    setSelectedSupplement(supplement);
+    setSupplementDialogVisible(true);
+  };
+
+  const addToCart = (id: string, type: 'product' | 'supplement') => {
+    setCart(prev => {
+      const existingItem = prev.find(item => item.id === id && item.type === type);
+      if (existingItem) {
+        return prev.map(item => 
+          item.id === id && item.type === type 
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      } else {
+        return [...prev, { id, type, quantity: 1 }];
+      }
+    });
+  };
+
+  const getFilteredItems = () => {
+    let items: Array<Product | Supplement> = [];
+    
+    if (selectedCategory === 'all' || selectedCategory === 'products') {
+      items = [...products];
+    }
+    if (selectedCategory === 'all' || selectedCategory === 'supplements') {
+      items = [...items, ...supplements];
+    }
+
+    if (searchQuery) {
+      items = items.filter(item => 
+        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.description.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    return items;
+  };
+
+  const getCartTotal = () => {
+    return cart.reduce((total, item) => {
+      const product = products.find(p => p.id === item.id);
+      const supplement = supplements.find(s => s.id === item.id);
+      const price = product?.price || supplement?.price || 0;
+      return total + (price * item.quantity);
+    }, 0);
+  };
+
+  const getCartItemCount = () => {
+    return cart.reduce((total, item) => total + item.quantity, 0);
+  };
+
+  const formatPrice = (price: number) => {
+    return `$${price.toFixed(2)}`;
+  };
+
+  return (
+    <View style={styles.container}>
+      <ScrollView style={styles.scrollView}>
+        <Animated.View style={{ opacity: fadeAnim }}>
+          {/* Header */}
+          <Card style={styles.headerCard}>
+            <Card.Content>
+              <Title style={styles.headerTitle}>Tienda Ética</Title>
+              <Paragraph style={styles.headerSubtitle}>
+                Productos certificados con explicaciones médicas detalladas
+              </Paragraph>
+              <View style={styles.ethicalBadges}>
+                <Chip mode="outlined" style={styles.ethicalChip}>
+                  ✓ Certificados de calidad
+                </Chip>
+                <Chip mode="outlined" style={styles.ethicalChip}>
+                  ✓ Explicaciones médicas
+                </Chip>
+                <Chip mode="outlined" style={styles.ethicalChip}>
+                  ✓ Sin químicos tóxicos
+                </Chip>
+              </View>
+            </Card.Content>
+          </Card>
+
+          {/* Search and Filter */}
+          <Searchbar
+            placeholder="Buscar productos..."
+            onChangeText={setSearchQuery}
+            value={searchQuery}
+            style={styles.searchBar}
+          />
+
+          <SegmentedButtons
+            value={selectedCategory}
+            onValueChange={setSelectedCategory}
+            buttons={[
+              { value: 'all', label: 'Todo' },
+              { value: 'supplements', label: 'Suplementos' },
+              { value: 'products', label: 'Productos' },
+            ]}
+            style={styles.categoryButtons}
+          />
+
+          {/* Cart Summary */}
+          {cart.length > 0 && (
+            <Card style={styles.cartCard}>
+              <Card.Content>
+                <View style={styles.cartSummary}>
+                  <View style={styles.cartInfo}>
+                    <Title style={styles.cartTitle}>Carrito</Title>
+                    <Paragraph style={styles.cartItems}>
+                      {getCartItemCount()} artículos
+                    </Paragraph>
+                  </View>
+                  <View style={styles.cartTotal}>
+                    <Title style={styles.totalAmount}>
+                      {formatPrice(getCartTotal())}
+                    </Title>
+                    <Button mode="contained" onPress={() => {/* Navigate to checkout */}}>
+                      Ver carrito
+                    </Button>
+                  </View>
+                </View>
+              </Card.Content>
+            </Card>
+          )}
+
+          {/* Products Grid */}
+          <View style={styles.productsGrid}>
+            {getFilteredItems().map((item) => {
+              const isSupplement = 'dosage' in item;
+              
+              return (
+                <Card key={item.id} style={styles.productCard}>
+                  <Card.Cover source={{ uri: item.image }} />
+                  <Card.Content>
+                    <View style={styles.productHeader}>
+                      <Title style={styles.productTitle} numberOfLines={2}>
+                        {item.name}
+                      </Title>
+                      {isSupplement && (item as Supplement).trimester.includes(user.trimester) && (
+                        <Badge style={styles.recommendedBadge}>Recomendado</Badge>
+                      )}
+                    </View>
+                    
+                    <Paragraph style={styles.productDescription} numberOfLines={2}>
+                      {item.description}
+                    </Paragraph>
+
+                    <View style={styles.productRating}>
+                      <Paragraph style={styles.ratingText}>
+                        {isSupplement ? '4.5' : (item as Product).rating} 
+                        ({isSupplement ? '128' : (item as Product).reviews} reseñas)
+                      </Paragraph>
+                    </View>
+
+                    <View style={styles.productPrice}>
+                      <Title style={styles.priceText}>
+                        {formatPrice(item.price)}
+                      </Title>
+                      {'originalPrice' in item && item.originalPrice && (
+                        <Paragraph style={styles.originalPrice}>
+                          {formatPrice(item.originalPrice)}
+                        </Paragraph>
+                      )}
+                    </View>
+
+                    <View style={styles.certificationsContainer}>
+                      {(isSupplement ? (item as Supplement).certifications : (item as Product).certifications)
+                        .slice(0, 2)
+                        .map((cert, index) => (
+                          <Chip key={index} mode="outlined" style={styles.certificationChip}>
+                            {cert}
+                          </Chip>
+                        ))}
+                    </View>
+
+                    <View style={styles.productActions}>
+                      <Button
+                        mode="outlined"
+                        icon="information"
+                        style={styles.actionButton}
+                        onPress={() => isSupplement ? showSupplementDetails(item as Supplement) : showProductDetails(item as Product)}
+                      >
+                        Detalles
+                      </Button>
+                      <Button
+                        mode="contained"
+                        icon="cart"
+                        style={styles.actionButton}
+                        onPress={() => addToCart(item.id, isSupplement ? 'supplement' : 'product')}
+                      >
+                        Agregar
+                      </Button>
+                    </View>
+                  </Card.Content>
+                </Card>
+              );
+            })}
+          </View>
+
+          {/* Empty State */}
+          {getFilteredItems().length === 0 && (
+            <Card style={styles.emptyCard}>
+              <Card.Content>
+                <Title style={styles.emptyTitle}>No se encontraron productos</Title>
+                <Paragraph style={styles.emptyText}>
+                  Intenta con otros términos de búsqueda o categorías
+                </Paragraph>
+              </Card.Content>
+            </Card>
+          )}
+        </Animated.View>
+      </ScrollView>
+
+      {/* Product Details Dialog */}
+      <Portal>
+        <Dialog visible={productDialogVisible} onDismiss={() => setProductDialogVisible(false)}>
+          <Dialog.Title>Detalles del producto</Dialog.Title>
+          <Dialog.Content>
+            {selectedProduct && (
+              <ScrollView>
+                <Image source={{ uri: selectedProduct.image }} style={styles.dialogImage} />
+                <Title style={styles.dialogTitle}>{selectedProduct.name}</Title>
+                <Paragraph style={styles.dialogDescription}>{selectedProduct.description}</Paragraph>
+                
+                <View style={styles.dialogRating}>
+                  <Paragraph style={styles.dialogRatingText}>
+                    {selectedProduct.rating} de 5 ({selectedProduct.reviews} reseñas)
+                  </Paragraph>
+                </View>
+
+                <Divider style={styles.divider} />
+
+                <Title style={styles.dialogSectionTitle}>Beneficios médicos</Title>
+                {selectedProduct.medicalBenefits.map((benefit, index) => (
+                  <List.Item
+                    key={index}
+                    title={benefit}
+                    left={(props) => <List.Icon {...props} icon="check-circle" color={customColors.success} />}
+                  />
+                ))}
+
+                <Divider style={styles.divider} />
+
+                <Title style={styles.dialogSectionTitle}>Certificaciones de calidad</Title>
+                <View style={styles.dialogCertifications}>
+                  {selectedProduct.certifications.map((cert, index) => (
+                    <Chip key={index} mode="outlined" style={styles.dialogCertificationChip}>
+                      {cert}
+                    </Chip>
+                  ))}
+                </View>
+
+                <View style={styles.dialogPrice}>
+                  <Title style={styles.dialogPriceText}>
+                    {formatPrice(selectedProduct.price)}
+                  </Title>
+                  {selectedProduct.originalPrice && (
+                    <Paragraph style={styles.dialogOriginalPrice}>
+                      {formatPrice(selectedProduct.originalPrice)}
+                    </Paragraph>
+                  )}
+                </View>
+              </ScrollView>
+            )}
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => setProductDialogVisible(false)}>Cerrar</Button>
+            <Button 
+              mode="contained" 
+              onPress={() => {
+                if (selectedProduct) {
+                  addToCart(selectedProduct.id, 'product');
+                  setProductDialogVisible(false);
+                }
+              }}
+            >
+              Agregar al carrito
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+
+      {/* Supplement Details Dialog */}
+      <Portal>
+        <Dialog visible={supplementDialogVisible} onDismiss={() => setSupplementDialogVisible(false)}>
+          <Dialog.Title>Información médica del suplemento</Dialog.Title>
+          <Dialog.Content>
+            {selectedSupplement && (
+              <ScrollView>
+                <Image source={{ uri: selectedSupplement.image }} style={styles.dialogImage} />
+                <Title style={styles.dialogTitle}>{selectedSupplement.name}</Title>
+                <Paragraph style={styles.dialogDescription}>{selectedSupplement.description}</Paragraph>
+
+                <Divider style={styles.divider} />
+
+                <Title style={styles.dialogSectionTitle}>Explicación médica</Title>
+                <Paragraph style={styles.medicalExplanation}>
+                  {selectedSupplement.medicalExplanation}
+                </Paragraph>
+
+                <Divider style={styles.divider} />
+
+                <Title style={styles.dialogSectionTitle}>Beneficios</Title>
+                {selectedSupplement.benefits.map((benefit, index) => (
+                  <List.Item
+                    key={index}
+                    title={benefit}
+                    left={(props) => <List.Icon {...props} icon="check-circle" color={customColors.success} />}
+                  />
+                ))}
+
+                <Divider style={styles.divider} />
+
+                <Title style={styles.dialogSectionTitle}>Dosificación</Title>
+                <Paragraph style={styles.dosageText}>{selectedSupplement.dosage}</Paragraph>
+
+                <Divider style={styles.divider} />
+
+                <Title style={styles.dialogSectionTitle}>Efectos secundarios</Title>
+                {selectedSupplement.sideEffects.map((effect, index) => (
+                  <List.Item
+                    key={index}
+                    title={effect}
+                    left={(props) => <List.Icon {...props} icon="alert" color={customColors.warning} />}
+                  />
+                ))}
+
+                <Divider style={styles.divider} />
+
+                <Title style={styles.dialogSectionTitle}>Certificaciones</Title>
+                <View style={styles.dialogCertifications}>
+                  {selectedSupplement.certifications.map((cert, index) => (
+                    <Chip key={index} mode="outlined" style={styles.dialogCertificationChip}>
+                      {cert}
+                    </Chip>
+                  ))}
+                </View>
+
+                <View style={styles.dialogPrice}>
+                  <Title style={styles.dialogPriceText}>
+                    {formatPrice(selectedSupplement.price)}
+                  </Title>
+                </View>
+              </ScrollView>
+            )}
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => setSupplementDialogVisible(false)}>Cerrar</Button>
+            <Button 
+              mode="contained" 
+              onPress={() => {
+                if (selectedSupplement) {
+                  addToCart(selectedSupplement.id, 'supplement');
+                  setSupplementDialogVisible(false);
+                }
+              }}
+            >
+              Agregar al carrito
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: theme.colors.background,
+  },
+  scrollView: {
+    padding: 16,
+  },
+  headerCard: {
+    marginBottom: 16,
+    backgroundColor: customColors.softYellow,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  headerSubtitle: {
+    fontSize: 14,
+    marginBottom: 12,
+  },
+  ethicalBadges: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  ethicalChip: {
+    height: 28,
+  },
+  searchBar: {
+    marginBottom: 12,
+  },
+  categoryButtons: {
+    marginBottom: 16,
+  },
+  cartCard: {
+    marginBottom: 16,
+    backgroundColor: customColors.babyBlue,
+  },
+  cartSummary: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  cartInfo: {
+    flex: 1,
+  },
+  cartTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  cartItems: {
+    fontSize: 14,
+    color: theme.colors.onSurfaceVariant,
+  },
+  cartTotal: {
+    alignItems: 'flex-end',
+  },
+  totalAmount: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: theme.colors.primary,
+    marginBottom: 8,
+  },
+  productsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  productCard: {
+    width: (width - 48) / 2,
+    marginBottom: 16,
+    elevation: 2,
+  },
+  productHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 8,
+  },
+  productTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    flex: 1,
+    marginRight: 8,
+  },
+  recommendedBadge: {
+    backgroundColor: customColors.success,
+  },
+  productDescription: {
+    fontSize: 12,
+    marginBottom: 8,
+  },
+  productRating: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  ratingText: {
+    fontSize: 12,
+    marginLeft: 8,
+  },
+  productPrice: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  priceText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: theme.colors.primary,
+  },
+  originalPrice: {
+    fontSize: 12,
+    textDecorationLine: 'line-through',
+    color: customColors.disabled,
+    marginLeft: 8,
+  },
+  certificationsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 4,
+    marginBottom: 12,
+  },
+  certificationChip: {
+    height: 20,
+    fontSize: 10,
+  },
+  productActions: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  actionButton: {
+    flex: 1,
+    height: 32,
+  },
+  emptyCard: {
+    marginTop: 32,
+    alignItems: 'center',
+  },
+  emptyTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  emptyText: {
+    textAlign: 'center',
+  },
+  dialogImage: {
+    width: '100%',
+    height: 200,
+    borderRadius: 8,
+    marginBottom: 16,
+  },
+  dialogTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  dialogDescription: {
+    fontSize: 14,
+    marginBottom: 12,
+  },
+  dialogRating: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  dialogRatingText: {
+    fontSize: 14,
+    marginLeft: 8,
+  },
+  divider: {
+    marginVertical: 12,
+  },
+  dialogSectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  medicalExplanation: {
+    fontSize: 14,
+    lineHeight: 20,
+    marginBottom: 8,
+  },
+  dosageText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: theme.colors.primary,
+  },
+  dialogCertifications: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  dialogCertificationChip: {
+    marginBottom: 4,
+  },
+  dialogPrice: {
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  dialogPriceText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: theme.colors.primary,
+  },
+  dialogOriginalPrice: {
+    fontSize: 16,
+    textDecorationLine: 'line-through',
+    color: customColors.disabled,
+  },
+}); 
