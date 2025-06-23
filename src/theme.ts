@@ -1,27 +1,39 @@
-import { MD3LightTheme, MD3Theme } from 'react-native-paper';
+import { MD3LightTheme } from 'react-native-paper';
 
 export const customColors = {
-  pregnancyPink: '#FFE4E1',
-  babyBlue: '#E3F2FD',
-  softYellow: '#FFF8E1',
+  primary: '#4A90E2',
+  secondary: '#7FDBB6',
+  background: '#FFFFFF',
+  surface: '#F8F9FA',
+  error: '#FF6B6B',
+  text: '#2C3E50',
+  disabled: '#BDC3C7',
+  placeholder: '#95A5A6',
+  border: '#E9ECEF',
+  success: '#27AE60',
+  warning: '#F39C12',
+  info: '#3498DB',
+  // Colores específicos para embarazo
+  pregnancyPink: '#FFB6C1',
+  babyBlue: '#87CEEB',
+  softYellow: '#FFFACD',
   neutralGray: '#F5F5F5',
-  success: '#34A853',
-  warning: '#FBBC04',
-  disabled: '#9AA0A6',
 };
 
-export const theme: MD3Theme = {
+export const theme = {
   ...MD3LightTheme,
   colors: {
     ...MD3LightTheme.colors,
-    primary: '#4A90E2', // Azul claro - confianza
-    secondary: '#7FDBB6', // Verde menta - crecimiento
-    background: '#FFFFFF',
-    surface: '#F8F9FA',
-    surfaceVariant: '#F1F3F4',
-    onSurface: '#1A1A1A',
-    onSurfaceVariant: '#5F6368',
-    error: '#EA4335',
+    primary: customColors.primary,
+    secondary: customColors.secondary,
+    background: customColors.background,
+    surface: customColors.surface,
+    error: customColors.error,
+    onPrimary: '#FFFFFF',
+    onSecondary: '#FFFFFF',
+    onBackground: customColors.text,
+    onSurface: customColors.text,
+    onError: '#FFFFFF',
   },
   fonts: {
     ...MD3LightTheme.fonts,

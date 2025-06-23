@@ -1,67 +1,49 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Provider as PaperProvider } from 'react-native-paper';
-import { StatusBar } from 'expo-status-bar';
-import { Ionicons } from '@expo/vector-icons';
-
-// Import screens
-import HomeScreen from './src/screens/HomeScreen';
-import SupplementsScreen from './src/screens/SupplementsScreen';
-import GuideScreen from './src/screens/GuideScreen';
-import CommunityScreen from './src/screens/CommunityScreen';
-import StoreScreen from './src/screens/StoreScreen';
-
-// Import theme
-import { theme } from './src/theme';
-import { customColors } from './src/theme';
-
-const Tab = createBottomTabNavigator();
+import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
 
 export default function App() {
   return (
-    <PaperProvider theme={theme}>
-      <NavigationContainer>
-        <StatusBar style="auto" />
-        <Tab.Navigator
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName: keyof typeof Ionicons.glyphMap;
-
-              if (route.name === 'Mi Embarazo') {
-                iconName = focused ? 'home' : 'home-outline';
-              } else if (route.name === 'Suplementos') {
-                iconName = focused ? 'medical' : 'medical-outline';
-              } else if (route.name === 'Guía') {
-                iconName = focused ? 'book' : 'book-outline';
-              } else if (route.name === 'Comunidad') {
-                iconName = focused ? 'people' : 'people-outline';
-              } else if (route.name === 'Tienda') {
-                iconName = focused ? 'cart' : 'cart-outline';
-              } else {
-                iconName = 'help-outline';
-              }
-
-              return <Ionicons name={iconName} size={size} color={color} />;
-            },
-            tabBarActiveTintColor: theme.colors.primary,
-            tabBarInactiveTintColor: customColors.disabled,
-            headerStyle: {
-              backgroundColor: theme.colors.primary,
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-              fontWeight: 'bold',
-            },
-          })}
-        >
-          <Tab.Screen name="Mi Embarazo" component={HomeScreen} />
-          <Tab.Screen name="Suplementos" component={SupplementsScreen} />
-          <Tab.Screen name="Guía" component={GuideScreen} />
-          <Tab.Screen name="Comunidad" component={CommunityScreen} />
-          <Tab.Screen name="Tienda" component={StoreScreen} />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        <Text style={styles.title}>🎉 ¡Mi App de Embarazo!</Text>
+        <Text style={styles.subtitle}>¡Funcionando perfectamente!</Text>
+        <Text style={styles.description}>
+          Esta es una aplicación completa para el seguimiento del embarazo
+        </Text>
+      </View>
+    </SafeAreaView>
   );
-} 
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f0f8ff',
+  },
+  content: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#4A90E2',
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 18,
+    color: '#2C3E50',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  description: {
+    fontSize: 16,
+    color: '#7F8C8D',
+    textAlign: 'center',
+    lineHeight: 24,
+  },
+}); 
+}
