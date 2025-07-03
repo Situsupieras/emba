@@ -45,16 +45,20 @@ Una aplicación completa para el seguimiento del embarazo con recomendaciones pe
 - Node.js (v16 o superior)
 - npm o yarn
 - Expo CLI
+- EAS CLI (para builds de producción)
 - Android Studio / Xcode (para desarrollo nativo)
 
 ### Instalación
 ```bash
 # Clonar el repositorio
-git clone [url-del-repositorio]
+git clone https://github.com/Situsupieras/emba.git
 cd emba
 
 # Instalar dependencias
 npm install
+
+# Instalar EAS CLI (para builds de producción)
+npm install -g eas-cli
 
 # Iniciar el proyecto
 npm start
@@ -66,6 +70,24 @@ npm start          # Iniciar servidor de desarrollo
 npm run android    # Ejecutar en Android
 npm run ios        # Ejecutar en iOS
 npm test           # Ejecutar tests
+```
+
+### 🏗️ Builds de Producción
+```bash
+# Configurar EAS (solo la primera vez)
+eas init
+
+# Build para Android
+eas build --platform android
+
+# Build para iOS
+eas build --platform ios
+
+# Build para ambas plataformas
+eas build --platform all
+
+# Actualizar aplicación (OTA)
+eas update
 ```
 
 ## 📱 Uso de la Aplicación
@@ -156,6 +178,7 @@ src/
 - **React Navigation**: Navegación entre pantallas
 - **React Native Paper**: Componentes de UI
 - **Animated API**: Animaciones nativas
+- **EAS Build**: Builds de producción en la nube
 
 ## 📊 Estado del Proyecto
 
@@ -167,6 +190,9 @@ src/
 - [x] Datos mock realistas
 - [x] Configuración de TypeScript
 - [x] Integración de componentes
+- [x] **Configuración EAS para builds de producción** ✅ **NUEVO**
+- [x] **Build de Android funcional** ✅ **NUEVO**
+- [x] **Keystore seguro generado** ✅ **NUEVO**
 
 ### 🚀 Próximas Mejoras
 - [ ] Backend real con API
@@ -197,26 +223,43 @@ src/
 - **Tasa de retención**: > 80%
 - **Satisfacción**: > 4.5/5 estrellas
 
+## 🚀 Producción y Distribución
+
+### Builds de Producción
+- **EAS Build**: Configurado para builds en la nube
+- **Android**: Build funcional con keystore seguro
+- **iOS**: Configurado (pendiente credenciales Apple)
+- **OTA Updates**: Sistema de actualizaciones over-the-air
+
+### Distribución
+- **Google Play Store**: Listo para publicación
+- **App Store**: Configurado (pendiente credenciales)
+- **Testing**: Builds internos disponibles
+
 ## 🤝 Contribución
 
-Para contribuir al proyecto:
-
-1. Fork el repositorio
+### Cómo Contribuir
+1. Fork el proyecto
 2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
 3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
 4. Push a la rama (`git push origin feature/AmazingFeature`)
 5. Abre un Pull Request
 
+### Reportar Bugs
+- Usa el sistema de Issues de GitHub
+- Incluye información detallada del dispositivo y versión
+- Adjunta screenshots si es posible
+
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
 
-## 📞 Soporte
+## 📞 Contacto
 
-Para soporte técnico o preguntas sobre la aplicación, contacta a:
-- Email: soporte@miembarazo.app
-- Documentación: [docs.miembarazo.app](https://docs.miembarazo.app)
+- **Desarrollador**: Alejandro
+- **Email**: [tu-email@ejemplo.com]
+- **Proyecto**: [https://github.com/Situsupieras/emba](https://github.com/Situsupieras/emba)
 
 ---
 
-**Mi Embarazo** - Tu compañera digital durante el embarazo 🤱 
+**¡Gracias por usar Mi Embarazo!** 🤰💙 
