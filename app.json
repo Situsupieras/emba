@@ -29,11 +29,7 @@
       "expo-secure-store",
       "expo-sqlite"
     ],
-    "extra": {
-      "eas": {
-        "projectId": "f87ae0eb-86cf-4080-9f18-451c7ee1d767"
-      }
-    },
+    "extra": {},
     "owner": "alejandrosts"
   }
 }
