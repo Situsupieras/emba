@@ -1,10 +1,10 @@
-# Mi Embarazo - App de Seguimiento del Embarazo
+# Inteligencia Prenatal - App de Seguimiento del Embarazo
 
 Una aplicación completa para el seguimiento del embarazo con recomendaciones personalizadas, comunidad de apoyo y tienda ética de suplementos.
 
 ## 🎯 Características Principales
 
-### 📱 Mi Embarazo
+### 📱 Inteligencia Prenatal
 - **Seguimiento semanal**: Información detallada del desarrollo fetal semana a semana
 - **Animaciones**: Visualizaciones del tamaño del bebé comparado con frutas/verduras
 - **Progreso visual**: Barra de progreso del embarazo (40 semanas)
@@ -95,7 +95,7 @@ eas update
 ### Navegación
 La aplicación utiliza navegación por pestañas inferiores con 5 secciones principales:
 
-1. **Mi Embarazo** - Pantalla principal con seguimiento semanal
+1. **Inteligencia Prenatal** - Pantalla principal con seguimiento semanal
 2. **Suplementos** - Recomendaciones personalizadas
 3. **Guía** - Artículos y videos educativos
 4. **Comunidad** - Foros y apoyo
@@ -262,4 +262,4 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 
 ---
 
-**¡Gracias por usar Mi Embarazo!** 🤰💙 
+**¡Gracias por usar Inteligencia Prenatal!** 🤰💙 
