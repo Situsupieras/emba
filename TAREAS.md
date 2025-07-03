@@ -18,11 +18,12 @@
 
 ### 🚀 **Configuración de Producción - NUEVO**
 - [x] **EAS CLI** instalado y configurado ✅ **COMPLETADO**
-- [x] **Proyecto vinculado** con Expo (@alejandrosts/pregnancy-app) ✅ **ACTIVO**
+- [x] **Proyecto vinculado** con Expo (@alejandrosts/inteligencia-prenatal) ✅ **ACTIVO**
 - [x] **Build de Android** configurado y funcional ✅ **LISTO**
 - [x] **Keystore generado** automáticamente ✅ **SEGURO**
 - [x] **Configuración de iOS** preparada ✅ **PENDIENTE DE CREDENCIALES**
 - [x] **Fix de assets** (adaptive-icon.png) ✅ **RESUELTO**
+- [x] **Favicon y sitio web** creados ✅ **NUEVO**
 
 ### 📱 **Pantallas Principales - TODAS FUNCIONALES**
 - [x] **HomeScreen** - Seguimiento semanal del embarazo ✅ **NAVEGACIÓN ACTIVA**
@@ -167,6 +168,13 @@ Productos con:
 - [x] **Configuración de assets** corregida ✅ **RESUELTO**
 - [x] **Proyecto vinculado** con Expo ✅ **ACTIVO**
 - [x] **Builds de producción** listos ✅ **FUNCIONAL**
+
+### 🌐 **Sitio Web y Branding - NUEVO**
+- [x] **Landing page** creada (index.html) ✅ **COMPLETADO**
+- [x] **Favicon personalizado** con colores de marca ✅ **IMPLEMENTADO**
+- [x] **Diseño responsive** para móviles y desktop ✅ **ACTIVO**
+- [x] **Meta tags** para SEO y redes sociales ✅ **FUNCIONAL**
+- [x] **Branding consistente** con la aplicación ✅ **LISTO**
 
 ## 📈 **MÉTRICAS Y PROGRESO**
 
