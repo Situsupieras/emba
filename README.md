@@ -254,11 +254,12 @@ src/
 
 Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
 
-## 🌐 Sitio Web
+## 🌐 Sitio Web y Branding
 
 - **Landing Page**: [index.html](./index.html) - Página de presentación de la aplicación
+- **App Icon Preview**: [app-icon.html](./app-icon.html) - Visualización del ícono de la aplicación
 - **Favicon**: [https://placehold.co/32x32/41729F/FFFFFF?text=IP&font=inter](https://placehold.co/32x32/41729F/FFFFFF?text=IP&font=inter)
-- **Icono de la App**: Diseño personalizado con colores #41729F (azul) y texto "IP" en blanco
+- **Icono de la App**: Diseño sofisticado con gradiente azul, sparkles y texto "IP" en blanco
 
 ## 📞 Contacto
 

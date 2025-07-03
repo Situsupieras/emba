@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Icono de la App - Inteligencia Prenatal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #eef2f7;
+            font-family: 'Inter', sans-serif;
+        }
+        .app-icon-container {
+            width: 256px;
+            height: 256px;
+            background: linear-gradient(135deg, #41729F, #5885AF);
+            border-radius: 56px; /* Standard iOS-like rounded corners */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        .icon-symbol {
+            font-size: 100px;
+            color: white;
+            font-weight: 700;
+            line-height: 1;
+            text-align: center;
+            position: relative;
+        }
+        .sparkle {
+            position: absolute;
+            color: #C3E0E5;
+            font-size: 24px;
+            opacity: 0.8;
+        }
+        .sparkle-1 {
+            top: -20px;
+            left: -10px;
+            transform: rotate(-20deg);
+        }
+        .sparkle-2 {
+            top: 50%;
+            right: -30px;
+            transform: translateY(-50%);
+        }
+        .sparkle-3 {
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%) rotate(15deg);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="app-icon-container">
+        <div class="icon-symbol">
+            <div class="sparkle sparkle-1">✦</div>
+            <div class="sparkle sparkle-2">✨</div>
+            <div class="sparkle sparkle-3">✧</div>
+            IP
+        </div>
+    </div>
+</body>
+</html> 
