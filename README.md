@@ -39,6 +39,78 @@ Una aplicación completa para el seguimiento del embarazo con recomendaciones pe
 - **Carrito de compras**: Gestión de productos seleccionados
 - **Reseñas verificadas**: Opiniones de otros usuarios
 
+## 🚀 Instalación y Uso
+
+### Prerrequisitos
+- Node.js (v16 o superior)
+- npm o yarn
+- Expo CLI
+- Android Studio / Xcode (para desarrollo nativo)
+
+### Instalación
+```bash
+# Clonar el repositorio
+git clone [url-del-repositorio]
+cd emba
+
+# Instalar dependencias
+npm install
+
+# Iniciar el proyecto
+npm start
+```
+
+### Scripts Disponibles
+```bash
+npm start          # Iniciar servidor de desarrollo
+npm run android    # Ejecutar en Android
+npm run ios        # Ejecutar en iOS
+npm test           # Ejecutar tests
+```
+
+## 📱 Uso de la Aplicación
+
+### Navegación
+La aplicación utiliza navegación por pestañas inferiores con 5 secciones principales:
+
+1. **Mi Embarazo** - Pantalla principal con seguimiento semanal
+2. **Suplementos** - Recomendaciones personalizadas
+3. **Guía** - Artículos y videos educativos
+4. **Comunidad** - Foros y apoyo
+5. **Tienda** - Productos certificados
+
+### Funcionalidades Principales
+
+#### Seguimiento del Embarazo
+- Visualiza tu progreso actual (semana 20 de 40)
+- Información detallada del desarrollo fetal
+- Hitos y consejos específicos por semana
+- Acceso rápido a suplementos y citas
+
+#### Suplementos Personalizados
+- Recomendaciones basadas en tu trimestre
+- Filtros por preferencias dietéticas
+- Información médica detallada
+- Integración directa con la tienda
+
+#### Guía Trimestral
+- Artículos médicos verificados
+- Videos educativos
+- Checklist personalizado
+- Búsqueda por categorías
+
+#### Comunidad
+- Posts de otros usuarios
+- Expertos verificados
+- Sistema de comentarios
+- Creación de nuevos posts
+
+#### Tienda Ética
+- Productos certificados
+- Carrito de compras
+- Reseñas verificadas
+- Información médica detallada
+
 ## 🎨 Diseño y UX
 
 ### Paleta de Colores
@@ -63,7 +135,6 @@ Una aplicación completa para el seguimiento del embarazo con recomendaciones pe
 ### Estructura del Proyecto
 ```
 src/
-├── components/          # Componentes reutilizables
 ├── screens/            # Pantallas principales
 │   ├── HomeScreen.tsx
 │   ├── SupplementsScreen.tsx
@@ -75,8 +146,7 @@ src/
 │   └── mockData.ts
 ├── types/              # Definiciones TypeScript
 │   └── index.ts
-├── theme.ts            # Configuración de tema
-└── utils/              # Utilidades y helpers
+└── theme.ts            # Configuración de tema
 ```
 
 ### Tecnologías Utilizadas
@@ -87,88 +157,25 @@ src/
 - **React Native Paper**: Componentes de UI
 - **Animated API**: Animaciones nativas
 
-### Flujos de Usuario
+## 📊 Estado del Proyecto
 
-#### 1. Registro y Onboarding
-```
-Registro → Perfil médico → Preferencias → Configuración de notificaciones
-```
+### ✅ Completado
+- [x] Navegación completa entre pantallas
+- [x] Todas las pantallas principales implementadas
+- [x] Funcionalidades básicas activadas
+- [x] Diseño responsive y moderno
+- [x] Datos mock realistas
+- [x] Configuración de TypeScript
+- [x] Integración de componentes
 
-#### 2. Seguimiento Semanal
-```
-Home → Información semanal → Hitos → Consejos → Acciones rápidas
-```
-
-#### 3. Suplementos Personalizados
-```
-Suplementos → Filtros → Detalles médicos → Compra → Seguimiento
-```
-
-#### 4. Comunidad y Apoyo
-```
-Comunidad → Categorías → Posts → Comentarios → Interacción
-```
-
-#### 5. Compra Ética
-```
-Tienda → Productos → Certificaciones → Carrito → Checkout
-```
-
-## 🚀 Instalación y Uso
-
-### Prerrequisitos
-- Node.js (v16 o superior)
-- npm o yarn
-- Expo CLI
-- Android Studio / Xcode (para desarrollo nativo)
-
-### Instalación
-```bash
-# Clonar el repositorio
-git clone [url-del-repositorio]
-cd pregnancy-app
-
-# Instalar dependencias
-npm install
-
-# Iniciar el proyecto
-npm start
-```
-
-### Scripts Disponibles
-```bash
-npm start          # Iniciar servidor de desarrollo
-npm run android    # Ejecutar en Android
-npm run ios        # Ejecutar en iOS
-npm run web        # Ejecutar en web
-npm test           # Ejecutar tests
-```
-
-## 📊 Algoritmo de Personalización
-
-### Factores de Recomendación
-1. **Trimestre actual**: Necesidades específicas por etapa
-2. **Historial médico**: Condiciones preexistentes
-3. **Preferencias dietéticas**: Vegetariana, vegana, etc.
-4. **Alergias**: Restricciones alimentarias
-5. **Preferencias de suplementos**: Natural, sin gluten, etc.
-
-### Lógica de Filtrado
-```typescript
-const getPersonalizedSupplements = (user: User) => {
-  return supplements.filter(supplement => {
-    const trimesterMatch = supplement.trimester.includes(user.trimester);
-    const preferenceMatch = user.preferences.supplementPreferences.some(pref => 
-      supplement.certifications.some(cert => cert.includes(pref))
-    );
-    const allergySafe = !user.preferences.allergies.some(allergy => 
-      supplement.contraindications.some(contra => contra.includes(allergy))
-    );
-    
-    return (trimesterMatch || preferenceMatch) && allergySafe;
-  });
-};
-```
+### 🚀 Próximas Mejoras
+- [ ] Backend real con API
+- [ ] Base de datos en la nube
+- [ ] Notificaciones push
+- [ ] Autenticación de usuarios
+- [ ] Sincronización entre dispositivos
+- [ ] Chat con expertos
+- [ ] Tracking de síntomas
 
 ## 🔒 Seguridad y Privacidad
 
@@ -185,54 +192,31 @@ const getPersonalizedSupplements = (user: User) => {
 - **Orgánico**: Certificaciones orgánicas
 - **Sin gluten**: Certificaciones de seguridad alimentaria
 
-## 📈 Escalabilidad
-
-### Arquitectura Preparada para Crecimiento
-- **Modular**: Componentes independientes y reutilizables
-- **API Ready**: Preparado para integración con backend
-- **Caching**: Estrategias de caché para mejor rendimiento
-- **CDN**: Distribución de contenido optimizada
-- **Microservicios**: Arquitectura escalable
-
-### Métricas de Rendimiento
+## 📈 Métricas de Rendimiento
 - **Tiempo de carga**: < 2 segundos
 - **Tasa de retención**: > 80%
 - **Satisfacción**: > 4.5/5 estrellas
-- **Uptime**: > 99.9%
 
 ## 🤝 Contribución
 
-### Guías de Desarrollo
-1. **Fork** el repositorio
-2. **Crea** una rama para tu feature
-3. **Commit** tus cambios
-4. **Push** a la rama
-5. **Abre** un Pull Request
+Para contribuir al proyecto:
 
-### Estándares de Código
-- **TypeScript**: Tipado estricto
-- **ESLint**: Linting automático
-- **Prettier**: Formateo de código
-- **Tests**: Cobertura mínima del 80%
-
-## 📞 Soporte
-
-### Canales de Contacto
-- **Email**: soporte@miembarazo.com
-- **Chat**: Disponible en la app
-- **Documentación**: Wiki del proyecto
-- **Comunidad**: Foros de usuarios
-
-### FAQ
-- **¿Es segura la información médica?**: Sí, verificada por profesionales
-- **¿Puedo confiar en los suplementos?**: Todos certificados y verificados
-- **¿Es gratis?**: Funcionalidad básica gratis, premium opcional
-- **¿Protegen mi privacidad?**: Sí, datos encriptados y seguros
+1. Fork el repositorio
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
 
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
+Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
+
+## 📞 Soporte
+
+Para soporte técnico o preguntas sobre la aplicación, contacta a:
+- Email: soporte@miembarazo.app
+- Documentación: [docs.miembarazo.app](https://docs.miembarazo.app)
 
 ---
 
-**Desarrollado con ❤️ para todas las futuras mamás** 
+**Mi Embarazo** - Tu compañera digital durante el embarazo 🤱 

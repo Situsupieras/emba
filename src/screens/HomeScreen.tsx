@@ -16,22 +16,56 @@ import {
   Avatar,
   List,
 } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import { theme, customColors } from '../theme';
 import { FetalDevelopment, User } from '../types';
 import { fetalDevelopmentData } from '../data/fetalDevelopment';
 import { mockUser } from '../data/mockData';
+import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import type { MainTabParamList } from '../types/navigation';
+import * as SecureStore from 'expo-secure-store';
 
 const { width } = Dimensions.get('window');
 
 export default function HomeScreen() {
+  const navigation = useNavigation<BottomTabNavigationProp<MainTabParamList>>();
   const [user, setUser] = useState<User>(mockUser);
   const [currentDevelopment, setCurrentDevelopment] = useState<FetalDevelopment | null>(null);
   const [fadeAnim] = useState(new Animated.Value(0));
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const name = await SecureStore.getItemAsync('userName');
+        const semanasStr = await SecureStore.getItemAsync('semanas');
+        const ultimaReglaStr = await SecureStore.getItemAsync('ultimaRegla');
+        let currentWeek = 1;
+        if (semanasStr && !isNaN(Number(semanasStr))) {
+          currentWeek = Number(semanasStr);
+        } else if (ultimaReglaStr) {
+          const ultimaRegla = new Date(ultimaReglaStr);
+          const hoy = new Date();
+          const diff = hoy.getTime() - ultimaRegla.getTime();
+          const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+          currentWeek = Math.max(1, Math.floor(dias / 7));
+        }
+        setUser((prev) => ({
+          ...prev,
+          name: name || prev.name,
+          currentWeek,
+        }));
+      } catch (e) {
+        console.log('Error leyendo datos reales:', e);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     const development = fetalDevelopmentData.find(d => d.week === user.currentWeek);
     setCurrentDevelopment(development || null);
-
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 1000,
@@ -51,6 +85,18 @@ export default function HomeScreen() {
       default: return customColors.neutralGray;
     }
   };
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Card style={styles.loadingCard}>
+          <Card.Content>
+            <Title>Cargando información real...</Title>
+          </Card.Content>
+        </Card>
+      </View>
+    );
+  }
 
   if (!currentDevelopment) {
     return (
@@ -149,7 +195,12 @@ export default function HomeScreen() {
                 mode="contained"
                 icon="medical"
                 style={styles.actionButton}
-                onPress={() => {/* Navigate to supplements */}}
+                onPress={() => {
+                  // Navigate to supplements tab
+                  if (navigation) {
+                    navigation.navigate('Suplementos');
+                  }
+                }}
               >
                 Ver suplementos
               </Button>
@@ -157,7 +208,12 @@ export default function HomeScreen() {
                 mode="outlined"
                 icon="calendar"
                 style={styles.actionButton}
-                onPress={() => {/* Navigate to appointments */}}
+                onPress={() => {
+                  // Navigate to guide tab for appointments info
+                  if (navigation) {
+                    navigation.navigate('Guía');
+                  }
+                }}
               >
                 Próxima cita
               </Button>

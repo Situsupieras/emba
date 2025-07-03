@@ -18,13 +18,17 @@ import {
   Divider,
   Badge,
 } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import { theme, customColors } from '../theme';
 import { Supplement, User } from '../types';
 import { mockSupplements, mockUser } from '../data/mockData';
+import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import type { MainTabParamList } from '../types/navigation';
 
 const { width } = Dimensions.get('window');
 
 export default function SupplementsScreen() {
+  const navigation = useNavigation<BottomTabNavigationProp<MainTabParamList>>();
   const [user, setUser] = useState<User>(mockUser);
   const [supplements, setSupplements] = useState<Supplement[]>([]);
   const [selectedSupplement, setSelectedSupplement] = useState<Supplement | null>(null);
@@ -171,7 +175,12 @@ export default function SupplementsScreen() {
                   mode="contained"
                   icon="cart"
                   style={styles.actionButton}
-                  onPress={() => {/* Navigate to store */}}
+                  onPress={() => {
+                    // Navigate to store to purchase
+                    if (navigation) {
+                      navigation.navigate('Tienda');
+                    }
+                  }}
                 >
                   Comprar
                 </Button>
@@ -253,7 +262,13 @@ export default function SupplementsScreen() {
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={() => setDialogVisible(false)}>Cerrar</Button>
-            <Button mode="contained" onPress={() => {/* Navigate to store */}}>
+            <Button mode="contained" onPress={() => {
+              setDialogVisible(false);
+              // Navigate to store to purchase
+              if (navigation) {
+                navigation.navigate('Tienda');
+              }
+            }}>
               Comprar ahora
             </Button>
           </Dialog.Actions>

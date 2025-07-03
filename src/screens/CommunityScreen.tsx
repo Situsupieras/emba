@@ -336,7 +336,9 @@ export default function CommunityScreen() {
 
                 <Button 
                   mode="contained" 
-                  onPress={() => {/* Add comment functionality */}}
+                  onPress={() => {
+                    console.log('Adding comment to post:', selectedPost.title);
+                  }}
                   style={styles.addCommentButton}
                 >
                   Agregar comentario

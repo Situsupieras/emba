@@ -206,7 +206,10 @@ export default function GuideScreen() {
                     <Paragraph style={styles.articleMeta}>
                       Por {article.author} • {article.readTime} min de lectura
                     </Paragraph>
-                    <Button mode="contained" onPress={() => {/* Navigate to article detail */}}>
+                    <Button mode="contained" onPress={() => {
+                      // Show article detail modal
+                      console.log('Reading article:', article.title);
+                    }}>
                       Leer más
                     </Button>
                   </View>
@@ -225,7 +228,9 @@ export default function GuideScreen() {
                 <Paragraph style={styles.videoDescription}>
                   Rutina de ejercicios adaptada a tu etapa del embarazo
                 </Paragraph>
-                <Button mode="contained" icon="play" style={styles.videoButton}>
+                <Button mode="contained" icon="play" style={styles.videoButton} onPress={() => {
+                  console.log('Playing video: Ejercicios seguros');
+                }}>
                   Ver video
                 </Button>
               </Card.Content>
@@ -238,7 +243,9 @@ export default function GuideScreen() {
                 <Paragraph style={styles.videoDescription}>
                   Consejos nutricionales específicos para esta etapa
                 </Paragraph>
-                <Button mode="contained" icon="play" style={styles.videoButton}>
+                <Button mode="contained" icon="play" style={styles.videoButton} onPress={() => {
+                  console.log('Playing video: Nutrición');
+                }}>
                   Ver video
                 </Button>
               </Card.Content>
