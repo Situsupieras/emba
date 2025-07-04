@@ -14,7 +14,11 @@ import UltimaReglaScreen from './src/screens/UltimaReglaScreen';
 import { Ionicons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 import type { RootStackParamList, MainTabParamList } from './src/types/navigation';
-import { View, Text } from 'react-native';
+import { View, Text, Platform } from 'react-native';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { firebaseApp } from './src/data/firebaseConfig';
+import ProfileScreen from './src/screens/ProfileScreen';
+import * as Notifications from 'expo-notifications';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -26,10 +30,11 @@ function MainTabs() {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: any;
           if (route.name === 'Home') iconName = focused ? 'home' : 'home-outline';
-          else if (route.name === 'Suplementos') iconName = focused ? 'medical-bag' : 'medical-bag';
+          else if (route.name === 'Suplementos') iconName = 'medkit';
           else if (route.name === 'Guía') iconName = focused ? 'book' : 'book-outline';
           else if (route.name === 'Comunidad') iconName = focused ? 'people' : 'people-outline';
           else if (route.name === 'Tienda') iconName = focused ? 'cart' : 'cart-outline';
+          else if (route.name === 'Perfil') iconName = focused ? 'person' : 'person-outline';
           else iconName = 'help-outline';
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -48,62 +53,83 @@ function MainTabs() {
         headerTitleStyle: { fontWeight: 'bold' },
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Mi Embarazo', headerShown: false }} />
-      <Tab.Screen name="Suplementos" component={SupplementsScreen} options={{ title: 'Suplementos' }} />
-      <Tab.Screen name="Guía" component={GuideScreen} options={{ title: 'Guía Trimestral' }} />
-      <Tab.Screen name="Comunidad" component={CommunityScreen} options={{ title: 'Comunidad' }} />
-      <Tab.Screen name="Tienda" component={StoreScreen} options={{ title: 'Tienda Ética' }} />
+      <Tab.Screen name="Home" key="Home" component={HomeScreen} options={{ title: 'Mi Embarazo', headerShown: false }} />
+      <Tab.Screen name="Suplementos" key="Suplementos" component={SupplementsScreen} options={{ title: 'Suplementos' }} />
+      <Tab.Screen name="Guía" key="Guía" component={GuideScreen} options={{ title: 'Guía Trimestral' }} />
+      <Tab.Screen name="Comunidad" key="Comunidad" component={CommunityScreen} options={{ title: 'Comunidad' }} />
+      <Tab.Screen name="Tienda" key="Tienda" component={StoreScreen} options={{ title: 'Tienda Ética' }} />
+      <Tab.Screen name="Perfil" key="Perfil" component={ProfileScreen} />
     </Tab.Navigator>
   );
 }
 
 export default function App() {
-  const [initialRoute, setInitialRoute] = useState<string | null>(null);
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let didFinish = false;
-    const timeout = setTimeout(() => {
-      if (!didFinish) {
-        console.log('Timeout: SecureStore no respondió, mostrando Auth');
-        setInitialRoute('Auth');
-      }
-    }, 2000);
-    (async () => {
-      try {
-        const userName = await SecureStore.getItemAsync('userName');
-        const ultimaRegla = await SecureStore.getItemAsync('ultimaRegla');
-        console.log('userName:', userName, 'ultimaRegla:', ultimaRegla);
-        if (!userName) setInitialRoute('Auth');
-        else if (!ultimaRegla) setInitialRoute('UltimaRegla');
-        else setInitialRoute('Main');
-      } catch (e) {
-        console.log('Error leyendo SecureStore:', e);
-        setInitialRoute('Auth');
-      } finally {
-        didFinish = true;
-        clearTimeout(timeout);
-      }
-    })();
-    return () => clearTimeout(timeout);
+    const auth = getAuth(firebaseApp);
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+      setLoading(false);
+    });
+    return unsubscribe;
   }, []);
 
-  if (!initialRoute) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
-        <Text style={{ color: 'red', fontSize: 18 }}>Cargando... (initialRoute: {String(initialRoute)})</Text>
-      </View>
-    );
+  // Configuración de notificaciones
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+      shouldShowBanner: true,
+      shouldShowList: true,
+    }),
+  });
+
+  // Solicitar permisos y mostrar notificación de bienvenida
+  useEffect(() => {
+    if (user) {
+      (async () => {
+        const { status } = await Notifications.requestPermissionsAsync();
+        if (status === 'granted') {
+          const tokenData = await Notifications.getExpoPushTokenAsync();
+          // Aquí puedes guardar el token en Firestore si lo deseas
+          await Notifications.scheduleNotificationAsync({
+            content: {
+              title: '¡Bienvenida a Inteligencia Prenatal!',
+              body: 'Recibirás recordatorios y novedades importantes aquí.',
+            },
+            trigger: null,
+          });
+        }
+        if (Platform.OS === 'android') {
+          Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
+          });
+        }
+      })();
+    }
+  }, [user]);
+
+  if (loading) {
+    return null; // O un splash screen
   }
 
-  return (
+  return user ? (
     <PaperProvider theme={theme}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName={initialRoute as keyof RootStackParamList} screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName="Main" screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Auth" component={AuthScreen} />
           <Stack.Screen name="UltimaRegla" component={UltimaReglaScreen} />
           <Stack.Screen name="Main" component={MainTabs} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
+  ) : (
+    <AuthScreen />
   );
 }

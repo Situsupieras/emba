@@ -24,6 +24,8 @@ import { mockUser } from '../data/mockData';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import type { MainTabParamList } from '../types/navigation';
 import * as SecureStore from 'expo-secure-store';
+import { getAuth, signOut } from 'firebase/auth';
+import { t } from '../data/i18n';
 
 const { width } = Dimensions.get('window');
 
@@ -86,12 +88,17 @@ export default function HomeScreen() {
     }
   };
 
+  const handleLogout = async () => {
+    const auth = getAuth();
+    await signOut(auth);
+  };
+
   if (loading) {
     return (
       <View style={styles.container}>
         <Card style={styles.loadingCard}>
           <Card.Content>
-            <Title>Cargando información real...</Title>
+            <Title>{t('loadingRealInfo')}</Title>
           </Card.Content>
         </Card>
       </View>
@@ -103,7 +110,7 @@ export default function HomeScreen() {
       <View style={styles.container}>
         <Card style={styles.loadingCard}>
           <Card.Content>
-            <Title>Cargando información...</Title>
+            <Title>{t('loadingInfo')}</Title>
           </Card.Content>
         </Card>
       </View>
@@ -113,16 +120,23 @@ export default function HomeScreen() {
   return (
     <ScrollView style={styles.container}>
       <Animated.View style={{ opacity: fadeAnim }}>
+        <Button mode="outlined" onPress={handleLogout} style={{ marginBottom: 16, alignSelf: 'flex-end' }}>
+          {t('logout')}
+        </Button>
         {/* Header with user info */}
         <Card style={[styles.headerCard, { backgroundColor: getTrimesterColor() }]}>
           <Card.Content>
             <View style={styles.headerContent}>
               <Avatar.Text size={60} label={user.name.charAt(0)} />
               <View style={styles.userInfo}>
-                <Title style={styles.userName}>¡Hola, {user.name}!</Title>
-                <Paragraph>Semana {user.currentWeek} de 40</Paragraph>
+                <Title style={styles.userName}>
+                  {t('welcome')}, {user.name}!
+                </Title>
+                <Paragraph>
+                  {t('weekOf', { week: user.currentWeek })}
+                </Paragraph>
                 <Chip mode="outlined" style={styles.trimesterChip}>
-                  {user.trimester}er Trimestre
+                  {user.trimester}{t('trimesterShort')} {t('trimester')}
                 </Chip>
               </View>
             </View>
@@ -137,17 +151,15 @@ export default function HomeScreen() {
         {/* Weekly Development */}
         <Card style={styles.card}>
           <Card.Content>
-            <Title style={styles.cardTitle}>Desarrollo de tu bebé</Title>
+            <Title style={styles.cardTitle}>{t('development')}</Title>
             <View style={styles.developmentInfo}>
               <View style={styles.sizeInfo}>
                 <Title style={styles.sizeTitle}>{currentDevelopment.size}</Title>
-                <Paragraph style={styles.sizeSubtitle}>
-                  Tamaño de tu bebé esta semana
-                </Paragraph>
+                <Paragraph style={styles.sizeSubtitle}>{t('babySizeThisWeek')}</Paragraph>
               </View>
               <View style={styles.weightInfo}>
                 <Title style={styles.weightTitle}>{currentDevelopment.weight}</Title>
-                <Paragraph style={styles.weightSubtitle}>Peso aproximado</Paragraph>
+                <Paragraph style={styles.weightSubtitle}>{t('approxWeight')}</Paragraph>
               </View>
             </View>
             <Paragraph style={styles.description}>
@@ -159,14 +171,9 @@ export default function HomeScreen() {
         {/* Milestones */}
         <Card style={styles.card}>
           <Card.Content>
-            <Title style={styles.cardTitle}>Hitos de esta semana</Title>
-            {currentDevelopment.milestones.map((milestone, index) => (
-              <List.Item
-                key={index}
-                title={milestone}
-                left={(props) => <List.Icon {...props} icon="check-circle" color={customColors.success} />}
-                style={styles.milestoneItem}
-              />
+            <Title style={styles.cardTitle}>{t('milestones')}</Title>
+            {currentDevelopment.milestones.map((milestone) => (
+              <List.Item key={milestone} title={milestone} />
             ))}
           </Card.Content>
         </Card>
@@ -174,14 +181,9 @@ export default function HomeScreen() {
         {/* Tips */}
         <Card style={styles.card}>
           <Card.Content>
-            <Title style={styles.cardTitle}>Consejos para esta semana</Title>
-            {currentDevelopment.tips.map((tip, index) => (
-              <List.Item
-                key={index}
-                title={tip}
-                left={(props) => <List.Icon {...props} icon="lightbulb" color={customColors.warning} />}
-                style={styles.tipItem}
-              />
+            <Title style={styles.cardTitle}>{t('tips')}</Title>
+            {currentDevelopment.tips.map((tip) => (
+              <List.Item key={tip} title={tip} />
             ))}
           </Card.Content>
         </Card>
@@ -189,11 +191,11 @@ export default function HomeScreen() {
         {/* Quick Actions */}
         <Card style={styles.card}>
           <Card.Content>
-            <Title style={styles.cardTitle}>Acciones rápidas</Title>
+            <Title style={styles.cardTitle}>{t('quickActions')}</Title>
             <View style={styles.actionButtons}>
               <Button
                 mode="contained"
-                icon="medical-bag"
+                icon="medkit"
                 style={styles.actionButton}
                 onPress={() => {
                   // Navigate to supplements tab

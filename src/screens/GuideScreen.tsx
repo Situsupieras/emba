@@ -22,6 +22,7 @@ import {
 import { theme, customColors } from '../theme';
 import { Article, ChecklistItem, User } from '../types';
 import { mockArticles, useUserData } from '../data/mockData';
+import { t } from '../data/i18n';
 
 const { width } = Dimensions.get('window');
 
@@ -133,7 +134,7 @@ export default function GuideScreen() {
         {/* Header */}
         <Card style={[styles.headerCard, { backgroundColor: getTrimesterColor() }]}>
           <Card.Content>
-            <Title style={styles.headerTitle}>Guía del {user.trimester}er Trimestre</Title>
+            <Title style={styles.headerTitle}>{t('guide')} {user.trimester}er {t('trimester') || 'Trimestre'}</Title>
             <Paragraph style={styles.headerSubtitle}>
               Información personalizada para tu etapa del embarazo
             </Paragraph>
@@ -148,9 +149,9 @@ export default function GuideScreen() {
           value={selectedTab}
           onValueChange={setSelectedTab}
           buttons={[
-            { value: 'articles', label: 'Artículos' },
-            { value: 'videos', label: 'Videos' },
-            { value: 'checklist', label: 'Checklist' },
+            { value: 'articles', label: t('articles') || 'Artículos' },
+            { value: 'videos', label: t('videos') || 'Videos' },
+            { value: 'checklist', label: t('checklist') || 'Checklist' },
           ]}
           style={styles.tabButtons}
         />
@@ -225,7 +226,7 @@ export default function GuideScreen() {
                 <Paragraph style={styles.videoDescription}>
                   Rutina de ejercicios adaptada a tu etapa del embarazo
                 </Paragraph>
-                <Button mode="contained" icon="play" style={styles.videoButton} onPress={() => {
+                <Button mode="contained" icon="play-circle" style={styles.videoButton} onPress={() => {
                   console.log('Playing video: Ejercicios seguros');
                 }}>
                   Ver video
@@ -240,7 +241,7 @@ export default function GuideScreen() {
                 <Paragraph style={styles.videoDescription}>
                   Consejos nutricionales específicos para esta etapa
                 </Paragraph>
-                <Button mode="contained" icon="play" style={styles.videoButton} onPress={() => {
+                <Button mode="contained" icon="play-circle" style={styles.videoButton} onPress={() => {
                   console.log('Playing video: Nutrición');
                 }}>
                   Ver video
@@ -252,9 +253,9 @@ export default function GuideScreen() {
 
         {selectedTab === 'checklist' && (
           <>
-            <Title style={styles.checklistTitle}>Checklist del trimestre</Title>
+            <Title style={styles.checklistTitle}>{t('checklistOfTrimester') || 'Checklist del trimestre'}</Title>
             <Paragraph style={styles.checklistSubtitle}>
-              Marca las tareas completadas para llevar un mejor control
+              {t('markTasks') || 'Marca las tareas completadas para llevar un mejor control'}
             </Paragraph>
             {checklistItems.map((item) => (
               <Card key={item.id} style={styles.checklistCard}>

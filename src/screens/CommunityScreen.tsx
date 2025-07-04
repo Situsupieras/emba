@@ -24,6 +24,7 @@ import {
 import { theme, customColors } from '../theme';
 import { CommunityPost, Comment, User } from '../types';
 import { mockCommunityPosts, useUserData } from '../data/mockData';
+import { t } from '../data/i18n';
 
 const { width } = Dimensions.get('window');
 
@@ -139,9 +140,9 @@ export default function CommunityScreen() {
           {/* Header */}
           <Card style={styles.headerCard}>
             <Card.Content>
-              <Title style={styles.headerTitle}>Comunidad de Embarazadas</Title>
+              <Title style={styles.headerTitle}>{t('community')}</Title>
               <Paragraph style={styles.headerSubtitle}>
-                Conecta con otras mamás y expertos en un espacio seguro y moderado
+                {t('communitySubtitle') || 'Conecta con otras mamás y expertos en un espacio seguro y moderado'}
               </Paragraph>
             </Card.Content>
           </Card>
@@ -153,7 +154,7 @@ export default function CommunityScreen() {
               onPress={() => setSelectedCategory('all')}
               style={styles.categoryChip}
             >
-              Todos
+              {t('all') || 'Todos'}
             </Chip>
             <Chip
               mode={selectedCategory === 'Desarrollo del bebé' ? 'flat' : 'outlined'}
@@ -264,7 +265,7 @@ export default function CommunityScreen() {
 
       {/* FAB for new post */}
       <FAB
-        icon="plus"
+        icon="plus-circle"
         style={styles.fab}
         onPress={() => setNewPostDialogVisible(true)}
       />
@@ -281,7 +282,7 @@ export default function CommunityScreen() {
                 </Paragraph>
                 <Divider style={styles.divider} />
                 <Title style={styles.commentsTitle}>Comentarios</Title>
-                {selectedPost.comments.map((comment, idx) => (
+                {selectedPost.comments.map((comment) => (
                   <Card key={comment.id} style={styles.commentCard}>
                     <Card.Content>
                       <View style={styles.commentHeader}>

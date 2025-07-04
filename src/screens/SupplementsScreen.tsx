@@ -24,6 +24,7 @@ import { Supplement, User } from '../types';
 import { mockSupplements, useUserData } from '../data/mockData';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import type { MainTabParamList } from '../types/navigation';
+import { t } from '../data/i18n';
 
 const { width } = Dimensions.get('window');
 
@@ -105,18 +106,16 @@ export default function SupplementsScreen() {
         {/* Header with trimester info */}
         <Card style={styles.headerCard}>
           <Card.Content>
-            <Title style={styles.headerTitle}>
-              Suplementos Personalizados
-            </Title>
+            <Title style={styles.headerTitle}>{t('supplements')}</Title>
             <Paragraph style={styles.headerSubtitle}>
               {getTrimesterRecommendations()}
             </Paragraph>
             <View style={styles.trimesterInfo}>
               <Chip mode="outlined" style={styles.trimesterChip}>
-                {user.trimester}er Trimestre
+                {user.trimester}{t('trimesterShort')}
               </Chip>
               <Chip mode="outlined" style={styles.weekChip}>
-                Semana {user.currentWeek}
+                {t('week')} {user.currentWeek}
               </Chip>
             </View>
           </Card.Content>
@@ -125,14 +124,14 @@ export default function SupplementsScreen() {
         {/* Personalized Recommendations */}
         <Card style={styles.card}>
           <Card.Content>
-            <Title style={styles.cardTitle}>Recomendaciones para ti</Title>
+            <Title style={styles.cardTitle}>{t('recommendationsForYou')}</Title>
             {(user.preferences.dietaryRestrictions.length > 0 || user.preferences.allergies.length > 0) && (
               <Paragraph style={styles.recommendationText}>
                 {user.preferences.dietaryRestrictions.length > 0 && (
-                  <>Basado en tu perfil: {user.preferences.dietaryRestrictions.join(', ')} </>
+                  <>{t('basedOnYourProfile')}: {user.preferences.dietaryRestrictions.join(', ')}</>
                 )}
                 {user.preferences.allergies.length > 0 && (
-                  <>| Alergias: {user.preferences.allergies.join(', ')}</>
+                  <>| {t('allergies')}: {user.preferences.allergies.join(', ')}</>
                 )}
               </Paragraph>
             )}
@@ -140,7 +139,7 @@ export default function SupplementsScreen() {
         </Card>
 
         {/* Supplements List */}
-        {supplements.map((supplement, index) => (
+        {supplements.map((supplement) => (
           <Card key={supplement.id} style={styles.supplementCard}>
             <Card.Content>
               <View style={styles.supplementHeader}>
@@ -151,14 +150,14 @@ export default function SupplementsScreen() {
                   </Paragraph>
                   <View style={styles.supplementTags}>
                     {supplement.trimester.includes(user.trimester) && (
-                      <Badge style={styles.priorityBadge}>Prioritario</Badge>
+                      <Badge style={styles.priorityBadge}>{t('priority')}</Badge>
                     )}
                     <Chip 
                       mode="outlined" 
                       style={[styles.trimesterTag, { borderColor: getPriorityColor(supplement) }]}
                       textStyle={{ color: getPriorityColor(supplement) }}
                     >
-                      {supplement.trimester.join(', ')}er trimestre
+                      {supplement.trimester.join(', ')}{t('trimesterShort')}
                     </Chip>
                   </View>
                 </View>
@@ -169,10 +168,10 @@ export default function SupplementsScreen() {
               </View>
               
               <View style={styles.benefitsContainer}>
-                <Paragraph style={styles.benefitsTitle} numberOfLines={0}>Beneficios principales:</Paragraph>
+                <Paragraph style={styles.benefitsTitle} numberOfLines={0}>{t('mainBenefits')}</Paragraph>
                 {supplement.benefits.slice(0, 2).map((benefit, idx) => (
                   <List.Item
-                    key={idx}
+                    key={benefit}
                     title={benefit}
                     titleNumberOfLines={4}
                     left={(props) => <List.Icon {...props} icon="check" color={customColors.success} />}
@@ -182,8 +181,8 @@ export default function SupplementsScreen() {
               </View>
 
               <View style={styles.certificationsContainer}>
-                {supplement.certifications.slice(0, 2).map((cert, idx) => (
-                  <Chip key={idx} mode="outlined" style={styles.certificationChip} textStyle={{flexWrap: 'wrap', maxWidth: 120, textAlign: 'center'}}>
+                {supplement.certifications.map((cert) => (
+                  <Chip key={cert} mode="outlined" style={styles.certificationChip} textStyle={{flexWrap: 'wrap', maxWidth: 120, textAlign: 'center'}}>
                     {cert}
                   </Chip>
                 ))}
@@ -196,20 +195,19 @@ export default function SupplementsScreen() {
                   style={styles.actionButton}
                   onPress={() => showSupplementDetails(supplement)}
                 >
-                  Ver detalles médicos
+                  {t('seeMedicalDetails')}
                 </Button>
                 <Button
                   mode="contained"
                   icon="cart"
                   style={styles.actionButton}
                   onPress={() => {
-                    // Navigate to store to purchase
                     if (navigation) {
                       navigation.navigate('Tienda');
                     }
                   }}
                 >
-                  Comprar
+                  {t('buy')}
                 </Button>
               </View>
             </Card.Content>
@@ -219,10 +217,9 @@ export default function SupplementsScreen() {
         {/* Medical Disclaimer */}
         <Card style={styles.disclaimerCard}>
           <Card.Content>
-            <Title style={styles.disclaimerTitle}>Importante</Title>
+            <Title style={styles.cardTitle}>{t('important')}</Title>
             <Paragraph style={styles.disclaimerText}>
-              Siempre consulta con tu médico antes de tomar cualquier suplemento. 
-              Esta información es educativa y no reemplaza el consejo médico profesional.
+              {t('medicalDisclaimer')}
             </Paragraph>
           </Card.Content>
         </Card>
@@ -231,7 +228,7 @@ export default function SupplementsScreen() {
       {/* Supplement Details Dialog */}
       <Portal>
         <Dialog visible={dialogVisible} onDismiss={() => setDialogVisible(false)}>
-          <Dialog.Title>Información Médica Detallada</Dialog.Title>
+          <Dialog.Title>{t('detailedMedicalInfo')}</Dialog.Title>
           <Dialog.Content>
             {selectedSupplement && (
               <ScrollView>
@@ -243,10 +240,10 @@ export default function SupplementsScreen() {
 
                 <Divider style={styles.divider} />
                 
-                <Title style={styles.dialogSectionTitle}>Beneficios</Title>
+                <Title style={styles.dialogSectionTitle}>{t('benefits')}</Title>
                 {selectedSupplement.benefits.map((benefit, index) => (
                   <List.Item
-                    key={index}
+                    key={benefit}
                     title={benefit}
                     titleNumberOfLines={4}
                     left={(props) => <List.Icon {...props} icon="check-circle" color={customColors.success} />}
@@ -255,10 +252,10 @@ export default function SupplementsScreen() {
 
                 <Divider style={styles.divider} />
 
-                <Title style={styles.dialogSectionTitle}>Efectos secundarios</Title>
+                <Title style={styles.dialogSectionTitle}>{t('sideEffects')}</Title>
                 {selectedSupplement.sideEffects.map((effect, index) => (
                   <List.Item
-                    key={index}
+                    key={effect}
                     title={effect}
                     titleNumberOfLines={4}
                     left={(props) => <List.Icon {...props} icon="alert" color={customColors.warning} />}
@@ -267,10 +264,10 @@ export default function SupplementsScreen() {
 
                 <Divider style={styles.divider} />
 
-                <Title style={styles.dialogSectionTitle}>Contraindicaciones</Title>
+                <Title style={styles.dialogSectionTitle}>{t('contraindications')}</Title>
                 {selectedSupplement.contraindications.map((contraindication, index) => (
                   <List.Item
-                    key={index}
+                    key={contraindication}
                     title={contraindication}
                     titleNumberOfLines={4}
                     left={(props) => <List.Icon {...props} icon="close-circle" color={theme.colors.error} />}
@@ -279,10 +276,10 @@ export default function SupplementsScreen() {
 
                 <Divider style={styles.divider} />
 
-                <Title style={styles.dialogSectionTitle}>Certificaciones</Title>
+                <Title style={styles.dialogSectionTitle}>{t('certifications')}</Title>
                 <View style={styles.certificationsGrid}>
-                  {selectedSupplement.certifications.map((cert, index) => (
-                    <Chip key={index} mode="outlined" style={styles.dialogCertificationChip} textStyle={{flexWrap: 'wrap', maxWidth: 120, textAlign: 'center'}}>
+                  {selectedSupplement.certifications.map((cert) => (
+                    <Chip key={cert} mode="outlined" style={styles.dialogCertificationChip} textStyle={{flexWrap: 'wrap', maxWidth: 120, textAlign: 'center'}}>
                       {cert}
                     </Chip>
                   ))}
@@ -291,10 +288,9 @@ export default function SupplementsScreen() {
             )}
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={() => setDialogVisible(false)}>Cerrar</Button>
+            <Button onPress={() => setDialogVisible(false)}>{t('close')}</Button>
             <Button mode="contained" onPress={() => {
               setDialogVisible(false);
-              // Navigate to store to purchase
               if (navigation) {
                 navigation.navigate('Tienda');
               }
@@ -434,11 +430,6 @@ const styles = StyleSheet.create({
   disclaimerCard: {
     marginTop: 16,
     backgroundColor: customColors.softYellow,
-  },
-  disclaimerTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: customColors.warning,
   },
   disclaimerText: {
     fontSize: 14,

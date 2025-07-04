@@ -10,4 +10,5 @@ export type MainTabParamList = {
   Guía: undefined;
   Comunidad: undefined;
   Tienda: undefined;
+  Perfil: undefined;
 }; 

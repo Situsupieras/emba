@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { TextInput, Button, Title, Paragraph, Card, Dialog, Portal } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as SecureStore from 'expo-secure-store';
+import { t } from '../data/i18n';
 
 function calcularSemanas(ultimaRegla: Date) {
   const hoy = new Date();
@@ -52,12 +53,12 @@ export default function UltimaReglaScreen({ navigation }: any) {
     <View style={styles.container}>
       <Card style={styles.card}>
         <Card.Content>
-          <Title style={styles.title}>Fecha de tu última menstruación</Title>
-          <Paragraph>Esto nos permite calcular tu semana de embarazo.</Paragraph>
+          <Title style={styles.title}>{t('lastMenstruationDate')}</Title>
+          <Paragraph>{t('thisAllowsUsToCalculateYourPregnancyWeek')}</Paragraph>
           <Button mode="outlined" onPress={() => setShowPicker(true)} style={styles.button}>
-            Seleccionar fecha
+            {t('selectDate')}
           </Button>
-          <Paragraph style={styles.selectedDate}>Seleccionada: {date.toLocaleDateString()}</Paragraph>
+          <Paragraph style={styles.selectedDate}>{t('selectedDate')}: {date.toLocaleDateString()}</Paragraph>
         </Card.Content>
       </Card>
       {showPicker && (
@@ -71,17 +72,17 @@ export default function UltimaReglaScreen({ navigation }: any) {
       )}
       <Portal>
         <Dialog visible={confirmDialog} onDismiss={() => setConfirmDialog(false)}>
-          <Dialog.Title>Confirmar semana</Dialog.Title>
+          <Dialog.Title>{t('confirmPregnancyWeek')}</Dialog.Title>
           <Dialog.Content>
             <Paragraph>
-              Según la fecha ingresada, tienes <Title>{semanas}</Title> semanas de embarazo. ¿Es correcto?
+              {t('accordingToTheDateEnteredYouHave')} <Title>{semanas}</Title> {t('pregnancyWeeks')}
             </Paragraph>
             <Button mode="contained" onPress={handleConfirm} style={styles.button}>
-              Sí, es correcto
+              {t('confirm')}
             </Button>
-            <Paragraph style={{ marginTop: 16 }}>Si no es correcto, puedes modificarlo manualmente:</Paragraph>
+            <Paragraph style={{ marginTop: 16 }}>{t('ifNotCorrectYouCanModifyItManually')}:</Paragraph>
             <TextInput
-              label="Semana de embarazo"
+              label={t('pregnancyWeek')}
               value={customWeeks}
               onChangeText={setCustomWeeks}
               keyboardType="numeric"
@@ -92,7 +93,7 @@ export default function UltimaReglaScreen({ navigation }: any) {
               <Paragraph style={{ color: 'red', marginTop: 4, textAlign: 'center' }}>{error}</Paragraph>
             ) : null}
             <Button mode="outlined" onPress={handleCustomWeeks} style={styles.button}>
-              Guardar semana personalizada
+              {t('customWeeks')}
             </Button>
           </Dialog.Content>
         </Dialog>
