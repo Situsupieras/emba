@@ -23,12 +23,13 @@ import {
 } from 'react-native-paper';
 import { theme, customColors } from '../theme';
 import { CommunityPost, Comment, User } from '../types';
-import { mockCommunityPosts, mockUser } from '../data/mockData';
+import { mockCommunityPosts, useUserData } from '../data/mockData';
 
 const { width } = Dimensions.get('window');
 
 export default function CommunityScreen() {
-  const [user, setUser] = useState<User>(mockUser);
+  const { user, loading } = useUserData();
+  const userWithId = { ...user, id: user.id || 'real-user' };
   const [posts, setPosts] = useState<CommunityPost[]>(mockCommunityPosts);
   const [selectedPost, setSelectedPost] = useState<CommunityPost | null>(null);
   const [dialogVisible, setDialogVisible] = useState(false);
@@ -56,8 +57,8 @@ export default function CommunityScreen() {
     if (newPostTitle.trim() && newPostContent.trim()) {
       const newPost: CommunityPost = {
         id: Date.now().toString(),
-        userId: user.id,
-        userName: user.name,
+        userId: userWithId.id,
+        userName: userWithId.name,
         title: newPostTitle,
         content: newPostContent,
         category: newPostCategory,
@@ -78,8 +79,8 @@ export default function CommunityScreen() {
   const addComment = (postId: string, content: string) => {
     const newComment: Comment = {
       id: Date.now().toString(),
-      userId: user.id,
-      userName: user.name,
+      userId: userWithId.id,
+      userName: userWithId.name,
       content,
       createdAt: new Date(),
       isExpert: false,
@@ -118,6 +119,18 @@ export default function CommunityScreen() {
     if (diffInHours < 48) return 'Ayer';
     return date.toLocaleDateString();
   };
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Card style={styles.headerCard}>
+          <Card.Content>
+            <Title>Cargando información...</Title>
+          </Card.Content>
+        </Card>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -201,48 +214,27 @@ export default function CommunityScreen() {
             <Card key={post.id} style={styles.postCard}>
               <Card.Content>
                 <View style={styles.postHeader}>
-                  <View style={styles.postAuthor}>
-                    <Avatar.Text size={40} label={post.userName.charAt(0)} />
-                    <View style={styles.authorInfo}>
-                      <Title style={styles.authorName}>{post.userName}</Title>
-                      <Paragraph style={styles.postDate}>
-                        {formatDate(post.createdAt)}
-                      </Paragraph>
-                    </View>
+                  <Avatar.Text size={36} label={post.userName.charAt(0)} style={styles.avatar} />
+                  <View style={styles.postInfo}>
+                    <Title style={styles.postTitle}>{post.title}</Title>
+                    <Paragraph style={styles.postMeta}>
+                      Por {post.userName} • {formatDate(post.createdAt)}
+                    </Paragraph>
                   </View>
                   {post.isExpertVerified && (
-                    <Badge style={styles.expertBadge}>Experto</Badge>
+                    <Badge style={styles.verifiedBadge}>Verificado</Badge>
                   )}
                 </View>
-
-                <Chip 
-                  mode="outlined" 
-                  style={[styles.categoryTag, { borderColor: getCategoryColor(post.category) }]}
-                  textStyle={{ color: getCategoryColor(post.category) }}
-                >
-                  {post.category}
-                </Chip>
-
-                <Title style={styles.postTitle}>{post.title}</Title>
-                <Paragraph style={styles.postContent} numberOfLines={3}>
+                <Paragraph style={styles.postContent} numberOfLines={0}>
                   {post.content}
                 </Paragraph>
-
                 <View style={styles.postFooter}>
-                  <View style={styles.postStats}>
-                    <Button icon="heart" mode="text" compact>
-                      {post.likes}
-                    </Button>
-                    <Button icon="comment" mode="text" compact>
-                      {post.comments.length}
-                    </Button>
-                  </View>
-                  <Button 
-                    mode="outlined" 
-                    onPress={() => showPostDetails(post)}
-                    style={styles.readMoreButton}
+                  <Chip mode="outlined" style={[styles.categoryTag, { backgroundColor: getCategoryColor(post.category) }]}
                   >
-                    Leer más
+                    {post.category}
+                  </Chip>
+                  <Button mode="text" onPress={() => showPostDetails(post)}>
+                    Ver más
                   </Button>
                 </View>
               </Card.Content>
@@ -280,69 +272,32 @@ export default function CommunityScreen() {
       {/* Post Details Dialog */}
       <Portal>
         <Dialog visible={dialogVisible} onDismiss={() => setDialogVisible(false)}>
-          <Dialog.Title>Detalles de la publicación</Dialog.Title>
+          <Dialog.Title>{selectedPost?.title}</Dialog.Title>
           <Dialog.Content>
             {selectedPost && (
               <ScrollView>
-                <View style={styles.dialogHeader}>
-                  <Avatar.Text size={50} label={selectedPost.userName.charAt(0)} />
-                  <View style={styles.dialogAuthorInfo}>
-                    <Title style={styles.dialogAuthorName}>{selectedPost.userName}</Title>
-                    <Paragraph style={styles.dialogDate}>
-                      {formatDate(selectedPost.createdAt)}
-                    </Paragraph>
-                  </View>
-                  {selectedPost.isExpertVerified && (
-                    <Badge style={styles.dialogExpertBadge}>Experto</Badge>
-                  )}
-                </View>
-
-                <Chip 
-                  mode="outlined" 
-                  style={[styles.dialogCategoryTag, { borderColor: getCategoryColor(selectedPost.category) }]}
-                  textStyle={{ color: getCategoryColor(selectedPost.category) }}
-                >
-                  {selectedPost.category}
-                </Chip>
-
-                <Title style={styles.dialogTitle}>{selectedPost.title}</Title>
-                <Paragraph style={styles.dialogContent}>{selectedPost.content}</Paragraph>
-
+                <Paragraph style={styles.postContent} numberOfLines={0}>
+                  {selectedPost.content}
+                </Paragraph>
                 <Divider style={styles.divider} />
-
-                <Title style={styles.commentsTitle}>
-                  Comentarios ({selectedPost.comments.length})
-                </Title>
-
-                {selectedPost.comments.map((comment) => (
+                <Title style={styles.commentsTitle}>Comentarios</Title>
+                {selectedPost.comments.map((comment, idx) => (
                   <Card key={comment.id} style={styles.commentCard}>
                     <Card.Content>
                       <View style={styles.commentHeader}>
-                        <Avatar.Text size={30} label={comment.userName.charAt(0)} />
+                        <Avatar.Text size={28} label={comment.userName.charAt(0)} style={styles.commentAvatar} />
                         <View style={styles.commentInfo}>
-                          <Title style={styles.commentAuthor}>{comment.userName}</Title>
-                          <Paragraph style={styles.commentDate}>
-                            {formatDate(comment.createdAt)}
-                          </Paragraph>
+                          <Paragraph style={styles.commentUser}>{comment.userName}</Paragraph>
+                          <Paragraph style={styles.commentDate}>{formatDate(comment.createdAt)}</Paragraph>
                         </View>
                         {comment.isExpert && (
-                          <Badge style={styles.commentExpertBadge}>Experto</Badge>
+                          <Badge style={styles.expertBadge}>Experto</Badge>
                         )}
                       </View>
-                      <Paragraph style={styles.commentContent}>{comment.content}</Paragraph>
+                      <Paragraph style={styles.commentContent} numberOfLines={0}>{comment.content}</Paragraph>
                     </Card.Content>
                   </Card>
                 ))}
-
-                <Button 
-                  mode="contained" 
-                  onPress={() => {
-                    console.log('Adding comment to post:', selectedPost.title);
-                  }}
-                  style={styles.addCommentButton}
-                >
-                  Agregar comentario
-                </Button>
               </ScrollView>
             )}
           </Dialog.Content>
@@ -392,18 +347,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
+    paddingHorizontal: 16,
+    paddingTop: 20,
+    paddingBottom: 32,
   },
   scrollView: {
     padding: 16,
   },
   headerCard: {
-    marginBottom: 16,
+    marginBottom: 20,
     backgroundColor: customColors.babyBlue,
+    borderRadius: 18,
+    elevation: 4,
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 4,
+    marginBottom: 10,
+    flexShrink: 1,
+    color: theme.colors.onPrimary,
   },
   headerSubtitle: {
     fontSize: 14,
@@ -435,8 +397,9 @@ const styles = StyleSheet.create({
     color: theme.colors.onSurfaceVariant,
   },
   postCard: {
-    marginBottom: 16,
+    marginBottom: 18,
     elevation: 2,
+    borderRadius: 12,
   },
   postHeader: {
     flexDirection: 'row',
@@ -444,47 +407,39 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     marginBottom: 12,
   },
-  postAuthor: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  avatar: {
+    marginRight: 12,
   },
-  authorInfo: {
-    marginLeft: 12,
+  postInfo: {
+    flex: 1,
   },
-  authorName: {
-    fontSize: 14,
+  postTitle: {
+    fontSize: 18,
     fontWeight: 'bold',
+    marginBottom: 4,
+    flexShrink: 1,
   },
-  postDate: {
+  postMeta: {
     fontSize: 12,
     color: theme.colors.onSurfaceVariant,
   },
-  expertBadge: {
-    backgroundColor: customColors.success,
-  },
-  categoryTag: {
-    alignSelf: 'flex-start',
-    marginBottom: 8,
-  },
-  postTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
   postContent: {
-    fontSize: 14,
-    marginBottom: 12,
+    fontSize: 15,
+    color: theme.colors.onSurfaceVariant,
+    marginBottom: 8,
+    flexShrink: 1,
   },
   postFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  postStats: {
-    flexDirection: 'row',
+  categoryTag: {
+    alignSelf: 'flex-start',
+    marginBottom: 8,
   },
-  readMoreButton: {
-    height: 32,
+  verifiedBadge: {
+    backgroundColor: customColors.success,
   },
   emptyCard: {
     marginTop: 32,
@@ -552,8 +507,9 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   commentCard: {
-    marginBottom: 8,
-    backgroundColor: theme.colors.surfaceVariant,
+    marginBottom: 12,
+    elevation: 1,
+    borderRadius: 10,
   },
   commentHeader: {
     flexDirection: 'row',
@@ -564,9 +520,10 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     flex: 1,
   },
-  commentAuthor: {
-    fontSize: 14,
+  commentUser: {
+    fontSize: 15,
     fontWeight: 'bold',
+    flexShrink: 1,
   },
   commentDate: {
     fontSize: 12,
@@ -576,12 +533,16 @@ const styles = StyleSheet.create({
     backgroundColor: customColors.success,
   },
   commentContent: {
-    fontSize: 14,
-  },
-  addCommentButton: {
-    marginTop: 16,
+    fontSize: 15,
+    flexShrink: 1,
   },
   input: {
     marginBottom: 12,
+  },
+  commentAvatar: {
+    marginRight: 8,
+  },
+  expertBadge: {
+    backgroundColor: customColors.success,
   },
 }); 

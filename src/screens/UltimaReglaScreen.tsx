@@ -17,6 +17,7 @@ export default function UltimaReglaScreen({ navigation }: any) {
   const [semanas, setSemanas] = useState<number | null>(null);
   const [confirmDialog, setConfirmDialog] = useState(false);
   const [customWeeks, setCustomWeeks] = useState('');
+  const [error, setError] = useState('');
 
   const handleDateChange = (_: any, selectedDate?: Date) => {
     setShowPicker(false);
@@ -35,13 +36,16 @@ export default function UltimaReglaScreen({ navigation }: any) {
 
   const handleCustomWeeks = async () => {
     const semanasNum = parseInt(customWeeks, 10);
-    if (!isNaN(semanasNum)) {
-      setSemanas(semanasNum);
-      await SecureStore.setItemAsync('ultimaRegla', date.toISOString());
-      await SecureStore.setItemAsync('semanas', semanasNum.toString());
-      setConfirmDialog(false);
-      navigation.replace('Main');
+    if (isNaN(semanasNum) || semanasNum < 1 || semanasNum > 40) {
+      setError('Por favor ingresa un número de semanas válido (1-40).');
+      return;
     }
+    setError('');
+    setSemanas(semanasNum);
+    await SecureStore.setItemAsync('ultimaRegla', date.toISOString());
+    await SecureStore.setItemAsync('semanas', semanasNum.toString());
+    setConfirmDialog(false);
+    navigation.replace('Main');
   };
 
   return (
@@ -82,7 +86,11 @@ export default function UltimaReglaScreen({ navigation }: any) {
               onChangeText={setCustomWeeks}
               keyboardType="numeric"
               style={styles.input}
+              error={!!error}
             />
+            {error ? (
+              <Paragraph style={{ color: 'red', marginTop: 4, textAlign: 'center' }}>{error}</Paragraph>
+            ) : null}
             <Button mode="outlined" onPress={handleCustomWeeks} style={styles.button}>
               Guardar semana personalizada
             </Button>
@@ -94,8 +102,8 @@ export default function UltimaReglaScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f0f8ff' },
-  card: { width: '90%', padding: 16 },
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f0f8ff', padding: 16 },
+  card: { width: '100%', maxWidth: 400, padding: 24, borderRadius: 16, elevation: 2 },
   title: { marginBottom: 12, textAlign: 'center' },
   button: { marginTop: 12 },
   selectedDate: { marginTop: 8, textAlign: 'center' },

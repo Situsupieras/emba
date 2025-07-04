@@ -21,12 +21,12 @@ import {
 } from 'react-native-paper';
 import { theme, customColors } from '../theme';
 import { Article, ChecklistItem, User } from '../types';
-import { mockArticles, mockUser } from '../data/mockData';
+import { mockArticles, useUserData } from '../data/mockData';
 
 const { width } = Dimensions.get('window');
 
 export default function GuideScreen() {
-  const [user, setUser] = useState<User>(mockUser);
+  const { user, loading } = useUserData();
   const [articles, setArticles] = useState<Article[]>(mockArticles);
   const [filteredArticles, setFilteredArticles] = useState<Article[]>(mockArticles);
   const [searchQuery, setSearchQuery] = useState('');
@@ -36,51 +36,45 @@ export default function GuideScreen() {
   const [fadeAnim] = useState(new Animated.Value(0));
 
   useEffect(() => {
+    if (loading) return;
     // Generate checklist items based on trimester
-    const generateChecklist = () => {
-      const items: ChecklistItem[] = [];
-      
-      switch (user.trimester) {
-        case 1:
-          items.push(
-            { id: '1', title: 'Programar primera cita prenatal', description: 'Visita inicial con el médico', trimester: 1, completed: true },
-            { id: '2', title: 'Tomar ácido fólico', description: '400 mcg diarios', trimester: 1, completed: true },
-            { id: '3', title: 'Dejar alcohol y tabaco', description: 'Evitar sustancias nocivas', trimester: 1, completed: true },
-            { id: '4', title: 'Informar al trabajo', description: 'Comunicar el embarazo', trimester: 1, completed: false },
-            { id: '5', title: 'Investigar seguros médicos', description: 'Cobertura para el parto', trimester: 1, completed: false }
-          );
-          break;
-        case 2:
-          items.push(
-            { id: '6', title: 'Ecografía morfológica', description: 'Entre las semanas 18-22', trimester: 2, completed: true },
-            { id: '7', title: 'Ejercicios prenatales', description: 'Yoga o pilates prenatal', trimester: 2, completed: false },
-            { id: '8', title: 'Preparar habitación del bebé', description: 'Planificar el espacio', trimester: 2, completed: false },
-            { id: '9', title: 'Clases de preparación al parto', description: 'Inscribirse en curso', trimester: 2, completed: false },
-            { id: '10', title: 'Plan de parto', description: 'Documentar preferencias', trimester: 2, completed: false }
-          );
-          break;
-        case 3:
-          items.push(
-            { id: '11', title: 'Preparar bolsa para hospital', description: 'Ropa y artículos necesarios', trimester: 3, completed: false },
-            { id: '12', title: 'Instalar silla de auto', description: 'Silla para recién nacido', trimester: 3, completed: false },
-            { id: '13', title: 'Organizar ayuda postparto', description: 'Familia o doula', trimester: 3, completed: false },
-            { id: '14', title: 'Última ecografía', description: 'Control final del bebé', trimester: 3, completed: false },
-            { id: '15', title: 'Reconocer signos de parto', description: 'Síntomas importantes', trimester: 3, completed: false }
-          );
-          break;
-      }
-      
-      return items;
-    };
-
-    setChecklistItems(generateChecklist());
-
+    const items: ChecklistItem[] = [];
+    switch (user.trimester) {
+      case 1:
+        items.push(
+          { id: '1', title: 'Programar primera cita prenatal', description: 'Visita inicial con el médico', trimester: 1, completed: true },
+          { id: '2', title: 'Tomar ácido fólico', description: '400 mcg diarios', trimester: 1, completed: true },
+          { id: '3', title: 'Dejar alcohol y tabaco', description: 'Evitar sustancias nocivas', trimester: 1, completed: true },
+          { id: '4', title: 'Informar al trabajo', description: 'Comunicar el embarazo', trimester: 1, completed: false },
+          { id: '5', title: 'Investigar seguros médicos', description: 'Cobertura para el parto', trimester: 1, completed: false }
+        );
+        break;
+      case 2:
+        items.push(
+          { id: '6', title: 'Ecografía morfológica', description: 'Entre las semanas 18-22', trimester: 2, completed: true },
+          { id: '7', title: 'Ejercicios prenatales', description: 'Yoga o pilates prenatal', trimester: 2, completed: false },
+          { id: '8', title: 'Preparar habitación del bebé', description: 'Planificar el espacio', trimester: 2, completed: false },
+          { id: '9', title: 'Clases de preparación al parto', description: 'Inscribirse en curso', trimester: 2, completed: false },
+          { id: '10', title: 'Plan de parto', description: 'Documentar preferencias', trimester: 2, completed: false }
+        );
+        break;
+      case 3:
+        items.push(
+          { id: '11', title: 'Preparar bolsa para hospital', description: 'Ropa y artículos necesarios', trimester: 3, completed: false },
+          { id: '12', title: 'Instalar silla de auto', description: 'Silla para recién nacido', trimester: 3, completed: false },
+          { id: '13', title: 'Organizar ayuda postparto', description: 'Familia o doula', trimester: 3, completed: false },
+          { id: '14', title: 'Última ecografía', description: 'Control final del bebé', trimester: 3, completed: false },
+          { id: '15', title: 'Reconocer signos de parto', description: 'Síntomas importantes', trimester: 3, completed: false }
+        );
+        break;
+    }
+    setChecklistItems(items);
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 800,
       useNativeDriver: true,
     }).start();
-  }, [user.trimester]);
+  }, [user.trimester, loading]);
 
   useEffect(() => {
     let filtered = articles;
@@ -122,6 +116,17 @@ export default function GuideScreen() {
     return checklistItems.length > 0 ? completed / checklistItems.length : 0;
   };
 
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Card style={styles.headerCard}>
+          <Card.Content>
+            <Title>Cargando información...</Title>
+          </Card.Content>
+        </Card>
+      </View>
+    );
+  }
   return (
     <ScrollView style={styles.container}>
       <Animated.View style={{ opacity: fadeAnim }}>
@@ -131,6 +136,9 @@ export default function GuideScreen() {
             <Title style={styles.headerTitle}>Guía del {user.trimester}er Trimestre</Title>
             <Paragraph style={styles.headerSubtitle}>
               Información personalizada para tu etapa del embarazo
+            </Paragraph>
+            <Paragraph style={styles.headerSubtitle}>
+              Semana actual: {user.currentWeek}
             </Paragraph>
           </Card.Content>
         </Card>
@@ -199,20 +207,9 @@ export default function GuideScreen() {
                       {article.category}
                     </Chip>
                   </View>
-                  <Paragraph style={styles.articleContent} numberOfLines={3}>
+                  <Paragraph style={styles.articleContent} numberOfLines={0}>
                     {article.content}
                   </Paragraph>
-                  <View style={styles.articleFooter}>
-                    <Paragraph style={styles.articleMeta}>
-                      Por {article.author} • {article.readTime} min de lectura
-                    </Paragraph>
-                    <Button mode="contained" onPress={() => {
-                      // Show article detail modal
-                      console.log('Reading article:', article.title);
-                    }}>
-                      Leer más
-                    </Button>
-                  </View>
                 </Card.Content>
               </Card>
             ))}
@@ -254,40 +251,23 @@ export default function GuideScreen() {
         )}
 
         {selectedTab === 'checklist' && (
-          <View style={styles.checklistContainer}>
-            {/* Progress */}
-            <Card style={styles.progressCard}>
-              <Card.Content>
-                <Title style={styles.progressTitle}>Progreso del checklist</Title>
-                <View style={styles.progressInfo}>
-                  <Paragraph style={styles.progressText}>
-                    {checklistItems.filter(item => item.completed).length} de {checklistItems.length} completado
-                  </Paragraph>
-                  <Paragraph style={styles.progressPercentage}>
-                    {Math.round(getProgressPercentage() * 100)}%
-                  </Paragraph>
-                </View>
-              </Card.Content>
-            </Card>
-
-            {/* Checklist Items */}
+          <>
+            <Title style={styles.checklistTitle}>Checklist del trimestre</Title>
+            <Paragraph style={styles.checklistSubtitle}>
+              Marca las tareas completadas para llevar un mejor control
+            </Paragraph>
             {checklistItems.map((item) => (
               <Card key={item.id} style={styles.checklistCard}>
                 <Card.Content>
-                  <View style={styles.checklistItem}>
+                  <View style={styles.checklistHeader}>
                     <Checkbox
                       status={item.completed ? 'checked' : 'unchecked'}
                       onPress={() => toggleChecklistItem(item.id)}
                       color={theme.colors.primary}
                     />
-                    <View style={styles.checklistContent}>
-                      <Title style={[
-                        styles.checklistTitle,
-                        item.completed && styles.completedText
-                      ]}>
-                        {item.title}
-                      </Title>
-                      <Paragraph style={styles.checklistDescription}>
+                    <View style={styles.checklistInfo}>
+                      <Title style={styles.checklistItemTitle}>{item.title}</Title>
+                      <Paragraph style={styles.checklistItemDescription} numberOfLines={0}>
                         {item.description}
                       </Paragraph>
                     </View>
@@ -295,7 +275,7 @@ export default function GuideScreen() {
                 </Card.Content>
               </Card>
             ))}
-          </View>
+          </>
         )}
       </Animated.View>
     </ScrollView>
@@ -306,22 +286,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
-    padding: 16,
+    paddingHorizontal: 18,
+    paddingTop: 22,
+    paddingBottom: 32,
   },
   headerCard: {
-    marginBottom: 16,
+    marginBottom: 20,
+    borderRadius: 18,
     elevation: 4,
+    backgroundColor: customColors.babyBlue,
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 4,
+    marginBottom: 10,
+    flexShrink: 1,
+    color: theme.colors.onPrimary,
   },
   headerSubtitle: {
     fontSize: 14,
   },
   tabButtons: {
     marginBottom: 16,
+    borderRadius: 10,
   },
   searchBar: {
     marginBottom: 12,
@@ -333,8 +320,9 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   articleCard: {
-    marginBottom: 16,
+    marginBottom: 18,
     elevation: 2,
+    borderRadius: 12,
   },
   articleHeader: {
     flexDirection: 'row',
@@ -343,26 +331,19 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   articleTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
-    flex: 1,
-    marginRight: 8,
+    marginBottom: 4,
+    flexShrink: 1,
   },
   categoryTag: {
     height: 24,
   },
   articleContent: {
-    fontSize: 14,
-    marginBottom: 12,
-  },
-  articleFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  articleMeta: {
-    fontSize: 12,
+    fontSize: 15,
     color: theme.colors.onSurfaceVariant,
+    marginBottom: 8,
+    flexShrink: 1,
   },
   videosContainer: {
     gap: 16,
@@ -410,7 +391,9 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
   },
   checklistCard: {
-    marginBottom: 8,
+    marginBottom: 14,
+    elevation: 2,
+    borderRadius: 12,
   },
   checklistItem: {
     flexDirection: 'row',
@@ -432,5 +415,28 @@ const styles = StyleSheet.create({
   completedText: {
     textDecorationLine: 'line-through',
     color: customColors.disabled,
+  },
+  checklistHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  checklistInfo: {
+    flex: 1,
+  },
+  checklistItemTitle: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    marginBottom: 4,
+    flexShrink: 1,
+  },
+  checklistItemDescription: {
+    fontSize: 15,
+    color: theme.colors.onSurfaceVariant,
+    flexShrink: 1,
+  },
+  checklistSubtitle: {
+    fontSize: 14,
+    color: theme.colors.onSurfaceVariant,
+    marginBottom: 8,
   },
 }); 

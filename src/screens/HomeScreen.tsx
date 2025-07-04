@@ -193,7 +193,7 @@ export default function HomeScreen() {
             <View style={styles.actionButtons}>
               <Button
                 mode="contained"
-                icon="medical"
+                icon="medical-bag"
                 style={styles.actionButton}
                 onPress={() => {
                   // Navigate to supplements tab
@@ -229,28 +229,38 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
-    padding: 16,
+    paddingHorizontal: 20,
+    paddingTop: 24,
+    paddingBottom: 32,
   },
   headerCard: {
-    marginBottom: 16,
+    marginBottom: 20,
+    backgroundColor: customColors.babyBlue,
+    borderRadius: 18,
     elevation: 4,
   },
   headerContent: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
+    gap: 16,
   },
   userInfo: {
     marginLeft: 16,
     flex: 1,
+    minWidth: 0,
   },
   userName: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
+    marginBottom: 4,
+    flexShrink: 1,
   },
   trimesterChip: {
+    marginTop: 4,
     alignSelf: 'flex-start',
-    marginTop: 8,
+    maxWidth: 140,
+    flexWrap: 'wrap',
   },
   progressBar: {
     height: 8,
@@ -261,9 +271,10 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   cardTitle: {
-    fontSize: 18,
+    fontSize: 19,
     fontWeight: 'bold',
-    marginBottom: 12,
+    marginBottom: 10,
+    flexShrink: 1,
   },
   developmentInfo: {
     flexDirection: 'row',
@@ -314,8 +325,14 @@ const styles = StyleSheet.create({
   actionButton: {
     flex: 1,
     marginHorizontal: 4,
+    minHeight: 48,
+    borderRadius: 10,
   },
   loadingCard: {
-    margin: 16,
+    marginTop: 60,
+    padding: 32,
+    alignItems: 'center',
+    borderRadius: 16,
+    elevation: 2,
   },
 }); 

@@ -1,4 +1,6 @@
 import { User, Supplement, Article, CommunityPost, Product } from '../types';
+import { useEffect, useState } from 'react';
+import * as SecureStore from 'expo-secure-store';
 
 export const mockUser: User = {
   id: '1',
@@ -155,4 +157,51 @@ export const mockProducts: Product[] = [
     certifications: ['Orgánico', 'Sin parabenos'],
     medicalBenefits: ['Hidrata la piel', 'Reduce aparición de estrías']
   }
-]; 
+];
+
+// Hook para obtener datos reales del usuario desde SecureStore
+export function useUserData() {
+  const [user, setUser] = useState({
+    id: 'real-user',
+    name: '',
+    currentWeek: 1,
+    trimester: 1,
+    preferences: {
+      dietaryRestrictions: [],
+      allergies: [],
+      supplementPreferences: [],
+    },
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const name = await SecureStore.getItemAsync('userName');
+        const semanasStr = await SecureStore.getItemAsync('semanas');
+        let currentWeek = 1;
+        if (semanasStr && !isNaN(Number(semanasStr))) {
+          currentWeek = Number(semanasStr);
+        }
+        // Calcular trimestre
+        let trimester = 1;
+        if (currentWeek >= 1 && currentWeek <= 13) trimester = 1;
+        else if (currentWeek >= 14 && currentWeek <= 27) trimester = 2;
+        else if (currentWeek >= 28) trimester = 3;
+        setUser((prev) => ({
+          ...prev,
+          id: prev.id || 'real-user',
+          name: name || '',
+          currentWeek,
+          trimester,
+        }));
+      } catch (e) {
+        console.log('Error leyendo datos de usuario:', e);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  return { user, loading };
+} 

@@ -21,7 +21,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { theme, customColors } from '../theme';
 import { Supplement, User } from '../types';
-import { mockSupplements, mockUser } from '../data/mockData';
+import { mockSupplements, useUserData } from '../data/mockData';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import type { MainTabParamList } from '../types/navigation';
 
@@ -29,22 +29,31 @@ const { width } = Dimensions.get('window');
 
 export default function SupplementsScreen() {
   const navigation = useNavigation<BottomTabNavigationProp<MainTabParamList>>();
-  const [user, setUser] = useState<User>(mockUser);
+  const { user, loading } = useUserData();
   const [supplements, setSupplements] = useState<Supplement[]>([]);
   const [selectedSupplement, setSelectedSupplement] = useState<Supplement | null>(null);
   const [dialogVisible, setDialogVisible] = useState(false);
   const [fadeAnim] = useState(new Animated.Value(0));
 
   useEffect(() => {
+    if (loading) return;
     // Filter supplements based on user's trimester and preferences
     const filteredSupplements = mockSupplements.filter(supplement => {
       const isForCurrentTrimester = supplement.trimester.includes(user.trimester);
-      const matchesPreferences = user.preferences.supplementPreferences.some(pref => 
-        supplement.certifications.some(cert => cert.toLowerCase().includes(pref.toLowerCase()))
-      );
+      const supplementCerts = Array.isArray(supplement.certifications) ? supplement.certifications : [];
+      const userPrefs = Array.isArray(user.preferences.supplementPreferences) ? user.preferences.supplementPreferences : [];
+      const matchesPreferences = userPrefs.length > 0
+        ? userPrefs.some(pref => 
+            supplementCerts.some(cert => {
+              if (typeof cert === 'string' && typeof pref === 'string') {
+                return (cert as string).toLowerCase().includes((pref as string).toLowerCase());
+              }
+              return false;
+            })
+          )
+        : false;
       return isForCurrentTrimester || matchesPreferences;
     });
-    
     setSupplements(filteredSupplements);
 
     Animated.timing(fadeAnim, {
@@ -52,7 +61,7 @@ export default function SupplementsScreen() {
       duration: 800,
       useNativeDriver: true,
     }).start();
-  }, [user]);
+  }, [user, loading]);
 
   const showSupplementDetails = (supplement: Supplement) => {
     setSelectedSupplement(supplement);
@@ -79,6 +88,17 @@ export default function SupplementsScreen() {
     return theme.colors.secondary;
   };
 
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Card style={styles.headerCard}>
+          <Card.Content>
+            <Title>Cargando información...</Title>
+          </Card.Content>
+        </Card>
+      </View>
+    );
+  }
   return (
     <ScrollView style={styles.container}>
       <Animated.View style={{ opacity: fadeAnim }}>
@@ -106,10 +126,16 @@ export default function SupplementsScreen() {
         <Card style={styles.card}>
           <Card.Content>
             <Title style={styles.cardTitle}>Recomendaciones para ti</Title>
-            <Paragraph style={styles.recommendationText}>
-              Basado en tu perfil: {user.preferences.dietaryRestrictions.join(', ')} | 
-              Alergias: {user.preferences.allergies.join(', ')}
-            </Paragraph>
+            {(user.preferences.dietaryRestrictions.length > 0 || user.preferences.allergies.length > 0) && (
+              <Paragraph style={styles.recommendationText}>
+                {user.preferences.dietaryRestrictions.length > 0 && (
+                  <>Basado en tu perfil: {user.preferences.dietaryRestrictions.join(', ')} </>
+                )}
+                {user.preferences.allergies.length > 0 && (
+                  <>| Alergias: {user.preferences.allergies.join(', ')}</>
+                )}
+              </Paragraph>
+            )}
           </Card.Content>
         </Card>
 
@@ -120,7 +146,7 @@ export default function SupplementsScreen() {
               <View style={styles.supplementHeader}>
                 <View style={styles.supplementInfo}>
                   <Title style={styles.supplementTitle}>{supplement.name}</Title>
-                  <Paragraph style={styles.supplementDescription}>
+                  <Paragraph style={styles.supplementDescription} numberOfLines={0}>
                     {supplement.description}
                   </Paragraph>
                   <View style={styles.supplementTags}>
@@ -143,11 +169,12 @@ export default function SupplementsScreen() {
               </View>
               
               <View style={styles.benefitsContainer}>
-                <Paragraph style={styles.benefitsTitle}>Beneficios principales:</Paragraph>
+                <Paragraph style={styles.benefitsTitle} numberOfLines={0}>Beneficios principales:</Paragraph>
                 {supplement.benefits.slice(0, 2).map((benefit, idx) => (
                   <List.Item
                     key={idx}
                     title={benefit}
+                    titleNumberOfLines={4}
                     left={(props) => <List.Icon {...props} icon="check" color={customColors.success} />}
                     style={styles.benefitItem}
                   />
@@ -156,7 +183,7 @@ export default function SupplementsScreen() {
 
               <View style={styles.certificationsContainer}>
                 {supplement.certifications.slice(0, 2).map((cert, idx) => (
-                  <Chip key={idx} mode="outlined" style={styles.certificationChip}>
+                  <Chip key={idx} mode="outlined" style={styles.certificationChip} textStyle={{flexWrap: 'wrap', maxWidth: 120, textAlign: 'center'}}>
                     {cert}
                   </Chip>
                 ))}
@@ -210,7 +237,7 @@ export default function SupplementsScreen() {
               <ScrollView>
                 <Title style={styles.dialogTitle}>{selectedSupplement.name}</Title>
                 
-                <Paragraph style={styles.medicalExplanation}>
+                <Paragraph style={styles.medicalExplanation} numberOfLines={0}>
                   {selectedSupplement.medicalExplanation}
                 </Paragraph>
 
@@ -221,6 +248,7 @@ export default function SupplementsScreen() {
                   <List.Item
                     key={index}
                     title={benefit}
+                    titleNumberOfLines={4}
                     left={(props) => <List.Icon {...props} icon="check-circle" color={customColors.success} />}
                   />
                 ))}
@@ -232,6 +260,7 @@ export default function SupplementsScreen() {
                   <List.Item
                     key={index}
                     title={effect}
+                    titleNumberOfLines={4}
                     left={(props) => <List.Icon {...props} icon="alert" color={customColors.warning} />}
                   />
                 ))}
@@ -243,6 +272,7 @@ export default function SupplementsScreen() {
                   <List.Item
                     key={index}
                     title={contraindication}
+                    titleNumberOfLines={4}
                     left={(props) => <List.Icon {...props} icon="close-circle" color={theme.colors.error} />}
                   />
                 ))}
@@ -252,7 +282,7 @@ export default function SupplementsScreen() {
                 <Title style={styles.dialogSectionTitle}>Certificaciones</Title>
                 <View style={styles.certificationsGrid}>
                   {selectedSupplement.certifications.map((cert, index) => (
-                    <Chip key={index} mode="outlined" style={styles.dialogCertificationChip}>
+                    <Chip key={index} mode="outlined" style={styles.dialogCertificationChip} textStyle={{flexWrap: 'wrap', maxWidth: 120, textAlign: 'center'}}>
                       {cert}
                     </Chip>
                   ))}
@@ -282,16 +312,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
-    padding: 16,
+    paddingHorizontal: 18,
+    paddingTop: 22,
+    paddingBottom: 32,
   },
   headerCard: {
-    marginBottom: 16,
+    marginBottom: 20,
     backgroundColor: customColors.babyBlue,
+    borderRadius: 18,
+    elevation: 4,
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: 10,
+    flexShrink: 1,
+    color: theme.colors.onPrimary,
   },
   headerSubtitle: {
     fontSize: 14,
@@ -308,7 +344,9 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.secondary,
   },
   card: {
-    marginBottom: 16,
+    marginBottom: 18,
+    borderRadius: 12,
+    elevation: 2,
   },
   cardTitle: {
     fontSize: 18,
@@ -331,13 +369,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   supplementTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 4,
+    flexShrink: 1,
   },
   supplementDescription: {
-    fontSize: 14,
+    fontSize: 15,
     marginBottom: 8,
+    flexShrink: 1,
   },
   supplementTags: {
     flexDirection: 'row',
@@ -381,6 +421,8 @@ const styles = StyleSheet.create({
   },
   certificationChip: {
     height: 28,
+    borderRadius: 8,
+    backgroundColor: customColors.softYellow,
   },
   actionButtons: {
     flexDirection: 'row',

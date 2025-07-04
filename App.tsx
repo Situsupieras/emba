@@ -26,7 +26,7 @@ function MainTabs() {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: any;
           if (route.name === 'Home') iconName = focused ? 'home' : 'home-outline';
-          else if (route.name === 'Suplementos') iconName = focused ? 'medical' : 'medical-outline';
+          else if (route.name === 'Suplementos') iconName = focused ? 'medical-bag' : 'medical-bag';
           else if (route.name === 'Guía') iconName = focused ? 'book' : 'book-outline';
           else if (route.name === 'Comunidad') iconName = focused ? 'people' : 'people-outline';
           else if (route.name === 'Tienda') iconName = focused ? 'cart' : 'cart-outline';

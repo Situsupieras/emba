@@ -424,22 +424,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
+    paddingHorizontal: 16,
+    paddingTop: 20,
+    paddingBottom: 32,
   },
   scrollView: {
     padding: 16,
   },
   headerCard: {
-    marginBottom: 16,
-    backgroundColor: customColors.softYellow,
+    marginBottom: 20,
+    backgroundColor: customColors.babyBlue,
+    borderRadius: 18,
+    elevation: 4,
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 4,
+    marginBottom: 10,
+    flexShrink: 1,
   },
   headerSubtitle: {
-    fontSize: 14,
-    marginBottom: 12,
+    fontSize: 15,
+    marginBottom: 14,
+    flexShrink: 1,
   },
   ethicalBadges: {
     flexDirection: 'row',
@@ -457,7 +464,9 @@ const styles = StyleSheet.create({
   },
   cartCard: {
     marginBottom: 16,
-    backgroundColor: customColors.babyBlue,
+    backgroundColor: customColors.softYellow,
+    borderRadius: 14,
+    elevation: 2,
   },
   cartSummary: {
     flexDirection: 'row',
@@ -468,8 +477,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   cartTitle: {
-    fontSize: 16,
+    fontSize: 19,
     fontWeight: 'bold',
+    marginBottom: 4,
+    flexShrink: 1,
   },
   cartItems: {
     fontSize: 14,
@@ -479,10 +490,10 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   totalAmount: {
-    fontSize: 18,
+    fontSize: 19,
     fontWeight: 'bold',
     color: theme.colors.primary,
-    marginBottom: 8,
+    marginBottom: 4,
   },
   productsGrid: {
     flexDirection: 'row',
@@ -501,17 +512,19 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   productTitle: {
-    fontSize: 14,
+    fontSize: 17,
     fontWeight: 'bold',
-    flex: 1,
-    marginRight: 8,
+    marginBottom: 4,
+    flexShrink: 1,
   },
   recommendedBadge: {
     backgroundColor: customColors.success,
   },
   productDescription: {
-    fontSize: 12,
+    fontSize: 14,
+    color: theme.colors.onSurfaceVariant,
     marginBottom: 8,
+    flexShrink: 1,
   },
   productRating: {
     flexDirection: 'row',
