@@ -167,6 +167,12 @@ I18n.translations = {
     weekOf: 'Semana {{week}} de 40',
     babySizeThisWeek: 'Tamaño de tu bebé esta semana',
     approxWeight: 'Peso aproximado',
+    nextAppointment: 'Próxima cita',
+    // Recomendaciones de trimestre
+    firstTrimesterRecommendation: 'En el primer trimestre, el ácido fólico es fundamental para el desarrollo del tubo neural.',
+    secondTrimesterRecommendation: 'El segundo trimestre requiere calcio y vitamina D para el desarrollo óseo del bebé.',
+    thirdTrimesterRecommendation: 'El tercer trimestre necesita omega-3 DHA para el desarrollo cerebral final.',
+    customRecommendation: 'Consulta con tu médico para recomendaciones personalizadas.',
   },
   en: {
     welcome: 'Welcome to Prenatal Intelligence',
@@ -330,6 +336,12 @@ I18n.translations = {
     weekOf: 'Week {{week}} of 40',
     babySizeThisWeek: "Your baby's size this week",
     approxWeight: 'Approximate weight',
+    nextAppointment: 'Next appointment',
+    // Recomendaciones de trimestre
+    firstTrimesterRecommendation: 'In the first trimester, folic acid is essential for neural tube development.',
+    secondTrimesterRecommendation: "The second trimester requires calcium and vitamin D for the baby's bone development.",
+    thirdTrimesterRecommendation: 'The third trimester needs omega-3 DHA for final brain development.',
+    customRecommendation: 'Consult your doctor for personalized recommendations.',
   },
 };
 
@@ -337,6 +349,20 @@ I18n.translations = {
 I18n.locale = Localization.locale;
 // @ts-ignore
 I18n.fallbacks = true;
+// @ts-ignore
+I18n.defaultLocale = 'es';
 
 // @ts-ignore
-export const t = (key: string, config?: any) => I18n.t(key, config); 
+export const t = (key: string, config?: any) => I18n.t(key, config);
+
+// Función para cambiar idioma
+export const setLanguage = (locale: string) => {
+  // @ts-ignore
+  I18n.locale = locale;
+};
+
+// Función para obtener idioma actual
+export const getCurrentLanguage = () => {
+  // @ts-ignore
+  return I18n.locale;
+}; 

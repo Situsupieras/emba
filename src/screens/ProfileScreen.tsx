@@ -5,7 +5,7 @@ import { getAuth, signOut, updateProfile, sendEmailVerification } from 'firebase
 import * as ImagePicker from 'expo-image-picker';
 // @ts-ignore
 import I18n from 'i18n-js';
-import { t } from '../data/i18n';
+import { t, setLanguage, getCurrentLanguage } from '../data/i18n';
 
 export default function ProfileScreen() {
   const auth = getAuth();
@@ -16,10 +16,7 @@ export default function ProfileScreen() {
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
   const [verifMsg, setVerifMsg] = useState('');
-  const initialLocale = typeof I18n.locale === 'string' ? I18n.locale : 'es';
-  const [language, setLanguage] = useState(
-    typeof initialLocale === 'string' && initialLocale.startsWith('es') ? 'es' : 'en'
-  );
+  const [language, setLanguageState] = useState(getCurrentLanguage() || 'es');
 
   // Si user es undefined, mostrar loader
   if (typeof user === 'undefined') {
@@ -85,9 +82,8 @@ export default function ProfileScreen() {
   };
 
   const handleChangeLanguage = (lang: string) => {
+    setLanguageState(lang);
     setLanguage(lang);
-    // @ts-ignore
-    I18n.locale = lang;
   };
 
   return (

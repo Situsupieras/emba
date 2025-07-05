@@ -72,13 +72,13 @@ export default function SupplementsScreen() {
   const getTrimesterRecommendations = () => {
     switch (user.trimester) {
       case 1:
-        return "En el primer trimestre, el ácido fólico es fundamental para el desarrollo del tubo neural.";
+        return t('firstTrimesterRecommendation');
       case 2:
-        return "El segundo trimestre requiere calcio y vitamina D para el desarrollo óseo del bebé.";
+        return t('secondTrimesterRecommendation');
       case 3:
-        return "El tercer trimestre necesita omega-3 DHA para el desarrollo cerebral final.";
+        return t('thirdTrimesterRecommendation');
       default:
-        return "Consulta con tu médico para recomendaciones personalizadas.";
+        return t('customRecommendation');
     }
   };
 
@@ -145,7 +145,7 @@ export default function SupplementsScreen() {
               <View style={styles.supplementHeader}>
                 <View style={styles.supplementInfo}>
                   <Title style={styles.supplementTitle}>{supplement.name}</Title>
-                  <Paragraph style={styles.supplementDescription} numberOfLines={0}>
+                  <Paragraph style={styles.supplementDescription}>
                     {supplement.description}
                   </Paragraph>
                   <View style={styles.supplementTags}>
@@ -168,12 +168,12 @@ export default function SupplementsScreen() {
               </View>
               
               <View style={styles.benefitsContainer}>
-                <Paragraph style={styles.benefitsTitle} numberOfLines={0}>{t('mainBenefits')}</Paragraph>
+                <Paragraph style={styles.benefitsTitle}>{t('mainBenefits')}</Paragraph>
                 {supplement.benefits.slice(0, 2).map((benefit, idx) => (
                   <List.Item
                     key={benefit}
                     title={benefit}
-                    titleNumberOfLines={4}
+                    titleNumberOfLines={6}
                     left={(props) => <List.Icon {...props} icon="check" color={customColors.success} />}
                     style={styles.benefitItem}
                   />
@@ -372,8 +372,11 @@ const styles = StyleSheet.create({
   },
   supplementDescription: {
     fontSize: 15,
-    marginBottom: 8,
-    flexShrink: 1,
+    color: '#444',
+    marginBottom: 6,
+    textAlign: 'justify',
+    flexWrap: 'wrap',
+    minHeight: 40,
   },
   supplementTags: {
     flexDirection: 'row',
@@ -402,12 +405,15 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   benefitsTitle: {
-    fontSize: 14,
     fontWeight: 'bold',
-    marginBottom: 4,
+    marginBottom: 2,
+    fontSize: 15,
+    textAlign: 'left',
   },
   benefitItem: {
     paddingVertical: 2,
+    flexWrap: 'wrap',
+    minHeight: 32,
   },
   certificationsContainer: {
     flexDirection: 'row',

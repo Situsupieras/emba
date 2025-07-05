@@ -204,7 +204,7 @@ export default function HomeScreen() {
                   }
                 }}
               >
-                Ver suplementos
+                {t('supplements')}
               </Button>
               <Button
                 mode="outlined"
@@ -217,7 +217,7 @@ export default function HomeScreen() {
                   }
                 }}
               >
-                Próxima cita
+                {t('nextAppointment')}
               </Button>
             </View>
           </Card.Content>
