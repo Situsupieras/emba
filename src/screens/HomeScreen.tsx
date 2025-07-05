@@ -172,8 +172,10 @@ export default function HomeScreen() {
         <Card style={styles.card}>
           <Card.Content>
             <Title style={styles.cardTitle}>{t('milestones')}</Title>
-            {currentDevelopment.milestones.map((milestone) => (
-              <List.Item key={milestone} title={milestone} />
+            {currentDevelopment.milestones.map((milestone, index) => (
+              <View key={`milestone-${index}`} style={styles.milestoneItem}>
+                <Paragraph style={styles.milestoneText}>{milestone}</Paragraph>
+              </View>
             ))}
           </Card.Content>
         </Card>
@@ -182,8 +184,10 @@ export default function HomeScreen() {
         <Card style={styles.card}>
           <Card.Content>
             <Title style={styles.cardTitle}>{t('tips')}</Title>
-            {currentDevelopment.tips.map((tip) => (
-              <List.Item key={tip} title={tip} />
+            {currentDevelopment.tips.map((tip, index) => (
+              <View key={`tip-${index}`} style={styles.tipItem}>
+                <Paragraph style={styles.tipText}>{tip}</Paragraph>
+              </View>
             ))}
           </Card.Content>
         </Card>
@@ -315,10 +319,26 @@ const styles = StyleSheet.create({
     textAlign: 'justify',
   },
   milestoneItem: {
-    paddingVertical: 4,
+    paddingVertical: 8,
+    paddingHorizontal: 4,
+    marginBottom: 8,
+  },
+  milestoneText: {
+    fontSize: 16,
+    lineHeight: 24,
+    textAlign: 'justify',
+    flexWrap: 'wrap',
   },
   tipItem: {
-    paddingVertical: 4,
+    paddingVertical: 8,
+    paddingHorizontal: 4,
+    marginBottom: 8,
+  },
+  tipText: {
+    fontSize: 16,
+    lineHeight: 24,
+    textAlign: 'justify',
+    flexWrap: 'wrap',
   },
   actionButtons: {
     flexDirection: 'row',

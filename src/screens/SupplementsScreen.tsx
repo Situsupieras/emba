@@ -18,6 +18,7 @@ import {
   Divider,
   Badge,
 } from 'react-native-paper';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { theme, customColors } from '../theme';
 import { Supplement, User } from '../types';
@@ -170,13 +171,12 @@ export default function SupplementsScreen() {
               <View style={styles.benefitsContainer}>
                 <Paragraph style={styles.benefitsTitle}>{t('mainBenefits')}</Paragraph>
                 {supplement.benefits.slice(0, 2).map((benefit, idx) => (
-                  <List.Item
-                    key={benefit}
-                    title={benefit}
-                    titleNumberOfLines={6}
-                    left={(props) => <List.Icon {...props} icon="check" color={customColors.success} />}
-                    style={styles.benefitItem}
-                  />
+                  <View key={`benefit-${idx}`} style={styles.benefitItem}>
+                    <View style={styles.benefitContent}>
+                      <MaterialCommunityIcons name="check" size={20} color={customColors.success} style={styles.benefitIcon} />
+                      <Paragraph style={styles.benefitText}>{benefit}</Paragraph>
+                    </View>
+                  </View>
                 ))}
               </View>
 
@@ -411,9 +411,24 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   benefitItem: {
-    paddingVertical: 2,
+    paddingVertical: 8,
+    paddingHorizontal: 4,
+    marginBottom: 8,
+  },
+  benefitContent: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+  },
+  benefitIcon: {
+    marginTop: 2,
+  },
+  benefitText: {
+    fontSize: 16,
+    lineHeight: 24,
+    textAlign: 'justify',
     flexWrap: 'wrap',
-    minHeight: 32,
+    flex: 1,
   },
   certificationsContainer: {
     flexDirection: 'row',
