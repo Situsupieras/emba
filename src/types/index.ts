@@ -104,4 +104,51 @@ export interface Product {
   inStock: boolean;
   certifications: string[];
   medicalBenefits: string[];
+}
+
+export interface MedicalFeedback {
+  id: string;
+  week: number;
+  date: Date;
+  doctorName: string;
+  recommendations: string[];
+  concerns: string[];
+  nextAppointment: Date;
+  notes: string;
+  supplementsPrescribed: string[];
+  testsOrdered: string[];
+  weight: number;
+  bloodPressure: string;
+  babyHeartbeat: number;
+  ultrasoundNotes?: string;
+}
+
+export interface MedicalRecommendation {
+  id: string;
+  week: number;
+  category: 'diet' | 'exercise' | 'supplements' | 'lifestyle' | 'medical' | 'general';
+  recommendation: string;
+  priority: 'high' | 'medium' | 'low';
+  source: 'doctor' | 'app' | 'user';
+  dateAdded: Date;
+  isFollowed: boolean;
+  notes?: string;
+}
+
+export interface MedicalSync {
+  lastSyncDate: Date;
+  doctorRecommendations: MedicalRecommendation[];
+  appRecommendations: MedicalRecommendation[];
+  conflicts: MedicalConflict[];
+  resolvedConflicts: MedicalConflict[];
+}
+
+export interface MedicalConflict {
+  id: string;
+  appRecommendation: string;
+  doctorRecommendation: string;
+  week: number;
+  dateDetected: Date;
+  resolution: 'doctor_priority' | 'app_priority' | 'compromise' | 'pending';
+  notes?: string;
 } 

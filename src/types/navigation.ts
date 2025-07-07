@@ -2,6 +2,7 @@ export type RootStackParamList = {
   Auth: undefined;
   UltimaRegla: undefined;
   Main: undefined;
+  MedicalFeedback: undefined;
 };
 
 export type MainTabParamList = {
@@ -12,4 +13,5 @@ export type MainTabParamList = {
   Tienda: undefined;
   Chat: undefined;
   Perfil: undefined;
+  MedicalFeedback: undefined;
 }; 

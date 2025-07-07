@@ -226,6 +226,21 @@ export default function HomeScreen() {
                 {t('nextAppointment')}
               </Button>
             </View>
+            <View style={styles.actionButtons}>
+              <Button
+                mode="contained"
+                icon="medical"
+                style={[styles.actionButton, styles.medicalButton]}
+                onPress={() => {
+                  // Navigate to medical feedback screen
+                  if (navigation) {
+                    navigation.navigate('MedicalFeedback');
+                  }
+                }}
+              >
+                Retroalimentación Médica
+              </Button>
+            </View>
           </Card.Content>
         </Card>
       </Animated.View>
@@ -383,5 +398,9 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
+  },
+  medicalButton: {
+    backgroundColor: customColors.pregnancyPink,
+    marginTop: 8,
   },
 }); 

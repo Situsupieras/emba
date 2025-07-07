@@ -12,6 +12,7 @@ import StoreScreen from './src/screens/StoreScreen';
 import ChatScreen from './src/screens/ChatScreen';
 import AuthScreen from './src/screens/AuthScreen';
 import UltimaReglaScreen from './src/screens/UltimaReglaScreen';
+import MedicalFeedbackScreen from './src/screens/MedicalFeedbackScreen';
 import { Ionicons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 import type { RootStackParamList, MainTabParamList } from './src/types/navigation';
@@ -128,6 +129,15 @@ export default function App() {
           <Stack.Screen name="Auth" component={AuthScreen} />
           <Stack.Screen name="UltimaRegla" component={UltimaReglaScreen} />
           <Stack.Screen name="Main" component={MainTabs} />
+          <Stack.Screen 
+            name="MedicalFeedback" 
+            component={MedicalFeedbackScreen} 
+            options={{ 
+              headerShown: true,
+              title: 'Retroalimentación Médica',
+              presentation: 'modal'
+            }} 
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
