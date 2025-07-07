@@ -173,6 +173,26 @@ I18n.translations = {
     secondTrimesterRecommendation: 'El segundo trimestre requiere calcio y vitamina D para el desarrollo óseo del bebé.',
     thirdTrimesterRecommendation: 'El tercer trimestre necesita omega-3 DHA para el desarrollo cerebral final.',
     customRecommendation: 'Consulta con tu médico para recomendaciones personalizadas.',
+    // Chat translations
+    chat: {
+      title: 'Asistente IA',
+      subtitle: 'Tu compañero de embarazo inteligente',
+      welcome: '¡Hola! Soy tu asistente de embarazo. Puedo ayudarte con preguntas sobre nutrición, ejercicio, síntomas, medicamentos y citas médicas. ¿En qué puedo ayudarte hoy?',
+      placeholder: 'Escribe tu pregunta...',
+      typing: 'Escribiendo...',
+      error: 'Lo siento, no pude procesar tu mensaje. Por favor, intenta de nuevo.',
+      errorTitle: 'Error de conexión',
+      errorMessage: 'No se pudo conectar con el servidor. Verifica tu conexión a internet.',
+      quickQuestions: 'Preguntas rápidas',
+      suggestions: 'Aquí tienes algunas sugerencias para continuar la conversación:',
+      questions: {
+        nutrition: '¿Qué debo comer?',
+        exercise: '¿Puedo hacer ejercicio?',
+        symptoms: '¿Es normal este síntoma?',
+        medication: '¿Qué medicamentos puedo tomar?',
+        appointments: '¿Cuándo es mi próxima cita?',
+      },
+    },
   },
   en: {
     welcome: 'Welcome to Prenatal Intelligence',
@@ -342,15 +362,51 @@ I18n.translations = {
     secondTrimesterRecommendation: "The second trimester requires calcium and vitamin D for the baby's bone development.",
     thirdTrimesterRecommendation: 'The third trimester needs omega-3 DHA for final brain development.',
     customRecommendation: 'Consult your doctor for personalized recommendations.',
+    // Chat translations
+    chat: {
+      title: 'AI Assistant',
+      subtitle: 'Your intelligent pregnancy companion',
+      welcome: "Hello! I'm your pregnancy assistant. I can help you with questions about nutrition, exercise, symptoms, medications, and medical appointments. How can I help you today?",
+      placeholder: 'Type your question...',
+      typing: 'Typing...',
+      error: "Sorry, I couldn't process your message. Please try again.",
+      errorTitle: 'Connection Error',
+      errorMessage: 'Could not connect to server. Please check your internet connection.',
+      quickQuestions: 'Quick questions',
+      suggestions: 'Here are some suggestions to continue the conversation:',
+      questions: {
+        nutrition: 'What should I eat?',
+        exercise: 'Can I exercise?',
+        symptoms: 'Is this symptom normal?',
+        medication: 'What medications can I take?',
+        appointments: 'When is my next appointment?',
+      },
+    },
   },
 };
 
 // @ts-ignore
-I18n.locale = Localization.locale;
+I18n.locale = Localization.locale || 'es';
 // @ts-ignore
 I18n.fallbacks = true;
 // @ts-ignore
 I18n.defaultLocale = 'es';
+
+// Asegurar que el idioma se inicialice correctamente
+try {
+  // @ts-ignore
+  const locale = Localization.locale;
+  if (typeof locale === 'string' && locale.startsWith('es')) {
+    // @ts-ignore
+    I18n.locale = 'es';
+  } else {
+    // @ts-ignore
+    I18n.locale = 'en';
+  }
+} catch (error) {
+  // @ts-ignore
+  I18n.locale = 'es';
+}
 
 // @ts-ignore
 export const t = (key: string, config?: any) => I18n.t(key, config);

@@ -7,7 +7,7 @@ export const mockUser: User = {
   id: '1',
   name: t('mockUserName'),
   email: 'maria@example.com',
-  dueDate: new Date('2024-06-15'),
+  dueDate: new Date('2025-06-15'),
   currentWeek: 20,
   trimester: 2,
   medicalHistory: [t('noRelevantHistory')],
@@ -87,7 +87,7 @@ export const mockArticles: Article[] = [
     title: 'Guía completa de nutrición en el primer trimestre',
     content: 'Durante el primer trimestre, tu bebé está desarrollando todos sus órganos principales...',
     author: 'Dr. Ana Martínez',
-    publishDate: new Date('2024-01-15'),
+    publishDate: new Date('2025-01-15'),
     category: 'Nutrición',
     tags: ['primer trimestre', 'nutrición', 'ácido fólico'],
     image: 'https://via.placeholder.com/300x200',
@@ -98,7 +98,7 @@ export const mockArticles: Article[] = [
     title: 'Ejercicios seguros durante el embarazo',
     content: 'El ejercicio moderado durante el embarazo tiene múltiples beneficios...',
     author: 'Lic. Carlos Rodríguez',
-    publishDate: new Date('2024-01-10'),
+    publishDate: new Date('2025-01-10'),
     category: 'Ejercicio',
     tags: ['ejercicio', 'seguridad', 'bienestar'],
     image: 'https://via.placeholder.com/300x200',
@@ -121,11 +121,11 @@ export const mockCommunityPosts: CommunityPost[] = [
         userId: '3',
         userName: 'Dr. García',
         content: 'Es completamente normal. Los primeros movimientos se sienten entre las semanas 16-22.',
-        createdAt: new Date('2024-01-12'),
+        createdAt: new Date('2025-01-12'),
         isExpert: true
       }
     ],
-    createdAt: new Date('2024-01-11'),
+    createdAt: new Date('2025-01-11'),
     isExpertVerified: true
   }
 ];

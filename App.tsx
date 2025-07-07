@@ -9,14 +9,15 @@ import SupplementsScreen from './src/screens/SupplementsScreen';
 import GuideScreen from './src/screens/GuideScreen';
 import CommunityScreen from './src/screens/CommunityScreen';
 import StoreScreen from './src/screens/StoreScreen';
+import ChatScreen from './src/screens/ChatScreen';
 import AuthScreen from './src/screens/AuthScreen';
 import UltimaReglaScreen from './src/screens/UltimaReglaScreen';
 import { Ionicons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 import type { RootStackParamList, MainTabParamList } from './src/types/navigation';
 import { View, Text, Platform } from 'react-native';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { firebaseApp } from './src/data/firebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './src/data/firebaseConfig';
 import ProfileScreen from './src/screens/ProfileScreen';
 import * as Notifications from 'expo-notifications';
 
@@ -30,10 +31,11 @@ function MainTabs() {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: any;
           if (route.name === 'Home') iconName = focused ? 'home' : 'home-outline';
-          else if (route.name === 'Suplementos') iconName = 'medkit';
+          else if (route.name === 'Suplementos') iconName = 'flask';
           else if (route.name === 'Guía') iconName = focused ? 'book' : 'book-outline';
           else if (route.name === 'Comunidad') iconName = focused ? 'people' : 'people-outline';
           else if (route.name === 'Tienda') iconName = focused ? 'cart' : 'cart-outline';
+          else if (route.name === 'Chat') iconName = focused ? 'chatbubbles' : 'chatbubbles-outline';
           else if (route.name === 'Perfil') iconName = focused ? 'person' : 'person-outline';
           else iconName = 'help-outline';
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -53,12 +55,13 @@ function MainTabs() {
         headerTitleStyle: { fontWeight: 'bold' },
       })}
     >
-      <Tab.Screen name="Home" key="Home" component={HomeScreen} options={{ title: 'Mi Embarazo', headerShown: false }} />
-      <Tab.Screen name="Suplementos" key="Suplementos" component={SupplementsScreen} options={{ title: 'Suplementos' }} />
-      <Tab.Screen name="Guía" key="Guía" component={GuideScreen} options={{ title: 'Guía Trimestral' }} />
-      <Tab.Screen name="Comunidad" key="Comunidad" component={CommunityScreen} options={{ title: 'Comunidad' }} />
-      <Tab.Screen name="Tienda" key="Tienda" component={StoreScreen} options={{ title: 'Tienda Ética' }} />
-      <Tab.Screen name="Perfil" key="Perfil" component={ProfileScreen} />
+      <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Mi Embarazo', headerShown: false }} />
+      <Tab.Screen name="Suplementos" component={SupplementsScreen} options={{ title: 'Suplementos' }} />
+      <Tab.Screen name="Guía" component={GuideScreen} options={{ title: 'Guía Trimestral' }} />
+      <Tab.Screen name="Comunidad" component={CommunityScreen} options={{ title: 'Comunidad' }} />
+      <Tab.Screen name="Tienda" component={StoreScreen} options={{ title: 'Tienda Ética' }} />
+      <Tab.Screen name="Chat" component={ChatScreen} options={{ title: 'Asistente IA', headerShown: false }} />
+      <Tab.Screen name="Perfil" component={ProfileScreen} options={{ title: 'Mi Perfil' }} />
     </Tab.Navigator>
   );
 }
@@ -68,7 +71,6 @@ export default function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const auth = getAuth(firebaseApp);
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
       setLoading(false);

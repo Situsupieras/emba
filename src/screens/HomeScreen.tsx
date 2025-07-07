@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Dimensions,
   Animated,
+  TouchableOpacity,
 } from 'react-native';
 import {
   Card,
@@ -21,6 +22,7 @@ import { theme, customColors } from '../theme';
 import { FetalDevelopment, User } from '../types';
 import { fetalDevelopmentData } from '../data/fetalDevelopment';
 import { mockUser } from '../data/mockData';
+import { Ionicons } from '@expo/vector-icons';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import type { MainTabParamList } from '../types/navigation';
 import * as SecureStore from 'expo-secure-store';
@@ -199,7 +201,7 @@ export default function HomeScreen() {
             <View style={styles.actionButtons}>
               <Button
                 mode="contained"
-                icon="medkit"
+                icon="pill"
                 style={styles.actionButton}
                 onPress={() => {
                   // Navigate to supplements tab
@@ -227,6 +229,15 @@ export default function HomeScreen() {
           </Card.Content>
         </Card>
       </Animated.View>
+      
+      {/* Floating Chat Button */}
+      <TouchableOpacity
+        style={styles.floatingChatButton}
+        onPress={() => navigation.navigate('Chat')}
+        activeOpacity={0.8}
+      >
+        <Ionicons name="chatbubbles" size={24} color="white" />
+      </TouchableOpacity>
     </ScrollView>
   );
 }
@@ -356,5 +367,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 16,
     elevation: 2,
+  },
+  floatingChatButton: {
+    position: 'absolute',
+    bottom: 100,
+    right: 20,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: theme.colors.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
   },
 }); 

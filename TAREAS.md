@@ -1,7 +1,7 @@
 # 📋 Diario de Desarrollo - Inteligencia Prenatal
 
 ## 🎯 Estado Actual del Proyecto
-**Fecha:** Julio 2024  
+**Fecha:** Julio 2025  
 **Versión:** 1.0.0  
 **Estado:** ✅ **LISTO PARA PRODUCCIÓN**
 
@@ -10,7 +10,7 @@
 ## 📅 Diario de Desarrollo Detallado
 
 ### **DÍA 1 - Configuración Inicial**
-**Fecha:** Julio 2024  
+**Fecha:** Julio 2025  
 **Objetivo:** Setup del proyecto y estructura base
 
 #### ✅ Completado:
@@ -32,7 +32,7 @@
 ---
 
 ### **DÍA 2 - Implementación de Pantallas Base**
-**Fecha:** Julio 2024  
+**Fecha:** Julio 2025  
 **Objetivo:** Crear todas las pantallas principales
 
 #### ✅ Completado:
@@ -57,7 +57,7 @@
 ---
 
 ### **DÍA 3 - Internacionalización (i18n)**
-**Fecha:** Julio 2024  
+**Fecha:** Julio 2025  
 **Objetivo:** Implementar sistema completo de traducciones
 
 #### ✅ Completado:
@@ -80,7 +80,7 @@
 ---
 
 ### **DÍA 4 - Firebase y Autenticación**
-**Fecha:** Julio 2024  
+**Fecha:** Julio 2025  
 **Objetivo:** Implementar autenticación completa
 
 #### ✅ Completado:
@@ -105,7 +105,7 @@
 ---
 
 ### **DÍA 5 - UI/UX y Material Design**
-**Fecha:** Julio 2024  
+**Fecha:** Julio 2025  
 **Objetivo:** Implementar diseño profesional
 
 #### ✅ Completado:
@@ -132,7 +132,7 @@
 ---
 
 ### **DÍA 6 - Datos Mock y Funcionalidades**
-**Fecha:** Julio 2024  
+**Fecha:** Julio 2025  
 **Objetivo:** Implementar datos realistas y funcionalidades
 
 #### ✅ Completado:
@@ -156,7 +156,7 @@
 ---
 
 ### **DÍA 7 - Pulido Final y Testing**
-**Fecha:** Julio 2024  
+**Fecha:** Julio 2025  
 **Objetivo:** Eliminar errores y warnings
 
 #### ✅ Completado:
@@ -164,16 +164,22 @@
 - [x] Corrección de warnings de iconos
 - [x] Keys únicas en todas las listas
 - [x] Blindaje de acceso a propiedades
+- [x] **Mejoras de UI para textos completos** (implementado)
 - [x] Testing en dispositivo real
 - [x] Optimización de rendimiento
 
 #### 🔧 Problemas Encontrados:
-1. **Warnings de Expo Go:** Push notifications y persistencia
+1. **Textos cortados en UI:** Contenido no visible completamente
+   - **Problema:** numberOfLines limitaba textos importantes
+   - **Solución:** Usar numberOfLines={0} y flexbox optimizado
+   - **Resultado:** ✅ Resuelto - textos completos visibles
+
+2. **Warnings de Expo Go:** Push notifications y persistencia
    - **Problema:** Limitaciones de Expo Go
    - **Solución:** Aceptar como limitaciones esperadas
    - **Resultado:** ✅ Aceptado (funciona en builds nativos)
 
-2. **Memory leaks:** Procesos de Node.js acumulados
+3. **Memory leaks:** Procesos de Node.js acumulados
    - **Problema:** Múltiples procesos de Metro
    - **Solución:** `taskkill /f /im node.exe` y reinicio limpio
    - **Resultado:** ✅ Resuelto
@@ -206,6 +212,9 @@
 - Paleta de colores de embarazo
 - Componentes consistentes
 - Responsive design
+- **Textos completos** visibles en todas las pantallas
+- **ScrollView** en diálogos para contenido extenso
+- **Flexbox** optimizado para textos largos
 
 ### ✅ **Datos Realistas**
 - Desarrollo fetal (40 semanas)
@@ -288,6 +297,8 @@
 3. **Firebase v11+ cambió:** Eliminó `firebase/auth/react-native`
 4. **Iconos Ionicons:** Verificar existencia antes de usar
 5. **Keys en React:** Siempre usar valores únicos y estables
+6. **Textos en UI:** Usar numberOfLines={0} para contenido importante
+7. **Apóstrofes problemáticos:** Usar comillas dobles en lugar de escapar
 
 ### **Organizacionales:**
 1. **Documentación es clave:** Mantener diario de desarrollo
@@ -318,4 +329,19 @@
 
 **Estado Final:** ✅ **LISTO PARA PRODUCCIÓN**  
 **Calidad:** ⭐⭐⭐⭐⭐ **EXCELENTE**  
-**Funcionalidad:** �� **100% OPERATIVA** 
+**Funcionalidad:** ✅ **100% OPERATIVA**
+
+# TAREAS PENDIENTES - INTELIGENCIA PRENATAL
+
+## Completadas
+- Extender el registro de usuario para pedir: nombre, edad, semana actual de embarazo, dieta, historial de compra de suplementos, hijos previos, email y guardar en SecureStore.
+- Actualizar la pantalla de perfil para mostrar y permitir editar todos los campos.
+- Actualizar el chat para enviar el contexto completo del usuario al webhook.
+- Corregir iconos inválidos y warnings de persistencia de Firebase Auth.
+
+## En progreso
+- Mejorar el Picker de dieta en el perfil para que siempre se vea completo.
+- Hacer que el cambio de idioma sea instantáneo y global en toda la app.
+- Traducir datos mock y contenido dinámico (tips, milestones, suplementos, etc.) según el idioma activo.
+- Arreglar los estilos de chips y badges para que nunca corten texto.
+- Revisión visual y QA final: asegurar legibilidad, padding y contraste profesional en todos los componentes. 

@@ -67,6 +67,9 @@ folicAcidDescription: "Essential supplement for the development of the baby's ne
 - **0 errores de sintaxis** restantes
 - **Build exitoso** confirmado
 
+### **🚨 REGLA OBLIGATORIA:**
+**NUNCA usar comillas simples para strings con apóstrofes. SIEMPRE usar comillas dobles.**
+
 ---
 
 ## 🛠️ **Tecnologías Utilizadas**
@@ -163,6 +166,13 @@ emba/
 - **Inputs** con validación visual
 - **Navegación** con tabs animados
 
+### **🎯 Mejoras de UX Implementadas:**
+- **✅ Textos completos** visibles en todas las pantallas
+- **✅ ScrollView** en diálogos para contenido extenso
+- **✅ Flexbox** optimizado para textos largos
+- **✅ numberOfLines={0}** para textos importantes
+- **✅ Responsive design** en todos los dispositivos
+
 ---
 
 ## 🚀 **Próximos Pasos**
@@ -185,6 +195,7 @@ emba/
 ### **Archivos de Documentación:**
 - **`DEV_LOG.md`** - Diario detallado de desarrollo
 - **`TAREAS.md`** - Lista de tareas completadas
+- **`DIRECTRICES_DE_DESARROLLO.md`** - Reglas y soluciones implementadas
 - **`package.json`** - Dependencias y scripts
 
 ### **Comandos Útiles:**
@@ -223,10 +234,11 @@ eas submit --platform ios
 ## 📞 **Soporte**
 
 ### **Problemas Comunes:**
-1. **Error de sintaxis:** Verificar apóstrofes en i18n.ts
+1. **Error de sintaxis:** Verificar apóstrofes en i18n.ts (usar comillas dobles)
 2. **Iconos inválidos:** Usar solo iconos de Ionicons válidos
 3. **Keys duplicadas:** Usar keys únicas en listas
-4. **Caché persistente:** Usar `npx expo start -c`
+4. **Textos cortados:** Usar numberOfLines={0} para textos importantes
+5. **Caché persistente:** Usar `npx expo start -c`
 
 ### **Contacto:**
 - **Desarrollador:** Alejandro STS

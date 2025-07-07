@@ -1,5 +1,7 @@
 // Configuración de Firebase para Inteligencia Prenatal
 import { initializeApp } from 'firebase/app';
+import { initializeAuth } from 'firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCsNRmRkCugFoGP74aWR_086dQ7EN0ChXc",
@@ -11,4 +13,7 @@ const firebaseConfig = {
   measurementId: "G-TTCFEMFK96"
 };
 
-export const firebaseApp = initializeApp(firebaseConfig); 
+export const firebaseApp = initializeApp(firebaseConfig);
+
+// Configurar Auth estándar (AsyncStorage se maneja automáticamente en React Native)
+export const auth = initializeAuth(firebaseApp); 

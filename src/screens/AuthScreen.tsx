@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { TextInput, Button, Title, Paragraph, Card, Divider, ActivityIndicator } from 'react-native-paper';
 import * as Google from 'expo-auth-session/providers/google';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithCredential, FacebookAuthProvider, GoogleAuthProvider, sendPasswordResetEmail } from 'firebase/auth';
-import { firebaseApp } from '../data/firebaseConfig';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithCredential, FacebookAuthProvider, GoogleAuthProvider, sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '../data/firebaseConfig';
 import { t } from '../data/i18n';
-import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
-
-const auth = getAuth(firebaseApp);
+import { Picker } from '@react-native-picker/picker';
+import * as SecureStore from 'expo-secure-store';
 
 export default function AuthScreen({ navigation }: any) {
   const [isLogin, setIsLogin] = useState(true);
@@ -21,6 +20,13 @@ export default function AuthScreen({ navigation }: any) {
     androidClientId: '567704618820-2v6v7k1q7k1v7k1v.apps.googleusercontent.com', // Reemplaza por tu clientId de Google Android
   });
   const [resetSent, setResetSent] = useState(false);
+  const [name, setName] = useState('');
+  const [age, setAge] = useState('25');
+  const [currentWeek, setCurrentWeek] = useState('12');
+  const [diet, setDiet] = useState('omnívora');
+  const [hasBoughtSupplements, setHasBoughtSupplements] = useState(false);
+  const [supplements, setSupplements] = useState([]);
+  const [previousChildren, setPreviousChildren] = useState('0');
 
   React.useEffect(() => {
     if (response?.type === 'success') {
@@ -42,6 +48,18 @@ export default function AuthScreen({ navigation }: any) {
         await signInWithEmailAndPassword(auth, email, password);
       } else {
         await createUserWithEmailAndPassword(auth, email, password);
+        // Guardar datos adicionales en SecureStore
+        const userData = {
+          name,
+          age: Number(age),
+          currentWeek: Number(currentWeek),
+          diet,
+          hasBoughtSupplements,
+          supplements,
+          previousChildren: Number(previousChildren),
+          email,
+        };
+        await SecureStore.setItemAsync('userProfile', JSON.stringify(userData));
       }
       navigation.replace('Main');
     } catch (e: any) {
@@ -75,6 +93,58 @@ export default function AuthScreen({ navigation }: any) {
       <Card style={styles.card}>
         <Card.Content>
           <Title style={styles.title}>{isLogin ? t('login') : t('register')}</Title>
+          {!isLogin && (
+            <>
+              <TextInput
+                label="Nombre completo"
+                value={name}
+                onChangeText={setName}
+                style={styles.input}
+                mode="outlined"
+              />
+              <TextInput
+                label="Edad"
+                value={age}
+                onChangeText={setAge}
+                keyboardType="numeric"
+                style={styles.input}
+                mode="outlined"
+              />
+              <TextInput
+                label="Semana actual de embarazo"
+                value={currentWeek}
+                onChangeText={setCurrentWeek}
+                keyboardType="numeric"
+                style={styles.input}
+                mode="outlined"
+              />
+              <Paragraph style={{ marginTop: 8 }}>Dieta</Paragraph>
+              <Picker
+                selectedValue={diet}
+                onValueChange={setDiet}
+                style={{ marginBottom: 8 }}
+              >
+                <Picker.Item label="Omnívora" value="omnívora" />
+                <Picker.Item label="Vegetariana" value="vegetariana" />
+                <Picker.Item label="Vegana" value="vegana" />
+              </Picker>
+              <Button
+                mode={hasBoughtSupplements ? 'contained' : 'outlined'}
+                onPress={() => setHasBoughtSupplements(!hasBoughtSupplements)}
+                style={{ marginBottom: 8 }}
+              >
+                {hasBoughtSupplements ? 'Ha comprado suplementos' : 'No ha comprado suplementos'}
+              </Button>
+              <TextInput
+                label="Hijos previos"
+                value={previousChildren}
+                onChangeText={setPreviousChildren}
+                keyboardType="numeric"
+                style={styles.input}
+                mode="outlined"
+              />
+            </>
+          )}
           <TextInput
             label={t('email')}
             value={email}
@@ -82,6 +152,7 @@ export default function AuthScreen({ navigation }: any) {
             autoCapitalize="none"
             keyboardType="email-address"
             style={styles.input}
+            mode="outlined"
           />
           <TextInput
             label={t('password')}
@@ -89,6 +160,7 @@ export default function AuthScreen({ navigation }: any) {
             onChangeText={setPassword}
             secureTextEntry
             style={styles.input}
+            mode="outlined"
           />
           {error ? <Paragraph style={styles.error}>{error}</Paragraph> : null}
           <Button mode="contained" onPress={handleAuth} style={styles.button} disabled={loading}>

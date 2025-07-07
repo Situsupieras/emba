@@ -10,5 +10,6 @@ export type MainTabParamList = {
   Guía: undefined;
   Comunidad: undefined;
   Tienda: undefined;
+  Chat: undefined;
   Perfil: undefined;
 }; 

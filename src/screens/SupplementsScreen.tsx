@@ -369,10 +369,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 4,
     flexShrink: 1,
+    color: '#2C3E50',
   },
   supplementDescription: {
     fontSize: 15,
-    color: '#444',
+    color: '#2C3E50',
     marginBottom: 6,
     textAlign: 'justify',
     flexWrap: 'wrap',
