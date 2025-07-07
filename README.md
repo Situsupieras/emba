@@ -1,6 +1,6 @@
 # 🤱 Inteligencia Prenatal
 
-**App móvil completa para el seguimiento del embarazo con inteligencia artificial**
+**App móvil completa para el seguimiento del embarazo con inteligencia artificial y sincronización médica**
 
 ---
 
@@ -13,19 +13,55 @@
 - **✅ 100% internacionalización** (español/inglés)
 - **✅ UI/UX profesional** (Material Design)
 - **✅ Autenticación completa** (Firebase Auth)
+- **✅ Sistema médico integrado** (sincronización con doctor)
+
+---
+
+## 🆕 **NUEVAS FUNCIONALIDADES**
+
+### **🏥 Sistema de Retroalimentación Médica**
+**Descripción:** Sistema completo para sincronizar las recomendaciones de la app con las del médico
+
+**Características:**
+- ✅ **Registro de consultas médicas** con nombre del doctor
+- ✅ **Captura de recomendaciones** específicas del médico
+- ✅ **Detección automática de conflictos** entre app y médico
+- ✅ **Sincronización inteligente** de recomendaciones
+- ✅ **Resolución manual de conflictos** con opciones claras
+- ✅ **Seguimiento de suplementos** recetados
+- ✅ **Registro de exámenes** ordenados
+- ✅ **Datos vitales** (peso, presión arterial, latidos del bebé)
+
+**Beneficios:**
+- **Consistencia médica** - La app se adapta a las recomendaciones del médico
+- **Seguimiento personalizado** - Cada usuario tiene su propio historial médico
+- **Prevención de conflictos** - Detecta y resuelve discrepancias automáticamente
+- **Información actualizada** - Siempre refleja la última consulta médica
+
+### **📅 Guía Semanal Personalizada**
+**Descripción:** Sistema de 40 semanas completo con información personalizada
+
+**Características:**
+- ✅ **40 semanas completas** con información detallada
+- ✅ **Contenido bilingüe** (español/inglés)
+- ✅ **Textos emocionales** y motivadores
+- ✅ **Imágenes visuales** (frutas/objetos representando tamaño)
+- ✅ **Información personalizada** para la semana actual del usuario
+- ✅ **No navegación entre semanas** - solo información relevante
 
 ---
 
 ## 🚀 **Características Principales**
 
 ### **📱 Pantallas Implementadas:**
-1. **🏠 Home** - Dashboard principal con información semanal
+1. **🏠 Home** - Dashboard principal con información semanal personalizada
 2. **💊 Supplements** - Catálogo de suplementos prenatales
 3. **🛒 Store** - Tienda con productos especializados
-4. **📚 Guide** - Guía semanal de desarrollo fetal
+4. **📚 Guide** - Guía semanal de desarrollo fetal (40 semanas)
 5. **👥 Community** - Comunidad de madres
 6. **👤 Profile** - Perfil y configuración
 7. **🔐 Auth** - Login/registro con múltiples métodos
+8. **🏥 Medical Feedback** - Sistema de retroalimentación médica
 
 ### **🌍 Internacionalización:**
 - **Español** (idioma principal)
@@ -39,6 +75,12 @@
 - **Recuperación de contraseña**
 - **Verificación de email**
 - **Persistencia de sesión**
+
+### **🤖 Chat con IA:**
+- **Asistente inteligente** para preguntas sobre embarazo
+- **Contexto personalizado** (semana, edad, historial)
+- **Respuestas en tiempo real** vía webhook
+- **Idioma preferido** del usuario
 
 ---
 
@@ -84,10 +126,16 @@ folicAcidDescription: "Essential supplement for the development of the baby's ne
 - **Firebase Auth** para autenticación
 - **Firebase Firestore** (preparado)
 - **Expo Notifications** (build nativo)
+- **Webhook integration** para chat IA
 
 ### **Internacionalización:**
 - **i18n-js** para traducciones
 - **AsyncStorage** para persistencia
+
+### **Sincronización Médica:**
+- **Servicio personalizado** para detectar conflictos
+- **Algoritmo inteligente** para categorizar recomendaciones
+- **Sistema de prioridades** (médico > app)
 
 ---
 
@@ -116,6 +164,8 @@ npx expo start
 2. **Probar navegación** entre pantallas
 3. **Cambiar idioma** en Profile
 4. **Probar autenticación** con email/Google
+5. **Registrar consulta médica** en Medical Feedback
+6. **Probar chat IA** con contexto personalizado
 
 ---
 
@@ -127,6 +177,9 @@ npx expo start
 FIREBASE_API_KEY=your_api_key
 FIREBASE_AUTH_DOMAIN=your_domain
 FIREBASE_PROJECT_ID=your_project_id
+
+# Webhook para chat IA
+CHAT_WEBHOOK_URL=your_webhook_url
 ```
 
 ### **Configuración Firebase:**
@@ -142,7 +195,12 @@ FIREBASE_PROJECT_ID=your_project_id
 emba/
 ├── src/
 │   ├── screens/          # Pantallas principales
+│   │   ├── MedicalFeedbackScreen.tsx  # 🆕 Sistema médico
+│   │   └── ...
 │   ├── data/            # Datos y configuración
+│   │   ├── medicalSync.ts  # 🆕 Sincronización médica
+│   │   ├── fetalDevelopment.ts  # 🆕 40 semanas completas
+│   │   └── ...
 │   ├── types/           # TypeScript types
 │   └── theme.ts         # Tema y estilos
 ├── assets/              # Imágenes e iconos
@@ -172,6 +230,8 @@ emba/
 - **✅ Flexbox** optimizado para textos largos
 - **✅ numberOfLines={0}** para textos importantes
 - **✅ Responsive design** en todos los dispositivos
+- **✅ Sistema médico intuitivo** con detección de conflictos
+- **✅ Guía semanal visual** con imágenes representativas
 
 ---
 
@@ -187,6 +247,7 @@ emba/
 - 🔄 **Push notifications** personalizadas
 - 🔄 **Analytics** y métricas
 - 🔄 **Más idiomas** (portugués, francés)
+- 🔄 **Integración con sistemas médicos** (HL7, FHIR)
 
 ---
 
