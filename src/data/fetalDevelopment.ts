@@ -650,4 +650,388 @@ export const fetalDevelopmentData: FetalDevelopment[] = [
     ],
     animation: "week40"
   }
+];
+
+// Semanario emocional y visual de las 40 semanas del embarazo
+// Cada semana incluye textos en español e inglés y una imagen visual (fruta/objeto)
+
+export interface WeekDevelopment {
+  week: number;
+  es: {
+    title: string;
+    description: string;
+    babyDevelopment: string;
+    motherChanges: string;
+    tips: string[];
+    milestones: string[];
+    size: string;
+    weight: string;
+    image: string; // URL de imagen libre de derechos
+  };
+  en: {
+    title: string;
+    description: string;
+    babyDevelopment: string;
+    motherChanges: string;
+    tips: string[];
+    milestones: string[];
+    size: string;
+    weight: string;
+    image: string; // Free image URL
+  };
+}
+
+export const fetalDevelopment: WeekDevelopment[] = [
+  // Semana 1
+  {
+    week: 1,
+    es: {
+      title: 'Semana 1: Un nuevo comienzo',
+      description: '¡Empieza el viaje! Aunque aún no hay embarazo confirmado, tu cuerpo se prepara para una nueva vida.',
+      babyDevelopment: 'No hay embrión todavía, pero tu cuerpo está ovulando y preparándose.',
+      motherChanges: 'Puedes sentirte igual, pero tu ciclo menstrual está en marcha.',
+      tips: [
+        'Lleva una vida saludable y equilibrada.',
+        'Empieza a tomar ácido fólico si no lo hacías.',
+      ],
+      milestones: [
+        'Ovulación',
+        'Preparación del útero',
+      ],
+      size: 'No aplica',
+      weight: 'No aplica',
+      image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', // Semilla
+    },
+    en: {
+      title: 'Week 1: A New Beginning',
+      description: 'The journey begins! Although pregnancy is not confirmed yet, your body is preparing for new life.',
+      babyDevelopment: 'No embryo yet, but your body is ovulating and getting ready.',
+      motherChanges: 'You may feel the same, but your menstrual cycle is in progress.',
+      tips: [
+        'Live a healthy and balanced life.',
+        'Start taking folic acid if you haven\'t already.',
+      ],
+      milestones: [
+        'Ovulation',
+        'Uterus preparation',
+      ],
+      size: 'N/A',
+      weight: 'N/A',
+      image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', // Seed
+    },
+  },
+  // Semana 2
+  {
+    week: 2,
+    es: {
+      title: 'Semana 2: Esperanza en el aire',
+      description: 'Tu cuerpo sigue preparándose. Pronto, una nueva vida podría comenzar.',
+      babyDevelopment: 'Aún no hay embarazo, pero el óvulo está listo para ser fecundado.',
+      motherChanges: 'Puedes notar cambios leves en tu temperatura basal.',
+      tips: [
+        'Escucha a tu cuerpo y relájate.',
+        'Mantén hábitos saludables.',
+      ],
+      milestones: [
+        'Ovulación cercana',
+        'Óvulo maduro',
+      ],
+      size: 'No aplica',
+      weight: 'No aplica',
+      image: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80', // Aire/hojas
+    },
+    en: {
+      title: 'Week 2: Hope in the Air',
+      description: 'Your body keeps preparing. Soon, a new life may begin.',
+      babyDevelopment: 'Still no pregnancy, but the egg is ready to be fertilized.',
+      motherChanges: 'You may notice slight changes in your basal temperature.',
+      tips: [
+        'Listen to your body and relax.',
+        'Maintain healthy habits.',
+      ],
+      milestones: [
+        'Ovulation approaching',
+        'Mature egg',
+      ],
+      size: 'N/A',
+      weight: 'N/A',
+      image: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80', // Air/leaves
+    },
+  },
+  // Semana 35
+  {
+    week: 35,
+    es: {
+      title: 'Semana 35: Casi listo para el mundo',
+      description: '¡Tu bebé está casi completamente desarrollado! Solo necesita un poco más de tiempo para estar perfecto.',
+      babyDevelopment: 'Los riñones están completamente desarrollados y el hígado puede procesar algunos productos de desecho. La mayoría de los sistemas básicos están bien desarrollados.',
+      motherChanges: 'Puedes sentir más presión en la pelvis y dificultad para respirar. El bebé está descendiendo.',
+      tips: [
+        'Descansa todo lo posible',
+        'Ten lista la maleta para el hospital',
+        'Practica técnicas de respiración',
+        'Mantén una postura cómoda'
+      ],
+      milestones: [
+        'Riñones completamente desarrollados',
+        'Hígado funcional',
+        'Sistemas básicos desarrollados',
+        'Preparación para el nacimiento'
+      ],
+      size: 'Melón cantalupo',
+      weight: '2.4 kilogramos',
+      image: 'https://images.unsplash.com/photo-1550254478-ead40cc54513?auto=format&fit=crop&w=400&q=80', // Melón
+    },
+    en: {
+      title: 'Week 35: Almost Ready for the World',
+      description: 'Your baby is almost fully developed! Just needs a little more time to be perfect.',
+      babyDevelopment: 'The kidneys are fully developed and the liver can process some waste products. Most basic systems are well developed.',
+      motherChanges: 'You may feel more pressure in your pelvis and difficulty breathing. The baby is descending.',
+      tips: [
+        'Rest as much as possible',
+        'Have your hospital bag ready',
+        'Practice breathing techniques',
+        'Maintain comfortable posture'
+      ],
+      milestones: [
+        'Fully developed kidneys',
+        'Functional liver',
+        'Developed basic systems',
+        'Preparation for birth'
+      ],
+      size: 'Cantaloupe melon',
+      weight: '2.4 kilograms',
+      image: 'https://images.unsplash.com/photo-1550254478-ead40cc54513?auto=format&fit=crop&w=400&q=80', // Melon
+    },
+  },
+  // Semana 36
+  {
+    week: 36,
+    es: {
+      title: 'Semana 36: El final está cerca',
+      description: '¡Estás en la recta final! Tu bebé está casi listo para nacer y cada día que pasa lo hace más fuerte.',
+      babyDevelopment: 'El bebé está casi completamente desarrollado. La mayoría de los órganos están maduros y se posiciona para el parto.',
+      motherChanges: 'Puedes sentir contracciones de Braxton Hicks más frecuentes. El bebé puede estar encajado.',
+      tips: [
+        'Reconoce los signos del parto',
+        'Ten todo listo para el hospital',
+        'Descansa todo lo posible',
+        'Mantén la calma'
+      ],
+      milestones: [
+        'Bebé casi completamente desarrollado',
+        'Órganos maduros',
+        'Posicionamiento para el parto',
+        'Preparación final'
+      ],
+      size: 'Lechuga romana',
+      weight: '2.6 kilogramos',
+      image: 'https://images.unsplash.com/photo-1622205313162-be1d5716a43b?auto=format&fit=crop&w=400&q=80', // Lechuga
+    },
+    en: {
+      title: 'Week 36: The End is Near',
+      description: 'You\'re in the final stretch! Your baby is almost ready to be born and each passing day makes them stronger.',
+      babyDevelopment: 'The baby is almost fully developed. Most organs are mature and positioning for birth.',
+      motherChanges: 'You may feel more frequent Braxton Hicks contractions. The baby may be engaged.',
+      tips: [
+        'Recognize labor signs',
+        'Have everything ready for the hospital',
+        'Rest as much as possible',
+        'Stay calm'
+      ],
+      milestones: [
+        'Baby almost fully developed',
+        'Mature organs',
+        'Positioning for birth',
+        'Final preparation'
+      ],
+      size: 'Romaine lettuce',
+      weight: '2.6 kilograms',
+      image: 'https://images.unsplash.com/photo-1622205313162-be1d5716a43b?auto=format&fit=crop&w=400&q=80', // Lettuce
+    },
+  },
+  // Semana 37
+  {
+    week: 37,
+    es: {
+      title: 'Semana 37: ¡A término temprano!',
+      description: '¡Felicidades! Tu bebé es considerado a término temprano. Sus pulmones están listos para funcionar fuera del útero.',
+      babyDevelopment: 'Los pulmones están listos para el nacimiento. El bebé sigue ganando peso y acumulando grasa.',
+      motherChanges: 'Puedes sentir más presión en la pelvis. El bebé puede nacer en cualquier momento.',
+      tips: [
+        'Mantén la calma',
+        'Confía en tu cuerpo',
+        'Ten todo preparado',
+        'Disfruta estos últimos días'
+      ],
+      milestones: [
+        'Pulmones listos para el nacimiento',
+        'Mayor acumulación de grasa',
+        'Preparación para el parto',
+        'A término temprano'
+      ],
+      size: 'Acelga',
+      weight: '2.9 kilogramos',
+      image: 'https://images.unsplash.com/photo-1576045057995-568f588f82fb?auto=format&fit=crop&w=400&q=80', // Acelga
+    },
+    en: {
+      title: 'Week 37: Early Term!',
+      description: 'Congratulations! Your baby is considered early term. Their lungs are ready to function outside the uterus.',
+      babyDevelopment: 'The lungs are ready for birth. The baby continues gaining weight and accumulating fat.',
+      motherChanges: 'You may feel more pressure in your pelvis. The baby can be born at any time.',
+      tips: [
+        'Stay calm',
+        'Trust your body',
+        'Have everything prepared',
+        'Enjoy these last days'
+      ],
+      milestones: [
+        'Lungs ready for birth',
+        'Greater fat accumulation',
+        'Preparation for labor',
+        'Early term'
+      ],
+      size: 'Swiss chard',
+      weight: '2.9 kilograms',
+      image: 'https://images.unsplash.com/photo-1576045057995-568f588f82fb?auto=format&fit=crop&w=400&q=80', // Swiss chard
+    },
+  },
+  // Semana 38
+  {
+    week: 38,
+    es: {
+      title: 'Semana 38: Preparación final',
+      description: 'Tu bebé sigue ganando peso y se prepara para el gran momento. El vérnix caseosa y el lanugo desaparecen casi por completo.',
+      babyDevelopment: 'El bebé sigue ganando peso. El vérnix caseosa y el lanugo desaparecen casi por completo.',
+      motherChanges: 'Puedes sentir contracciones más intensas. El bebé está listo para nacer.',
+      tips: [
+        'Descansa y relájate',
+        'Prepara todo para la llegada',
+        'Mantén la calma',
+        'Confía en el proceso'
+      ],
+      milestones: [
+        'Desaparición del lanugo',
+        'Mayor acumulación de grasa',
+        'Preparación final para el nacimiento',
+        'Órganos completamente maduros'
+      ],
+      size: 'Puerro grande',
+      weight: '3.1 kilogramos',
+      image: 'https://images.unsplash.com/photo-1580013759032-c96505e24c1f?auto=format&fit=crop&w=400&q=80', // Puerro
+    },
+    en: {
+      title: 'Week 38: Final Preparation',
+      description: 'Your baby continues gaining weight and preparing for the big moment. The vernix caseosa and lanugo almost completely disappear.',
+      babyDevelopment: 'The baby continues gaining weight. The vernix caseosa and lanugo almost completely disappear.',
+      motherChanges: 'You may feel more intense contractions. The baby is ready to be born.',
+      tips: [
+        'Rest and relax',
+        'Prepare everything for arrival',
+        'Stay calm',
+        'Trust the process'
+      ],
+      milestones: [
+        'Lanugo disappearance',
+        'Greater fat accumulation',
+        'Final preparation for birth',
+        'Completely mature organs'
+      ],
+      size: 'Large leek',
+      weight: '3.1 kilograms',
+      image: 'https://images.unsplash.com/photo-1580013759032-c96505e24c1f?auto=format&fit=crop&w=400&q=80', // Leek
+    },
+  },
+  // Semana 39
+  {
+    week: 39,
+    es: {
+      title: 'Semana 39: ¡A término completo!',
+      description: '¡Tu bebé está a término completo! Todos los órganos están maduros y listo para nacer en cualquier momento.',
+      babyDevelopment: 'El bebé está a término. Todos los órganos están maduros y listo para nacer en cualquier momento.',
+      motherChanges: 'Puedes sentir contracciones más regulares. El bebé puede nacer en cualquier momento.',
+      tips: [
+        'Mantén la calma',
+        'Confía en tu equipo médico',
+        'Disfruta estos últimos momentos',
+        'Prepárate para el milagro'
+      ],
+      milestones: [
+        'Órganos completamente maduros',
+        'Preparación para el nacimiento',
+        'El bebé puede nacer en cualquier momento',
+        'A término completo'
+      ],
+      size: 'Sandía pequeña',
+      weight: '3.3 kilogramos',
+      image: 'https://images.unsplash.com/photo-1566385101042-1a0aa0c1268c?auto=format&fit=crop&w=400&q=80', // Sandía
+    },
+    en: {
+      title: 'Week 39: Full Term!',
+      description: 'Your baby is full term! All organs are mature and ready to be born at any moment.',
+      babyDevelopment: 'The baby is full term. All organs are mature and ready to be born at any moment.',
+      motherChanges: 'You may feel more regular contractions. The baby can be born at any moment.',
+      tips: [
+        'Stay calm',
+        'Trust your medical team',
+        'Enjoy these last moments',
+        'Prepare for the miracle'
+      ],
+      milestones: [
+        'Completely mature organs',
+        'Preparation for birth',
+        'Baby can be born at any moment',
+        'Full term'
+      ],
+      size: 'Small watermelon',
+      weight: '3.3 kilograms',
+      image: 'https://images.unsplash.com/photo-1566385101042-1a0aa0c1268c?auto=format&fit=crop&w=400&q=80', // Watermelon
+    },
+  },
+  // Semana 40
+  {
+    week: 40,
+    es: {
+      title: 'Semana 40: ¡Es hora de conocer a tu bebé!',
+      description: '¡El momento ha llegado! Todos los órganos están maduros y el bebé puede sobrevivir fuera del útero.',
+      babyDevelopment: '¡Tu bebé está listo para nacer! Todos los órganos están maduros y el bebé puede sobrevivir fuera del útero.',
+      motherChanges: 'Puedes sentir contracciones regulares. El bebé está listo para nacer.',
+      tips: [
+        'Mantén la calma',
+        'Confía en tu cuerpo',
+        '¡Disfruta el momento!',
+        'Prepárate para el amor más grande'
+      ],
+      milestones: [
+        '¡Tu bebé está listo para nacer!',
+        'Todos los órganos están maduros',
+        'El bebé puede sobrevivir fuera del útero',
+        '¡El milagro de la vida!'
+      ],
+      size: 'Sandía pequeña',
+      weight: '3.4 kilogramos',
+      image: 'https://images.unsplash.com/photo-1566385101042-1a0aa0c1268c?auto=format&fit=crop&w=400&q=80', // Sandía
+    },
+    en: {
+      title: 'Week 40: Time to Meet Your Baby!',
+      description: 'The moment has arrived! All organs are mature and the baby can survive outside the uterus.',
+      babyDevelopment: 'Your baby is ready to be born! All organs are mature and the baby can survive outside the uterus.',
+      motherChanges: 'You may feel regular contractions. The baby is ready to be born.',
+      tips: [
+        'Stay calm',
+        'Trust your body',
+        'Enjoy the moment!',
+        'Prepare for the greatest love'
+      ],
+      milestones: [
+        'Your baby is ready to be born!',
+        'All organs are mature',
+        'Baby can survive outside the uterus',
+        'The miracle of life!'
+      ],
+      size: 'Small watermelon',
+      weight: '3.4 kilograms',
+      image: 'https://images.unsplash.com/photo-1566385101042-1a0aa0c1268c?auto=format&fit=crop&w=400&q=80', // Watermelon
+    },
+  }
 ]; 
