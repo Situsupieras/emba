@@ -148,12 +148,12 @@ export default function MedicalFeedbackScreen({ navigation }: MedicalFeedbackScr
 
   const addFeedback = () => {
     if (!newFeedback.doctorName?.trim()) {
-      Alert.alert('Error', 'Por favor ingresa el nombre del médico.');
+      Alert.alert('Error', t('medicalFeedback.requiredFields'));
       return;
     }
     
     if (!newFeedback.recommendations?.length) {
-      Alert.alert('Error', 'Por favor agrega al menos una recomendación del médico.');
+      Alert.alert('Error', t('medicalFeedback.requiredFields'));
       return;
     }
 
@@ -310,7 +310,7 @@ export default function MedicalFeedbackScreen({ navigation }: MedicalFeedbackScr
           <Card.Content>
             <Title style={styles.headerTitle}>
               <Ionicons name="medical" size={24} color={theme.colors.primary} />
-              {' '}Retroalimentación Médica
+              {' '}{t('medicalFeedback.title')}
             </Title>
             <Paragraph style={styles.headerSubtitle}>
               Registra las recomendaciones de tu médico para mantener la app sincronizada
@@ -322,7 +322,7 @@ export default function MedicalFeedbackScreen({ navigation }: MedicalFeedbackScr
         {user && (
           <Card style={styles.weekCard}>
             <Card.Content>
-              <Title style={styles.weekTitle}>Semana {user.currentWeek}</Title>
+              <Title style={styles.weekTitle}>{t('week')} {user.currentWeek}</Title>
               <Paragraph>Última actualización: {formatDate(new Date())}</Paragraph>
             </Card.Content>
           </Card>
@@ -339,10 +339,10 @@ export default function MedicalFeedbackScreen({ navigation }: MedicalFeedbackScr
                     <Text style={styles.doctorName}>Dr. {feedback.doctorName}</Text>
                     <Text style={styles.feedbackDate}>{formatDate(feedback.date)}</Text>
                   </View>
-                  <Text style={styles.feedbackWeek}>Semana {feedback.week}</Text>
+                  <Text style={styles.feedbackWeek}>{t('week')} {feedback.week}</Text>
                   {feedback.recommendations.length > 0 && (
                     <View style={styles.recommendationsList}>
-                      <Text style={styles.sectionTitle}>Recomendaciones:</Text>
+                      <Text style={styles.sectionTitle}>{t('medicalFeedback.recommendations')}:</Text>
                       {feedback.recommendations.slice(0, 2).map((rec, index) => (
                         <Text key={index} style={styles.recommendationText}>• {rec}</Text>
                       ))}

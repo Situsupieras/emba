@@ -99,14 +99,14 @@ export default function AuthScreen({ navigation }: any) {
           {!isLogin && (
             <>
               <TextInput
-                label="Nombre completo"
+                label={t('name')}
                 value={name}
                 onChangeText={setName}
                 style={styles.input}
                 mode="outlined"
               />
               <TextInput
-                label="Edad"
+                label={t('profile.age')}
                 value={age}
                 onChangeText={setAge}
                 keyboardType="numeric"
@@ -114,32 +114,32 @@ export default function AuthScreen({ navigation }: any) {
                 mode="outlined"
               />
               <TextInput
-                label="Semana actual de embarazo"
+                label={t('profile.currentPregnancyWeek')}
                 value={currentWeek}
                 onChangeText={setCurrentWeek}
                 keyboardType="numeric"
                 style={styles.input}
                 mode="outlined"
               />
-              <Paragraph style={{ marginTop: 8 }}>Dieta</Paragraph>
+              <Paragraph style={{ marginTop: 8 }}>{t('profile.dietType')}</Paragraph>
               <Picker
                 selectedValue={diet}
                 onValueChange={setDiet}
                 style={{ marginBottom: 8 }}
               >
-                <Picker.Item label="Omnívora" value="omnívora" />
-                <Picker.Item label="Vegetariana" value="vegetariana" />
-                <Picker.Item label="Vegana" value="vegana" />
+                <Picker.Item label={t('diets.omnivorous')} value="omnívora" />
+                <Picker.Item label={t('diets.vegetarian')} value="vegetariana" />
+                <Picker.Item label={t('diets.vegan')} value="vegana" />
               </Picker>
               <Button
                 mode={hasBoughtSupplements ? 'contained' : 'outlined'}
                 onPress={() => setHasBoughtSupplements(!hasBoughtSupplements)}
                 style={{ marginBottom: 8 }}
               >
-                {hasBoughtSupplements ? 'Ha comprado suplementos' : 'No ha comprado suplementos'}
+                {hasBoughtSupplements ? t('profile.hasBoughtSupplements') : t('profile.hasNotBoughtSupplements')}
               </Button>
               <TextInput
-                label="Hijos previos"
+                label={t('profile.previousChildren')}
                 value={previousChildren}
                 onChangeText={setPreviousChildren}
                 keyboardType="numeric"

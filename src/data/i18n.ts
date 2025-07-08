@@ -1,12 +1,100 @@
 import * as Localization from 'expo-localization';
+import * as SecureStore from 'expo-secure-store';
 // @ts-ignore
 // eslint-disable-next-line
 // declare module 'i18n-js';
 import I18n from 'i18n-js';
 
-// @ts-ignore
 I18n.translations = {
   es: {
+    // Agrupadas
+    messages: {
+      loading: 'Cargando información...',
+      noPosts: 'No hay publicaciones',
+      beFirst: 'Sé la primera en iniciar una conversación en esta categoría',
+      createPost: 'Crear publicación',
+      close: 'Cerrar',
+      cancel: 'Cancelar',
+      publish: 'Publicar',
+      buyNow: 'Comprar ahora',
+      seeDetails: 'Ver detalles',
+      important: 'Importante',
+      disclaimer: 'Siempre consulta con tu médico antes de tomar cualquier suplemento. Esta información es educativa y no reemplaza el consejo médico profesional.',
+    },
+    chat: {
+      title: 'Asistente IA',
+      subtitle: 'Tu compañero de embarazo inteligente',
+      welcome: '¡Hola! Soy tu asistente de embarazo. Puedo ayudarte con preguntas sobre nutrición, ejercicio, síntomas, medicamentos y citas médicas. ¿En qué puedo ayudarte hoy?',
+      placeholder: 'Escribe tu pregunta...',
+      typing: 'Escribiendo...',
+      error: 'Lo siento, no pude procesar tu mensaje. Por favor, intenta de nuevo.',
+      errorTitle: 'Error de conexión',
+      errorMessage: 'No se pudo conectar con el servidor. Verifica tu conexión a internet.',
+      quickQuestions: 'Preguntas rápidas',
+      suggestions: 'Aquí tienes algunas sugerencias para continuar la conversación:',
+      questions: {
+        nutrition: '¿Qué debo comer?',
+        exercise: '¿Puedo hacer ejercicio?',
+        symptoms: '¿Es normal este síntoma?',
+        medication: '¿Qué medicamentos puedo tomar?',
+        appointments: '¿Cuándo es mi próxima cita?',
+      },
+    },
+    profile: {
+      title: 'Perfil',
+      editProfile: 'Editar perfil',
+      save: 'Guardar',
+      cancel: 'Cancelar',
+      logout: 'Cerrar sesión',
+      pregnancyInfo: 'Información del Embarazo',
+      age: 'Edad',
+      currentPregnancyWeek: 'Semana actual de embarazo',
+      previousChildren: 'Hijos previos',
+      dietType: 'Tipo de dieta',
+      hasBoughtSupplements: 'Ha comprado suplementos',
+      hasNotBoughtSupplements: 'No ha comprado suplementos',
+      supplements: 'Suplementos',
+      yes: 'Sí',
+      no: 'No',
+      years: 'años',
+      language: 'Idioma / Language',
+      emailVerification: 'Verificación de Email',
+      emailVerified: 'Email verificado',
+      emailNotVerified: 'Email no verificado',
+      resendVerification: 'Reenviar verificación',
+      verificationSent: 'Correo de verificación enviado. Revisa tu bandeja de entrada.',
+      profileUpdated: 'Perfil actualizado correctamente.',
+      errorSavingProfile: 'Error al guardar el perfil.',
+      noAuthenticatedUser: 'No hay usuario autenticado.',
+      loadingProfile: 'Cargando perfil...',
+      errorLogout: 'Error al cerrar sesión.',
+    },
+    diets: {
+      omnivorous: 'Omnívora',
+      vegetarian: 'Vegetariana',
+      vegan: 'Vegana',
+    },
+    medicalFeedback: {
+      title: 'Retroalimentación Médica',
+      doctorName: 'Nombre del médico',
+      recommendations: 'Recomendaciones del médico',
+      concerns: 'Preocupaciones o síntomas',
+      nextAppointment: 'Próxima cita médica',
+      notes: 'Notas adicionales',
+      supplementsPrescribed: 'Suplementos recetados',
+      testsOrdered: 'Exámenes ordenados',
+      weight: 'Peso (kg)',
+      bloodPressure: 'Presión arterial',
+      babyHeartbeat: 'Latidos del bebé (bpm)',
+      ultrasoundNotes: 'Notas de ecografía',
+      saveFeedback: 'Guardar retroalimentación',
+      feedbackSaved: 'Retroalimentación médica guardada correctamente.',
+      errorSavingFeedback: 'Error al guardar la retroalimentación médica.',
+      requiredFields: 'Por favor completa todos los campos requeridos.',
+      invalidWeight: 'Peso inválido',
+      invalidHeartbeat: 'Latidos del bebé inválidos',
+    },
+    // Sueltas (solo las que no están duplicadas)
     welcome: 'Bienvenida a Inteligencia Prenatal',
     login: 'Iniciar sesión',
     register: 'Crear cuenta',
@@ -19,23 +107,6 @@ I18n.translations = {
     guide: 'Guía',
     community: 'Comunidad',
     store: 'Tienda',
-    profile: 'Perfil',
-    logout: 'Cerrar sesión',
-    save: 'Guardar',
-    edit: 'Editar',
-    name: 'Nombre',
-    language: 'Idioma',
-    spanish: 'Español',
-    english: 'Inglés',
-    emailVerified: 'Email verificado',
-    emailNotVerified: 'Email no verificado',
-    resendVerification: 'Reenviar correo de verificación',
-    method: 'Método',
-    emailPassword: 'Email/Contraseña',
-    other: 'Otro',
-    tips: 'Consejos para esta semana',
-    milestones: 'Hitos importantes de esta semana',
-    development: 'Desarrollo de tu bebé',
     week: 'Semana',
     quickActions: 'Acciones rápidas',
     trimester: 'Trimestre',
@@ -76,7 +147,6 @@ I18n.translations = {
       close: 'Cerrar',
       cancel: 'Cancelar',
       publish: 'Publicar',
-      save: 'Guardar',
       buyNow: 'Comprar ahora',
       seeDetails: 'Ver detalles',
       important: 'Importante',
@@ -193,8 +263,153 @@ I18n.translations = {
         appointments: '¿Cuándo es mi próxima cita?',
       },
     },
+    // Perfil y configuración
+    profile: {
+      title: 'Perfil',
+      editProfile: 'Editar perfil',
+      save: 'Guardar',
+      cancel: 'Cancelar',
+      logout: 'Cerrar sesión',
+      pregnancyInfo: 'Información del Embarazo',
+      age: 'Edad',
+      currentPregnancyWeek: 'Semana actual de embarazo',
+      previousChildren: 'Hijos previos',
+      dietType: 'Tipo de dieta',
+      hasBoughtSupplements: 'Ha comprado suplementos',
+      hasNotBoughtSupplements: 'No ha comprado suplementos',
+      supplements: 'Suplementos',
+      yes: 'Sí',
+      no: 'No',
+      years: 'años',
+      language: 'Idioma / Language',
+      emailVerification: 'Verificación de Email',
+      emailVerified: 'Email verificado',
+      emailNotVerified: 'Email no verificado',
+      resendVerification: 'Reenviar verificación',
+      verificationSent: 'Correo de verificación enviado. Revisa tu bandeja de entrada.',
+      profileUpdated: 'Perfil actualizado correctamente.',
+      errorSavingProfile: 'Error al guardar el perfil.',
+      noAuthenticatedUser: 'No hay usuario autenticado.',
+      loadingProfile: 'Cargando perfil...',
+      errorLogout: 'Error al cerrar sesión.',
+    },
+    // Dietas
+    diets: {
+      omnivorous: 'Omnívora',
+      vegetarian: 'Vegetariana',
+      vegan: 'Vegana',
+    },
+    // Retroalimentación médica
+    medicalFeedback: {
+      title: 'Retroalimentación Médica',
+      doctorName: 'Nombre del médico',
+      recommendations: 'Recomendaciones del médico',
+      concerns: 'Preocupaciones o síntomas',
+      nextAppointment: 'Próxima cita médica',
+      notes: 'Notas adicionales',
+      supplementsPrescribed: 'Suplementos recetados',
+      testsOrdered: 'Exámenes ordenados',
+      weight: 'Peso (kg)',
+      bloodPressure: 'Presión arterial',
+      babyHeartbeat: 'Latidos del bebé (bpm)',
+      ultrasoundNotes: 'Notas de ecografía',
+      saveFeedback: 'Guardar retroalimentación',
+      feedbackSaved: 'Retroalimentación médica guardada correctamente.',
+      errorSavingFeedback: 'Error al guardar la retroalimentación médica.',
+      requiredFields: 'Por favor completa todos los campos requeridos.',
+      invalidWeight: 'Peso inválido',
+      invalidHeartbeat: 'Latidos del bebé inválidos',
+    },
   },
   en: {
+    // Agrupadas
+    messages: {
+      loading: 'Loading information...',
+      noPosts: 'No posts yet',
+      beFirst: 'Be the first to start a conversation in this category',
+      createPost: 'Create post',
+      close: 'Close',
+      cancel: 'Cancel',
+      publish: 'Publish',
+      buyNow: 'Buy now',
+      seeDetails: 'See details',
+      important: 'Important',
+      disclaimer: 'Always consult your doctor before taking any supplement. This information is educational and does not replace professional medical advice.',
+    },
+    chat: {
+      title: 'AI Assistant',
+      subtitle: 'Your intelligent pregnancy companion',
+      welcome: "Hello! I'm your pregnancy assistant. I can help you with questions about nutrition, exercise, symptoms, medications, and medical appointments. How can I help you today?",
+      placeholder: 'Type your question...',
+      typing: 'Typing...',
+      error: "Sorry, I couldn't process your message. Please try again.",
+      errorTitle: 'Connection Error',
+      errorMessage: 'Could not connect to server. Please check your internet connection.',
+      quickQuestions: 'Quick questions',
+      suggestions: 'Here are some suggestions to continue the conversation:',
+      questions: {
+        nutrition: 'What should I eat?',
+        exercise: 'Can I exercise?',
+        symptoms: 'Is this symptom normal?',
+        medication: 'What medications can I take?',
+        appointments: 'When is my next appointment?',
+      },
+    },
+    profile: {
+      title: 'Profile',
+      editProfile: 'Edit profile',
+      save: 'Save',
+      cancel: 'Cancel',
+      logout: 'Logout',
+      pregnancyInfo: 'Pregnancy Information',
+      age: 'Age',
+      currentPregnancyWeek: 'Current pregnancy week',
+      previousChildren: 'Previous children',
+      dietType: 'Diet type',
+      hasBoughtSupplements: 'Has bought supplements',
+      hasNotBoughtSupplements: 'Has not bought supplements',
+      supplements: 'Supplements',
+      yes: 'Yes',
+      no: 'No',
+      years: 'years',
+      language: 'Language / Idioma',
+      emailVerification: 'Email Verification',
+      emailVerified: 'Email verified',
+      emailNotVerified: 'Email not verified',
+      resendVerification: 'Resend verification',
+      verificationSent: 'Verification email sent. Check your inbox.',
+      profileUpdated: 'Profile updated successfully.',
+      errorSavingProfile: 'Error saving profile.',
+      noAuthenticatedUser: 'No authenticated user.',
+      loadingProfile: 'Loading profile...',
+      errorLogout: 'Error logging out.',
+    },
+    diets: {
+      omnivorous: 'Omnivorous',
+      vegetarian: 'Vegetarian',
+      vegan: 'Vegan',
+    },
+    medicalFeedback: {
+      title: 'Medical Feedback',
+      doctorName: 'Doctor name',
+      recommendations: 'Doctor recommendations',
+      concerns: 'Concerns or symptoms',
+      nextAppointment: 'Next medical appointment',
+      notes: 'Additional notes',
+      supplementsPrescribed: 'Prescribed supplements',
+      testsOrdered: 'Tests ordered',
+      weight: 'Weight (kg)',
+      bloodPressure: 'Blood pressure',
+      babyHeartbeat: 'Baby heartbeat (bpm)',
+      ultrasoundNotes: 'Ultrasound notes',
+      saveFeedback: 'Save feedback',
+      feedbackSaved: 'Medical feedback saved successfully.',
+      errorSavingFeedback: 'Error saving medical feedback.',
+      requiredFields: 'Please complete all required fields.',
+      invalidWeight: 'Invalid weight',
+      invalidHeartbeat: 'Invalid baby heartbeat',
+    },
+    // Sueltas (solo las que no están duplicadas)
     welcome: 'Welcome to Prenatal Intelligence',
     login: 'Login',
     register: 'Sign up',
@@ -207,23 +422,6 @@ I18n.translations = {
     guide: 'Guide',
     community: 'Community',
     store: 'Store',
-    profile: 'Profile',
-    logout: 'Logout',
-    save: 'Save',
-    edit: 'Edit',
-    name: 'Name',
-    language: 'Language',
-    spanish: 'Spanish',
-    english: 'English',
-    emailVerified: 'Email verified',
-    emailNotVerified: 'Email not verified',
-    resendVerification: 'Resend verification email',
-    method: 'Method',
-    emailPassword: 'Email/Password',
-    other: 'Other',
-    tips: 'Tips for this week',
-    milestones: 'Milestones of this week',
-    development: "Your baby's development (size, organs, senses, etc.)",
     week: 'Week',
     quickActions: 'Quick Actions',
     trimester: 'Trimester',
@@ -264,7 +462,6 @@ I18n.translations = {
       close: 'Close',
       cancel: 'Cancel',
       publish: 'Publish',
-      save: 'Save',
       buyNow: 'Buy now',
       seeDetails: 'See details',
       important: 'Important',
@@ -289,14 +486,12 @@ I18n.translations = {
     mainBenefits: 'Main benefits:',
     seeMedicalDetails: 'See medical details',
     buy: 'Buy',
-    important: 'Important',
     medicalDisclaimer: 'Always consult your doctor before taking any supplement. This information is educational and does not replace professional medical advice.',
     detailedMedicalInfo: 'Detailed Medical Information',
     benefits: 'Benefits',
     sideEffects: 'Side effects',
     contraindications: 'Contraindications',
     certifications: 'Certifications',
-    close: 'Close',
     qualityCertified: '✓ Quality certified',
     medicalExplanations: '✓ Medical explanations',
     noToxicChemicals: '✓ No toxic chemicals',
@@ -382,43 +577,94 @@ I18n.translations = {
         appointments: 'When is my next appointment?',
       },
     },
+    // Profile and settings
+    profile: {
+      title: 'Profile',
+      editProfile: 'Edit profile',
+      save: 'Save',
+      cancel: 'Cancel',
+      logout: 'Logout',
+      pregnancyInfo: 'Pregnancy Information',
+      age: 'Age',
+      currentPregnancyWeek: 'Current pregnancy week',
+      previousChildren: 'Previous children',
+      dietType: 'Diet type',
+      hasBoughtSupplements: 'Has bought supplements',
+      hasNotBoughtSupplements: 'Has not bought supplements',
+      supplements: 'Supplements',
+      yes: 'Yes',
+      no: 'No',
+      years: 'years',
+      language: 'Language / Idioma',
+      emailVerification: 'Email Verification',
+      emailVerified: 'Email verified',
+      emailNotVerified: 'Email not verified',
+      resendVerification: 'Resend verification',
+      verificationSent: 'Verification email sent. Check your inbox.',
+      profileUpdated: 'Profile updated successfully.',
+      errorSavingProfile: 'Error saving profile.',
+      noAuthenticatedUser: 'No authenticated user.',
+      loadingProfile: 'Loading profile...',
+      errorLogout: 'Error logging out.',
+    },
+    // Diets
+    diets: {
+      omnivorous: 'Omnivorous',
+      vegetarian: 'Vegetarian',
+      vegan: 'Vegan',
+    },
+    // Medical feedback
+    medicalFeedback: {
+      title: 'Medical Feedback',
+      doctorName: 'Doctor name',
+      recommendations: 'Doctor recommendations',
+      concerns: 'Concerns or symptoms',
+      nextAppointment: 'Next medical appointment',
+      notes: 'Additional notes',
+      supplementsPrescribed: 'Prescribed supplements',
+      testsOrdered: 'Tests ordered',
+      weight: 'Weight (kg)',
+      bloodPressure: 'Blood pressure',
+      babyHeartbeat: 'Baby heartbeat (bpm)',
+      ultrasoundNotes: 'Ultrasound notes',
+      saveFeedback: 'Save feedback',
+      feedbackSaved: 'Medical feedback saved successfully.',
+      errorSavingFeedback: 'Error saving medical feedback.',
+      requiredFields: 'Please complete all required fields.',
+      invalidWeight: 'Invalid weight',
+      invalidHeartbeat: 'Invalid baby heartbeat',
+    },
   },
 };
 
-// @ts-ignore
 I18n.locale = Localization.locale || 'es';
-// @ts-ignore
 I18n.fallbacks = true;
-// @ts-ignore
 I18n.defaultLocale = 'es';
 
-// Asegurar que el idioma se inicialice correctamente
-try {
-  // @ts-ignore
-  const locale = Localization.locale;
-  if (typeof locale === 'string' && locale.startsWith('es')) {
-    // @ts-ignore
+const initializeLanguage = async () => {
+  try {
+    const savedLanguage = await SecureStore.getItemAsync('userLanguage');
+    if (savedLanguage && (savedLanguage === 'es' || savedLanguage === 'en')) {
+      I18n.locale = savedLanguage;
+    } else {
+      const locale = Localization.locale;
+      if (typeof locale === 'string' && locale.startsWith('es')) {
+        I18n.locale = 'es';
+      } else {
+        I18n.locale = 'en';
+      }
+    }
+  } catch (error) {
     I18n.locale = 'es';
-  } else {
-    // @ts-ignore
-    I18n.locale = 'en';
   }
-} catch (error) {
-  // @ts-ignore
-  I18n.locale = 'es';
-}
-
-// @ts-ignore
-export const t = (key: string, config?: any) => I18n.t(key, config);
-
-// Función para cambiar idioma
-export const setLanguage = (locale: string) => {
-  // @ts-ignore
-  I18n.locale = locale;
 };
 
-// Función para obtener idioma actual
+initializeLanguage();
+
+export const t = (key: string, config?: any) => I18n.t(key, config);
+export const setLanguage = (locale: string) => {
+  I18n.locale = locale;
+};
 export const getCurrentLanguage = () => {
-  // @ts-ignore
   return I18n.locale;
 }; 

@@ -78,10 +78,10 @@ export default function ProfileScreen() {
       await SecureStore.setItemAsync('userProfile', JSON.stringify(userData));
       // También actualizar el campo 'semanas' para compatibilidad
       await SecureStore.setItemAsync('semanas', currentWeek);
-      setSuccess('Perfil actualizado correctamente.');
+      setSuccess(t('profile.profileUpdated'));
       setIsEditing(false);
     } catch (error) {
-      setError('Error al guardar el perfil.');
+      setError(t('profile.errorSavingProfile'));
       console.error('Error saving user profile:', error);
     }
   };
@@ -91,7 +91,7 @@ export default function ProfileScreen() {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#6200ee" />
-        <Paragraph style={styles.loadingText}>Cargando perfil...</Paragraph>
+        <Paragraph style={styles.loadingText}>{t('profile.loadingProfile')}</Paragraph>
       </View>
     );
   }
@@ -100,7 +100,7 @@ export default function ProfileScreen() {
   if (!user) {
     return (
       <View style={styles.errorContainer}>
-        <Paragraph style={styles.errorText}>No hay usuario autenticado.</Paragraph>
+        <Paragraph style={styles.errorText}>{t('profile.noAuthenticatedUser')}</Paragraph>
       </View>
     );
   }
@@ -109,7 +109,7 @@ export default function ProfileScreen() {
     try {
       await signOut(auth);
     } catch (error) {
-      setError('Error al cerrar sesión.');
+      setError(t('profile.errorLogout'));
     }
   };
 
@@ -149,7 +149,7 @@ export default function ProfileScreen() {
     setError('');
     try {
       await sendEmailVerification(user!);
-      setVerifMsg('Correo de verificación enviado. Revisa tu bandeja de entrada.');
+      setVerifMsg(t('profile.verificationSent'));
     } catch (e: any) {
       setError(e.message);
     }
@@ -186,7 +186,7 @@ export default function ProfileScreen() {
             </TouchableOpacity>
             <View style={styles.userInfo}>
               <TextInput
-                label="Nombre completo"
+                label={t('name')}
                 value={displayName}
                 onChangeText={setDisplayName}
                 style={styles.nameInput}
@@ -199,12 +199,12 @@ export default function ProfileScreen() {
 
           {/* Campos del perfil de embarazo */}
           <View style={styles.section}>
-            <Title style={styles.sectionTitle}>Información del Embarazo</Title>
+            <Title style={styles.sectionTitle}>{t('profile.pregnancyInfo')}</Title>
             
             {isEditing ? (
               <View style={styles.editFields}>
                 <TextInput
-                  label="Edad"
+                  label={t('profile.age')}
                   value={age}
                   onChangeText={setAge}
                   keyboardType="numeric"
@@ -212,7 +212,7 @@ export default function ProfileScreen() {
                   mode="outlined"
                 />
                 <TextInput
-                  label="Semana actual de embarazo"
+                  label={t('profile.currentPregnancyWeek')}
                   value={currentWeek}
                   onChangeText={setCurrentWeek}
                   keyboardType="numeric"
@@ -220,7 +220,7 @@ export default function ProfileScreen() {
                   mode="outlined"
                 />
                 <TextInput
-                  label="Hijos previos"
+                  label={t('profile.previousChildren')}
                   value={previousChildren}
                   onChangeText={setPreviousChildren}
                   keyboardType="numeric"
@@ -228,16 +228,16 @@ export default function ProfileScreen() {
                   mode="outlined"
                 />
                 
-                <Paragraph style={styles.pickerLabel}>Tipo de dieta</Paragraph>
+                <Paragraph style={styles.pickerLabel}>{t('profile.dietType')}</Paragraph>
                 <View style={styles.pickerContainer}>
                   <Picker
                     selectedValue={diet}
                     onValueChange={setDiet}
                     style={styles.picker}
                   >
-                    <Picker.Item label="Omnívora" value="omnívora" />
-                    <Picker.Item label="Vegetariana" value="vegetariana" />
-                    <Picker.Item label="Vegana" value="vegana" />
+                    <Picker.Item label={t('diets.omnivorous')} value="omnívora" />
+                    <Picker.Item label={t('diets.vegetarian')} value="vegetariana" />
+                    <Picker.Item label={t('diets.vegan')} value="vegana" />
                   </Picker>
                 </View>
                 
@@ -247,24 +247,24 @@ export default function ProfileScreen() {
                   style={styles.supplementButton}
                   icon={hasBoughtSupplements ? 'check' : 'close'}
                 >
-                  {hasBoughtSupplements ? 'Ha comprado suplementos' : 'No ha comprado suplementos'}
+                  {hasBoughtSupplements ? t('profile.hasBoughtSupplements') : t('profile.hasNotBoughtSupplements')}
                 </Button>
               </View>
             ) : (
               <View style={styles.infoDisplay}>
                 <View style={styles.infoRow}>
-                  <Chip icon="calendar" style={styles.infoChip}>Edad: {age} años</Chip>
-                  <Chip icon="heart" style={styles.infoChip}>Semana: {currentWeek}</Chip>
+                  <Chip icon="calendar" style={styles.infoChip}>{t('profile.age')}: {age} {t('profile.years')}</Chip>
+                  <Chip icon="heart" style={styles.infoChip}>{t('week')}: {currentWeek}</Chip>
                 </View>
                 <View style={styles.infoRow}>
-                  <Chip icon="baby-face" style={styles.infoChip}>Hijos previos: {previousChildren}</Chip>
-                  <Chip icon="food-apple" style={styles.infoChip}>Dieta: {diet}</Chip>
+                  <Chip icon="baby-face" style={styles.infoChip}>{t('profile.previousChildren')}: {previousChildren}</Chip>
+                  <Chip icon="food-apple" style={styles.infoChip}>{t('profile.dietType')}: {diet}</Chip>
                 </View>
                 <Chip 
                   icon={hasBoughtSupplements ? 'check-circle' : 'close-circle'} 
                   style={[styles.infoChip, hasBoughtSupplements ? styles.positiveChip : styles.negativeChip]}
                 >
-                  Suplementos: {hasBoughtSupplements ? 'Sí' : 'No'}
+                  {t('profile.supplements')}: {hasBoughtSupplements ? t('profile.yes') : t('profile.no')}
                 </Chip>
               </View>
             )}
@@ -272,7 +272,7 @@ export default function ProfileScreen() {
 
           {/* Configuración de idioma */}
           <View style={styles.section}>
-            <Title style={styles.sectionTitle}>Idioma / Language</Title>
+            <Title style={styles.sectionTitle}>{t('profile.language')}</Title>
             <View style={styles.languageButtons}>
               <Button 
                 mode={language === 'es' ? 'contained' : 'outlined'} 
@@ -295,13 +295,13 @@ export default function ProfileScreen() {
 
           {/* Verificación de email */}
           <View style={styles.section}>
-            <Title style={styles.sectionTitle}>Verificación de Email</Title>
+            <Title style={styles.sectionTitle}>{t('profile.emailVerification')}</Title>
             <View style={styles.verificationStatus}>
               <Chip 
                 icon={user?.emailVerified ? 'check-circle' : 'alert-circle'} 
                 style={[styles.verificationChip, user?.emailVerified ? styles.verifiedChip : styles.notVerifiedChip]}
               >
-                {user?.emailVerified ? 'Email verificado' : 'Email no verificado'}
+                {user?.emailVerified ? t('profile.emailVerified') : t('profile.emailNotVerified')}
               </Chip>
               {!user?.emailVerified && (
                 <Button 
@@ -310,7 +310,7 @@ export default function ProfileScreen() {
                   style={styles.verifyButton}
                   icon="email-send"
                 >
-                  Reenviar verificación
+                  {t('profile.resendVerification')}
                 </Button>
               )}
             </View>
@@ -330,7 +330,7 @@ export default function ProfileScreen() {
                 style={styles.editButton}
                 icon="pencil"
               >
-                Editar perfil
+                {t('profile.editProfile')}
               </Button>
             ) : (
               <View style={styles.editButtons}>
@@ -342,7 +342,7 @@ export default function ProfileScreen() {
                   disabled={loading}
                   icon="content-save"
                 >
-                  Guardar
+                  {t('profile.save')}
                 </Button>
                 <Button 
                   mode="outlined" 
@@ -350,7 +350,7 @@ export default function ProfileScreen() {
                   style={styles.cancelButton}
                   icon="close"
                 >
-                  Cancelar
+                  {t('profile.cancel')}
                 </Button>
               </View>
             )}
@@ -361,7 +361,7 @@ export default function ProfileScreen() {
               style={styles.logoutButton}
               icon="logout"
             >
-              Cerrar sesión
+              {t('profile.logout')}
             </Button>
           </View>
         </Card.Content>
