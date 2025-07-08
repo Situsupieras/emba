@@ -59,7 +59,10 @@ export default function AuthScreen({ navigation }: any) {
           previousChildren: Number(previousChildren),
           email,
         };
+        console.log('AuthScreen - Guardando perfil de usuario:', userData);
         await SecureStore.setItemAsync('userProfile', JSON.stringify(userData));
+        // También guardar la semana en el campo 'semanas' para compatibilidad
+        await SecureStore.setItemAsync('semanas', currentWeek);
       }
       navigation.replace('Main');
     } catch (e: any) {

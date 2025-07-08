@@ -74,7 +74,10 @@ export default function ProfileScreen() {
         supplements: [],
         email: user?.email,
       };
+      console.log('ProfileScreen - Guardando perfil actualizado:', userData);
       await SecureStore.setItemAsync('userProfile', JSON.stringify(userData));
+      // También actualizar el campo 'semanas' para compatibilidad
+      await SecureStore.setItemAsync('semanas', currentWeek);
       setSuccess('Perfil actualizado correctamente.');
       setIsEditing(false);
     } catch (error) {

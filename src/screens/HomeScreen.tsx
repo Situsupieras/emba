@@ -47,21 +47,15 @@ export default function HomeScreen() {
         const ultimaReglaStr = await SecureStore.getItemAsync('ultimaRegla');
         
         let currentWeek = 1;
-        if (semanasStr && !isNaN(Number(semanasStr))) {
-          currentWeek = Number(semanasStr);
-        } else if (ultimaReglaStr) {
-          const ultimaRegla = new Date(ultimaReglaStr);
-          const hoy = new Date();
-          const diff = hoy.getTime() - ultimaRegla.getTime();
-          const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
-          currentWeek = Math.max(1, Math.floor(dias / 7));
-        }
-
-        // Obtener nombre del perfil de usuario si existe
         let userName = name || 'Usuario';
+        
+        // Primero intentar obtener la semana del perfil del usuario
         if (userProfileData) {
           try {
             const profile = JSON.parse(userProfileData);
+            if (profile.currentWeek && !isNaN(Number(profile.currentWeek))) {
+              currentWeek = Number(profile.currentWeek);
+            }
             if (profile.name && profile.name.trim()) {
               userName = profile.name;
             }
@@ -69,11 +63,41 @@ export default function HomeScreen() {
             console.log('Error parsing user profile:', e);
           }
         }
+        
+        // Si no hay perfil o no tiene semana, usar los datos de última regla
+        if (currentWeek === 1) {
+          if (semanasStr && !isNaN(Number(semanasStr))) {
+            currentWeek = Number(semanasStr);
+          } else if (ultimaReglaStr) {
+            const ultimaRegla = new Date(ultimaReglaStr);
+            const hoy = new Date();
+            const diff = hoy.getTime() - ultimaRegla.getTime();
+            const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+            currentWeek = Math.max(1, Math.floor(dias / 7));
+          }
+        }
 
+        // Calcular trimestre basado en la semana actual
+        let trimester = 1;
+        if (currentWeek >= 1 && currentWeek <= 13) {
+          trimester = 1;
+        } else if (currentWeek >= 14 && currentWeek <= 27) {
+          trimester = 2;
+        } else if (currentWeek >= 28) {
+          trimester = 3;
+        }
+
+        // El nombre ya se obtuvo arriba del perfil del usuario
+
+        console.log('HomeScreen - Semana cargada:', currentWeek);
+        console.log('HomeScreen - Nombre cargado:', userName);
+        console.log('HomeScreen - Trimestre calculado:', trimester);
+        
         setUser((prev) => ({
           ...prev,
           name: userName,
           currentWeek,
+          trimester,
         }));
       } catch (e) {
         console.log('Error leyendo datos reales:', e);
@@ -92,6 +116,25 @@ export default function HomeScreen() {
       useNativeDriver: true,
     }).start();
   }, [user.currentWeek]);
+
+  // Recalcular trimestre cuando cambie la semana
+  useEffect(() => {
+    let newTrimester = 1;
+    if (user.currentWeek >= 1 && user.currentWeek <= 13) {
+      newTrimester = 1;
+    } else if (user.currentWeek >= 14 && user.currentWeek <= 27) {
+      newTrimester = 2;
+    } else if (user.currentWeek >= 28) {
+      newTrimester = 3;
+    }
+
+    if (newTrimester !== user.trimester) {
+      setUser(prev => ({
+        ...prev,
+        trimester: newTrimester,
+      }));
+    }
+  }, [user.currentWeek, user.trimester]);
 
   const calculateProgress = () => {
     return user.currentWeek / 40; // 40 weeks total pregnancy
