@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Dimensions,
   Animated,
+  Text,
 } from 'react-native';
 import {
   Card,
@@ -279,7 +280,7 @@ export default function SupplementsScreen() {
                 <Title style={styles.dialogSectionTitle}>{t('certifications')}</Title>
                 <View style={styles.certificationsGrid}>
                   {selectedSupplement.certifications.map((cert) => (
-                    <Chip key={cert} mode="outlined" style={styles.dialogCertificationChip} textStyle={{flexWrap: 'wrap', maxWidth: 120, textAlign: 'center'}}>
+                    <Chip key={cert} mode="outlined" style={styles.dialogCertificationChip}>
                       {cert}
                     </Chip>
                   ))}
@@ -482,5 +483,7 @@ const styles = StyleSheet.create({
   },
   dialogCertificationChip: {
     marginBottom: 4,
+    minHeight: 40,
+    justifyContent: 'center',
   },
 }); 

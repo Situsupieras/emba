@@ -42,8 +42,10 @@ export default function HomeScreen() {
     (async () => {
       try {
         const name = await SecureStore.getItemAsync('userName');
+        const userProfileData = await SecureStore.getItemAsync('userProfile');
         const semanasStr = await SecureStore.getItemAsync('semanas');
         const ultimaReglaStr = await SecureStore.getItemAsync('ultimaRegla');
+        
         let currentWeek = 1;
         if (semanasStr && !isNaN(Number(semanasStr))) {
           currentWeek = Number(semanasStr);
@@ -54,9 +56,23 @@ export default function HomeScreen() {
           const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
           currentWeek = Math.max(1, Math.floor(dias / 7));
         }
+
+        // Obtener nombre del perfil de usuario si existe
+        let userName = name || 'Usuario';
+        if (userProfileData) {
+          try {
+            const profile = JSON.parse(userProfileData);
+            if (profile.name && profile.name.trim()) {
+              userName = profile.name;
+            }
+          } catch (e) {
+            console.log('Error parsing user profile:', e);
+          }
+        }
+
         setUser((prev) => ({
           ...prev,
-          name: name || prev.name,
+          name: userName,
           currentWeek,
         }));
       } catch (e) {

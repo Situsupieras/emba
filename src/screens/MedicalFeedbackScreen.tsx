@@ -147,8 +147,13 @@ export default function MedicalFeedbackScreen({ navigation }: MedicalFeedbackScr
   };
 
   const addFeedback = () => {
-    if (!newFeedback.doctorName || !newFeedback.recommendations?.length) {
-      Alert.alert('Error', 'Por favor completa al menos el nombre del médico y una recomendación.');
+    if (!newFeedback.doctorName?.trim()) {
+      Alert.alert('Error', 'Por favor ingresa el nombre del médico.');
+      return;
+    }
+    
+    if (!newFeedback.recommendations?.length) {
+      Alert.alert('Error', 'Por favor agrega al menos una recomendación del médico.');
       return;
     }
 

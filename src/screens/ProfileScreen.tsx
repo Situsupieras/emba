@@ -7,6 +7,7 @@ import * as SecureStore from 'expo-secure-store';
 import { Picker } from '@react-native-picker/picker';
 import { auth } from '../data/firebaseConfig';
 import { t, setLanguage, getCurrentLanguage } from '../data/i18n';
+import I18n from 'i18n-js';
 
 export default function ProfileScreen() {
   const user = auth.currentUser;
@@ -156,6 +157,8 @@ export default function ProfileScreen() {
     setLanguage(lang);
     try {
       await SecureStore.setItemAsync('userLanguage', lang);
+      // Forzar actualización del idioma en toda la app
+      I18n.locale = lang;
     } catch (error) {
       console.error('Error saving language:', error);
     }
