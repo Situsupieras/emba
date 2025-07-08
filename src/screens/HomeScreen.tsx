@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   View,
   ScrollView,
@@ -17,7 +17,7 @@ import {
   Avatar,
   List,
 } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { theme, customColors } from '../theme';
 import { FetalDevelopment, User } from '../types';
 import { fetalDevelopmentData } from '../data/fetalDevelopment';
@@ -28,15 +28,17 @@ import type { MainTabParamList } from '../types/navigation';
 import * as SecureStore from 'expo-secure-store';
 import { getAuth, signOut } from 'firebase/auth';
 import { t } from '../data/i18n';
+import { UserContext } from '../context/UserContext';
 
 const { width } = Dimensions.get('window');
 
 export default function HomeScreen() {
   const navigation = useNavigation<BottomTabNavigationProp<MainTabParamList>>();
-  const [user, setUser] = useState<User>(mockUser);
+  const { user, reloadUser } = useContext(UserContext);
   const [currentDevelopment, setCurrentDevelopment] = useState<FetalDevelopment | null>(null);
   const [fadeAnim] = useState(new Animated.Value(0));
   const [loading, setLoading] = useState(true);
+  const [profileUpdated, setProfileUpdated] = useState(false); // Nuevo estado para controlar actualizaciones de perfil
 
   useEffect(() => {
     (async () => {
@@ -135,6 +137,19 @@ export default function HomeScreen() {
       }));
     }
   }, [user.currentWeek, user.trimester]);
+
+  // Agregar efecto para escuchar cambios de perfil
+  useEffect(() => {
+    // Recargar usuario y semana si se actualiza el perfil
+    loadUser();
+  }, [profileUpdated]);
+
+  // Cuando se navega de vuelta desde ProfileScreen, llamar reloadUser() para actualizar la semana.
+  useFocusEffect(
+    React.useCallback(() => {
+      reloadUser();
+    }, [navigation])
+  );
 
   const calculateProgress = () => {
     return user.currentWeek / 40; // 40 weeks total pregnancy
@@ -288,7 +303,7 @@ export default function HomeScreen() {
             <View style={styles.actionButtons}>
               <Button
                 mode="contained"
-                icon="medical"
+                icon="hospital-box"
                 style={[styles.actionButton, styles.medicalButton]}
                 onPress={() => {
                   // Navigate to medical feedback screen
@@ -297,7 +312,7 @@ export default function HomeScreen() {
                   }
                 }}
               >
-                Retroalimentación Médica
+                {t('medicalFeedback.title')}
               </Button>
             </View>
           </Card.Content>

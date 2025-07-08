@@ -16,11 +16,15 @@ import MedicalFeedbackScreen from './src/screens/MedicalFeedbackScreen';
 import { Ionicons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 import type { RootStackParamList, MainTabParamList } from './src/types/navigation';
-import { View, Text, Platform } from 'react-native';
+import { View, Text, Platform, ActivityIndicator } from 'react-native';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './src/data/firebaseConfig';
 import ProfileScreen from './src/screens/ProfileScreen';
 import * as Notifications from 'expo-notifications';
+import { UserProvider } from './src/context/UserContext';
+import { securityFramework } from './src/security';
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -70,14 +74,28 @@ function MainTabs() {
 export default function App() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [securityInitialized, setSecurityInitialized] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
-      setLoading(false);
-    });
-    return unsubscribe;
+    initializeApp();
   }, []);
+
+  const initializeApp = async () => {
+    try {
+      // Inicializar framework de seguridad primero
+      await securityFramework.initialize();
+      setSecurityInitialized(true);
+      
+      // Luego inicializar el resto de la app
+      const auth = getAuth();
+      onAuthStateChanged(auth, (user) => {
+        setUser(user);
+        setLoading(false);
+      });
+    } catch (error) {
+      console.error('App initialization failed:', error);
+    }
+  };
 
   // Configuración de notificaciones
   Notifications.setNotificationHandler({
@@ -118,30 +136,40 @@ export default function App() {
     }
   }, [user]);
 
+  // No mostrar la app hasta que la seguridad esté inicializada
+  if (!securityInitialized) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#0000ff" />
+        <Text>Inicializando seguridad...</Text>
+      </View>
+    );
+  }
+
   if (loading) {
     return null; // O un splash screen
   }
 
-  return user ? (
-    <PaperProvider theme={theme}>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Main" screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Auth" component={AuthScreen} />
-          <Stack.Screen name="UltimaRegla" component={UltimaReglaScreen} />
-          <Stack.Screen name="Main" component={MainTabs} />
-          <Stack.Screen 
-            name="MedicalFeedback" 
-            component={MedicalFeedbackScreen} 
-            options={{ 
-              headerShown: true,
-              title: 'Retroalimentación Médica',
-              presentation: 'modal'
-            }} 
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
-  ) : (
-    <AuthScreen />
+  return (
+    <UserProvider>
+      <PaperProvider theme={theme}>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Main" screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Auth" component={AuthScreen} />
+            <Stack.Screen name="UltimaRegla" component={UltimaReglaScreen} />
+            <Stack.Screen name="Main" component={MainTabs} />
+            <Stack.Screen 
+              name="MedicalFeedback" 
+              component={MedicalFeedbackScreen} 
+              options={{ 
+                headerShown: true,
+                title: 'Retroalimentación Médica',
+                presentation: 'modal'
+              }} 
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
+    </UserProvider>
   );
 }

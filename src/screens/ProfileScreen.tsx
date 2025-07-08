@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { Card, Title, Paragraph, Button, Avatar, TextInput, ActivityIndicator, Chip } from 'react-native-paper';
 import { signOut, updateProfile, sendEmailVerification } from 'firebase/auth';
@@ -8,6 +8,7 @@ import { Picker } from '@react-native-picker/picker';
 import { auth } from '../data/firebaseConfig';
 import { t, setLanguage, getCurrentLanguage } from '../data/i18n';
 import I18n from 'i18n-js';
+import { UserContext } from '../context/UserContext';
 
 export default function ProfileScreen() {
   const user = auth.currentUser;
@@ -26,6 +27,8 @@ export default function ProfileScreen() {
   const [previousChildren, setPreviousChildren] = useState('0');
   const [hasBoughtSupplements, setHasBoughtSupplements] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+
+  const { reloadUser } = useContext(UserContext);
 
   // Cargar datos del perfil al montar el componente
   useEffect(() => {
@@ -80,6 +83,7 @@ export default function ProfileScreen() {
       await SecureStore.setItemAsync('semanas', currentWeek);
       setSuccess(t('profile.profileUpdated'));
       setIsEditing(false);
+      reloadUser();
     } catch (error) {
       setError(t('profile.errorSavingProfile'));
       console.error('Error saving user profile:', error);

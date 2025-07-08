@@ -1,45 +1,28 @@
 import * as Localization from 'expo-localization';
 import * as SecureStore from 'expo-secure-store';
-// @ts-ignore
-// eslint-disable-next-line
-// declare module 'i18n-js';
 import I18n from 'i18n-js';
 
 I18n.translations = {
   es: {
-    // Agrupadas
-    messages: {
-      loading: 'Cargando información...',
-      noPosts: 'No hay publicaciones',
-      beFirst: 'Sé la primera en iniciar una conversación en esta categoría',
-      createPost: 'Crear publicación',
-      close: 'Cerrar',
-      cancel: 'Cancelar',
-      publish: 'Publicar',
-      buyNow: 'Comprar ahora',
-      seeDetails: 'Ver detalles',
-      important: 'Importante',
-      disclaimer: 'Siempre consulta con tu médico antes de tomar cualquier suplemento. Esta información es educativa y no reemplaza el consejo médico profesional.',
-    },
-    chat: {
-      title: 'Asistente IA',
-      subtitle: 'Tu compañero de embarazo inteligente',
-      welcome: '¡Hola! Soy tu asistente de embarazo. Puedo ayudarte con preguntas sobre nutrición, ejercicio, síntomas, medicamentos y citas médicas. ¿En qué puedo ayudarte hoy?',
-      placeholder: 'Escribe tu pregunta...',
-      typing: 'Escribiendo...',
-      error: 'Lo siento, no pude procesar tu mensaje. Por favor, intenta de nuevo.',
-      errorTitle: 'Error de conexión',
-      errorMessage: 'No se pudo conectar con el servidor. Verifica tu conexión a internet.',
-      quickQuestions: 'Preguntas rápidas',
-      suggestions: 'Aquí tienes algunas sugerencias para continuar la conversación:',
-      questions: {
-        nutrition: '¿Qué debo comer?',
-        exercise: '¿Puedo hacer ejercicio?',
-        symptoms: '¿Es normal este síntoma?',
-        medication: '¿Qué medicamentos puedo tomar?',
-        appointments: '¿Cuándo es mi próxima cita?',
-      },
-    },
+    // Navegación principal
+    home: 'Inicio',
+    supplements: 'Suplementos',
+    guide: 'Guía',
+    community: 'Comunidad',
+    store: 'Tienda',
+    chat: 'Chat',
+
+    // Autenticación
+    welcome: 'Bienvenida a Inteligencia Prenatal',
+    login: 'Iniciar sesión',
+    register: 'Crear cuenta',
+    email: 'Correo electrónico',
+    password: 'Contraseña',
+    forgotPassword: '¿Olvidaste tu contraseña?',
+    name: 'Nombre completo',
+    logout: 'Cerrar sesión',
+
+    // Perfil de usuario
     profile: {
       title: 'Perfil',
       editProfile: 'Editar perfil',
@@ -57,7 +40,7 @@ I18n.translations = {
       yes: 'Sí',
       no: 'No',
       years: 'años',
-      language: 'Idioma / Language',
+      language: 'Idioma',
       emailVerification: 'Verificación de Email',
       emailVerified: 'Email verificado',
       emailNotVerified: 'Email no verificado',
@@ -69,11 +52,15 @@ I18n.translations = {
       loadingProfile: 'Cargando perfil...',
       errorLogout: 'Error al cerrar sesión.',
     },
+
+    // Dietas
     diets: {
       omnivorous: 'Omnívora',
       vegetarian: 'Vegetariana',
       vegan: 'Vegana',
     },
+
+    // Retroalimentación médica
     medicalFeedback: {
       title: 'Retroalimentación Médica',
       doctorName: 'Nombre del médico',
@@ -94,51 +81,29 @@ I18n.translations = {
       invalidWeight: 'Peso inválido',
       invalidHeartbeat: 'Latidos del bebé inválidos',
     },
-    // Sueltas (solo las que no están duplicadas)
-    welcome: 'Bienvenida a Inteligencia Prenatal',
-    login: 'Iniciar sesión',
-    register: 'Crear cuenta',
-    email: 'Correo electrónico',
-    password: 'Contraseña',
-    forgotPassword: '¿Olvidaste tu contraseña?',
-    send: 'Enviar',
-    home: 'Inicio',
-    supplements: 'Suplementos',
-    guide: 'Guía',
-    community: 'Comunidad',
-    store: 'Tienda',
-    week: 'Semana',
-    quickActions: 'Acciones rápidas',
-    trimester: 'Trimestre',
-    storeSubtitle: 'Productos certificados con explicaciones médicas detalladas',
-    seeCart: 'Ver carrito',
-    cart: 'Carrito',
-    articles: 'Artículos',
-    videos: 'Videos',
-    checklist: 'Checklist',
-    all: 'Todos',
-    communitySubtitle: 'Conecta con otras mamás y expertos en un espacio seguro y moderado',
-    // Categorías
-    categories: {
-      nutrition: 'Nutrición',
-      exercise: 'Ejercicio',
-      health: 'Salud',
-      emotions: 'Emociones',
-      babyDevelopment: 'Desarrollo del bebé',
-      general: 'General',
+
+    // Chat
+    chat: {
+      title: 'Asistente IA',
+      subtitle: 'Tu compañero de embarazo inteligente',
+      welcome: '¡Hola! Soy tu asistente de embarazo. Puedo ayudarte con preguntas sobre nutrición, ejercicio, síntomas, medicamentos y citas médicas. ¿En qué puedo ayudarte hoy?',
+      placeholder: 'Escribe tu pregunta...',
+      typing: 'Escribiendo...',
+      error: 'Lo siento, no pude procesar tu mensaje. Por favor, intenta de nuevo.',
+      errorTitle: 'Error de conexión',
+      errorMessage: 'No se pudo conectar con el servidor. Verifica tu conexión a internet.',
+      quickQuestions: 'Preguntas rápidas',
+      suggestions: 'Aquí tienes algunas sugerencias para continuar la conversación:',
+      questions: {
+        nutrition: '¿Qué debo comer?',
+        exercise: '¿Puedo hacer ejercicio?',
+        symptoms: '¿Es normal este síntoma?',
+        medication: '¿Qué medicamentos puedo tomar?',
+        appointments: '¿Cuándo es mi próxima cita?',
+      },
     },
-    // Chips y etiquetas
-    chips: {
-      verified: 'Verificado',
-      expert: 'Experto',
-      priority: 'Prioritario',
-      trimester: 'Trimestre',
-      week: 'Semana',
-      allergy: 'Alergia',
-      dietary: 'Dieta',
-      certification: 'Certificación',
-    },
-    // Mensajes y diálogos
+
+    // Mensajes generales
     messages: {
       loading: 'Cargando información...',
       noPosts: 'No hay publicaciones',
@@ -152,18 +117,69 @@ I18n.translations = {
       important: 'Importante',
       disclaimer: 'Siempre consulta con tu médico antes de tomar cualquier suplemento. Esta información es educativa y no reemplaza el consejo médico profesional.',
     },
-    selectDate: 'Seleccionar fecha',
-    confirm: 'Confirmar',
-    pregnancyWeek: 'Semana de embarazo',
-    customWeeks: 'Guardar semana personalizada',
-    lastMenstruationDate: 'Fecha de tu última menstruación',
-    thisAllowsUsToCalculateYourPregnancyWeek: 'Esto nos permite calcular tu semana de embarazo.',
-    selectedDate: 'Seleccionada',
-    confirmPregnancyWeek: 'Confirmar semana',
-    accordingToTheDateEnteredYouHave: 'Según la fecha ingresada, tienes',
-    pregnancyWeeks: 'semanas de embarazo. ¿Es correcto? ',
-    ifNotCorrectYouCanModifyItManually: 'Si no es correcto, puedes modificarlo manualmente',
+
+    // Categorías
+    categories: {
+      nutrition: 'Nutrición',
+      exercise: 'Ejercicio',
+      health: 'Salud',
+      emotions: 'Emociones',
+      babyDevelopment: 'Desarrollo del bebé',
+      general: 'General',
+    },
+
+    // Chips y etiquetas
+    chips: {
+      verified: 'Verificado',
+      expert: 'Experto',
+      priority: 'Prioritario',
+      trimester: 'Trimestre',
+      week: 'Semana',
+      allergy: 'Alergia',
+      dietary: 'Dieta',
+      certification: 'Certificación',
+    },
+
+    // Embarazo y desarrollo
+    week: 'Semana',
+    trimester: 'Trimestre',
     trimesterShort: 'er Trimestre',
+    pregnancyWeek: 'Semana de embarazo',
+    quickActions: 'Acciones rápidas',
+    development: 'Desarrollo de tu bebé',
+    milestones: 'Hitos importantes de esta semana',
+    babySizeThisWeek: 'Tamaño de tu bebé esta semana',
+    approxWeight: 'Peso aproximado',
+    nextAppointment: 'Próxima cita',
+
+    // Tienda
+    storeSubtitle: 'Productos certificados con explicaciones médicas detalladas',
+    seeCart: 'Ver carrito',
+    cart: 'Carrito',
+    searchProducts: 'Buscar productos...',
+    products: 'Productos',
+    items: 'artículos',
+    recommended: 'Recomendado',
+    reviews: 'reseñas',
+    details: 'Detalles',
+    add: 'Agregar',
+    noProductsFound: 'No se encontraron productos',
+    tryOtherSearchTerms: 'Intenta con otros términos de búsqueda o categorías',
+    productDetails: 'Detalles del producto',
+    outOfFive: 'de 5',
+    medicalBenefits: 'Beneficios médicos',
+    qualityCertified: '✓ Certificados de calidad',
+    medicalExplanations: '✓ Explicaciones médicas',
+    noToxicChemicals: '✓ Sin químicos tóxicos',
+
+    // Comunidad
+    communitySubtitle: 'Conecta con otras mamás y expertos en un espacio seguro y moderado',
+    articles: 'Artículos',
+    videos: 'Videos',
+    checklist: 'Checklist',
+    all: 'Todos',
+
+    // Suplementos
     recommendationsForYou: 'Recomendaciones para ti',
     basedOnYourProfile: 'Basado en tu perfil',
     allergies: 'Alergias',
@@ -177,22 +193,31 @@ I18n.translations = {
     sideEffects: 'Efectos secundarios',
     contraindications: 'Contraindicaciones',
     certifications: 'Certificaciones',
-    close: 'Cerrar',
-    qualityCertified: '✓ Certificados de calidad',
-    medicalExplanations: '✓ Explicaciones médicas',
-    noToxicChemicals: '✓ Sin químicos tóxicos',
-    searchProducts: 'Buscar productos...',
-    products: 'Productos',
-    items: 'artículos',
-    recommended: 'Recomendado',
-    reviews: 'reseñas',
-    details: 'Detalles',
-    add: 'Agregar',
-    noProductsFound: 'No se encontraron productos',
-    tryOtherSearchTerms: 'Intenta con otros términos de búsqueda o categorías',
-    productDetails: 'Detalles del producto',
-    outOfFive: 'de 5',
-    medicalBenefits: 'Beneficios médicos',
+
+    // Fecha de última regla
+    selectDate: 'Seleccionar fecha',
+    confirm: 'Confirmar',
+    customWeeks: 'Guardar semana personalizada',
+    lastMenstruationDate: 'Fecha de tu última menstruación',
+    thisAllowsUsToCalculateYourPregnancyWeek: 'Esto nos permite calcular tu semana de embarazo.',
+    selectedDate: 'Seleccionada',
+    confirmPregnancyWeek: 'Confirmar semana',
+    accordingToTheDateEnteredYouHave: 'Según la fecha ingresada, tienes',
+    pregnancyWeeks: 'semanas de embarazo. ¿Es correcto?',
+    ifNotCorrectYouCanModifyItManually: 'Si no es correcto, puedes modificarlo manualmente',
+
+    // Recomendaciones de trimestre
+    firstTrimesterRecommendation: 'En el primer trimestre, el ácido fólico es fundamental para el desarrollo del tubo neural.',
+    secondTrimesterRecommendation: 'El segundo trimestre requiere calcio y vitamina D para el desarrollo óseo del bebé.',
+    thirdTrimesterRecommendation: 'El tercer trimestre necesita omega-3 DHA para el desarrollo cerebral final.',
+    customRecommendation: 'Consulta con tu médico para recomendaciones personalizadas.',
+
+    // Estados de carga
+    loadingRealInfo: 'Cargando información real...',
+    loadingInfo: 'Cargando información...',
+    weekOf: 'Semana {{week}} de 40',
+
+    // Datos mock
     mockUserName: 'María García',
     noRelevantHistory: 'Sin antecedentes relevantes',
     vegetarian: 'Vegetariana',
@@ -232,129 +257,28 @@ I18n.translations = {
     mercuryFree: 'Libre de mercurio',
     mayCauseFishyBurps: 'Puede causar eructos con sabor a pescado',
     fishAllergy: 'Alergia al pescado',
-    loadingRealInfo: 'Cargando información real...',
-    loadingInfo: 'Cargando información...',
-    weekOf: 'Semana {{week}} de 40',
-    babySizeThisWeek: 'Tamaño de tu bebé esta semana',
-    approxWeight: 'Peso aproximado',
-    nextAppointment: 'Próxima cita',
-    // Recomendaciones de trimestre
-    firstTrimesterRecommendation: 'En el primer trimestre, el ácido fólico es fundamental para el desarrollo del tubo neural.',
-    secondTrimesterRecommendation: 'El segundo trimestre requiere calcio y vitamina D para el desarrollo óseo del bebé.',
-    thirdTrimesterRecommendation: 'El tercer trimestre necesita omega-3 DHA para el desarrollo cerebral final.',
-    customRecommendation: 'Consulta con tu médico para recomendaciones personalizadas.',
-    // Chat translations
-    chat: {
-      title: 'Asistente IA',
-      subtitle: 'Tu compañero de embarazo inteligente',
-      welcome: '¡Hola! Soy tu asistente de embarazo. Puedo ayudarte con preguntas sobre nutrición, ejercicio, síntomas, medicamentos y citas médicas. ¿En qué puedo ayudarte hoy?',
-      placeholder: 'Escribe tu pregunta...',
-      typing: 'Escribiendo...',
-      error: 'Lo siento, no pude procesar tu mensaje. Por favor, intenta de nuevo.',
-      errorTitle: 'Error de conexión',
-      errorMessage: 'No se pudo conectar con el servidor. Verifica tu conexión a internet.',
-      quickQuestions: 'Preguntas rápidas',
-      suggestions: 'Aquí tienes algunas sugerencias para continuar la conversación:',
-      questions: {
-        nutrition: '¿Qué debo comer?',
-        exercise: '¿Puedo hacer ejercicio?',
-        symptoms: '¿Es normal este síntoma?',
-        medication: '¿Qué medicamentos puedo tomar?',
-        appointments: '¿Cuándo es mi próxima cita?',
-      },
-    },
-    // Perfil y configuración
-    profile: {
-      title: 'Perfil',
-      editProfile: 'Editar perfil',
-      save: 'Guardar',
-      cancel: 'Cancelar',
-      logout: 'Cerrar sesión',
-      pregnancyInfo: 'Información del Embarazo',
-      age: 'Edad',
-      currentPregnancyWeek: 'Semana actual de embarazo',
-      previousChildren: 'Hijos previos',
-      dietType: 'Tipo de dieta',
-      hasBoughtSupplements: 'Ha comprado suplementos',
-      hasNotBoughtSupplements: 'No ha comprado suplementos',
-      supplements: 'Suplementos',
-      yes: 'Sí',
-      no: 'No',
-      years: 'años',
-      language: 'Idioma / Language',
-      emailVerification: 'Verificación de Email',
-      emailVerified: 'Email verificado',
-      emailNotVerified: 'Email no verificado',
-      resendVerification: 'Reenviar verificación',
-      verificationSent: 'Correo de verificación enviado. Revisa tu bandeja de entrada.',
-      profileUpdated: 'Perfil actualizado correctamente.',
-      errorSavingProfile: 'Error al guardar el perfil.',
-      noAuthenticatedUser: 'No hay usuario autenticado.',
-      loadingProfile: 'Cargando perfil...',
-      errorLogout: 'Error al cerrar sesión.',
-    },
-    // Dietas
-    diets: {
-      omnivorous: 'Omnívora',
-      vegetarian: 'Vegetariana',
-      vegan: 'Vegana',
-    },
-    // Retroalimentación médica
-    medicalFeedback: {
-      title: 'Retroalimentación Médica',
-      doctorName: 'Nombre del médico',
-      recommendations: 'Recomendaciones del médico',
-      concerns: 'Preocupaciones o síntomas',
-      nextAppointment: 'Próxima cita médica',
-      notes: 'Notas adicionales',
-      supplementsPrescribed: 'Suplementos recetados',
-      testsOrdered: 'Exámenes ordenados',
-      weight: 'Peso (kg)',
-      bloodPressure: 'Presión arterial',
-      babyHeartbeat: 'Latidos del bebé (bpm)',
-      ultrasoundNotes: 'Notas de ecografía',
-      saveFeedback: 'Guardar retroalimentación',
-      feedbackSaved: 'Retroalimentación médica guardada correctamente.',
-      errorSavingFeedback: 'Error al guardar la retroalimentación médica.',
-      requiredFields: 'Por favor completa todos los campos requeridos.',
-      invalidWeight: 'Peso inválido',
-      invalidHeartbeat: 'Latidos del bebé inválidos',
-    },
   },
+
   en: {
-    // Agrupadas
-    messages: {
-      loading: 'Loading information...',
-      noPosts: 'No posts yet',
-      beFirst: 'Be the first to start a conversation in this category',
-      createPost: 'Create post',
-      close: 'Close',
-      cancel: 'Cancel',
-      publish: 'Publish',
-      buyNow: 'Buy now',
-      seeDetails: 'See details',
-      important: 'Important',
-      disclaimer: 'Always consult your doctor before taking any supplement. This information is educational and does not replace professional medical advice.',
-    },
-    chat: {
-      title: 'AI Assistant',
-      subtitle: 'Your intelligent pregnancy companion',
-      welcome: "Hello! I'm your pregnancy assistant. I can help you with questions about nutrition, exercise, symptoms, medications, and medical appointments. How can I help you today?",
-      placeholder: 'Type your question...',
-      typing: 'Typing...',
-      error: "Sorry, I couldn't process your message. Please try again.",
-      errorTitle: 'Connection Error',
-      errorMessage: 'Could not connect to server. Please check your internet connection.',
-      quickQuestions: 'Quick questions',
-      suggestions: 'Here are some suggestions to continue the conversation:',
-      questions: {
-        nutrition: 'What should I eat?',
-        exercise: 'Can I exercise?',
-        symptoms: 'Is this symptom normal?',
-        medication: 'What medications can I take?',
-        appointments: 'When is my next appointment?',
-      },
-    },
+    // Main navigation
+    home: 'Home',
+    supplements: 'Supplements',
+    guide: 'Guide',
+    community: 'Community',
+    store: 'Store',
+    chat: 'Chat',
+
+    // Authentication
+    welcome: 'Welcome to Prenatal Intelligence',
+    login: 'Login',
+    register: 'Sign up',
+    email: 'Email',
+    password: 'Password',
+    forgotPassword: 'Forgot your password?',
+    name: 'Full name',
+    logout: 'Logout',
+
+    // User profile
     profile: {
       title: 'Profile',
       editProfile: 'Edit profile',
@@ -372,7 +296,7 @@ I18n.translations = {
       yes: 'Yes',
       no: 'No',
       years: 'years',
-      language: 'Language / Idioma',
+      language: 'Language',
       emailVerification: 'Email Verification',
       emailVerified: 'Email verified',
       emailNotVerified: 'Email not verified',
@@ -384,11 +308,15 @@ I18n.translations = {
       loadingProfile: 'Loading profile...',
       errorLogout: 'Error logging out.',
     },
+
+    // Diets
     diets: {
       omnivorous: 'Omnivorous',
       vegetarian: 'Vegetarian',
       vegan: 'Vegan',
     },
+
+    // Medical feedback
     medicalFeedback: {
       title: 'Medical Feedback',
       doctorName: 'Doctor name',
@@ -409,51 +337,29 @@ I18n.translations = {
       invalidWeight: 'Invalid weight',
       invalidHeartbeat: 'Invalid baby heartbeat',
     },
-    // Sueltas (solo las que no están duplicadas)
-    welcome: 'Welcome to Prenatal Intelligence',
-    login: 'Login',
-    register: 'Sign up',
-    email: 'Email',
-    password: 'Password',
-    forgotPassword: 'Forgot your password?',
-    send: 'Send',
-    home: 'Home',
-    supplements: 'Supplements',
-    guide: 'Guide',
-    community: 'Community',
-    store: 'Store',
-    week: 'Week',
-    quickActions: 'Quick Actions',
-    trimester: 'Trimester',
-    storeSubtitle: 'Certified products with detailed medical explanations',
-    seeCart: 'See cart',
-    cart: 'Cart',
-    articles: 'Articles',
-    videos: 'Videos',
-    checklist: 'Checklist',
-    all: 'All',
-    communitySubtitle: 'Connect with other moms and experts in a safe, moderated space',
-    // Categorías
-    categories: {
-      nutrition: 'Nutrition',
-      exercise: 'Exercise',
-      health: 'Health',
-      emotions: 'Emotions',
-      babyDevelopment: "Baby's development",
-      general: 'General',
+
+    // Chat
+    chat: {
+      title: 'AI Assistant',
+      subtitle: 'Your intelligent pregnancy companion',
+      welcome: "Hello! I'm your pregnancy assistant. I can help you with questions about nutrition, exercise, symptoms, medications, and medical appointments. How can I help you today?",
+      placeholder: 'Type your question...',
+      typing: 'Typing...',
+      error: "Sorry, I couldn't process your message. Please try again.",
+      errorTitle: 'Connection Error',
+      errorMessage: 'Could not connect to server. Please check your internet connection.',
+      quickQuestions: 'Quick questions',
+      suggestions: 'Here are some suggestions to continue the conversation:',
+      questions: {
+        nutrition: 'What should I eat?',
+        exercise: 'Can I exercise?',
+        symptoms: 'Is this symptom normal?',
+        medication: 'What medications can I take?',
+        appointments: 'When is my next appointment?',
+      },
     },
-    // Chips y etiquetas
-    chips: {
-      verified: 'Verified',
-      expert: 'Expert',
-      priority: 'Priority',
-      trimester: 'Trimester',
-      week: 'Week',
-      allergy: 'Allergy',
-      dietary: 'Dietary',
-      certification: 'Certification',
-    },
-    // Mensajes y diálogos
+
+    // General messages
     messages: {
       loading: 'Loading information...',
       noPosts: 'No posts yet',
@@ -467,18 +373,69 @@ I18n.translations = {
       important: 'Important',
       disclaimer: 'Always consult your doctor before taking any supplement. This information is educational and does not replace professional medical advice.',
     },
-    selectDate: 'Select date',
-    confirm: 'Confirm',
-    pregnancyWeek: 'Pregnancy week',
-    customWeeks: 'Save custom week',
-    lastMenstruationDate: 'Date of your last period',
-    thisAllowsUsToCalculateYourPregnancyWeek: 'This allows us to calculate your pregnancy week.',
-    selectedDate: 'Selected',
-    confirmPregnancyWeek: 'Confirm pregnancy week',
-    accordingToTheDateEnteredYouHave: 'According to the date entered, you have',
-    pregnancyWeeks: 'weeks of pregnancy. Is it correct?',
-    ifNotCorrectYouCanModifyItManually: 'If not correct, you can modify it manually',
+
+    // Categories
+    categories: {
+      nutrition: 'Nutrition',
+      exercise: 'Exercise',
+      health: 'Health',
+      emotions: 'Emotions',
+      babyDevelopment: "Baby's development",
+      general: 'General',
+    },
+
+    // Chips and labels
+    chips: {
+      verified: 'Verified',
+      expert: 'Expert',
+      priority: 'Priority',
+      trimester: 'Trimester',
+      week: 'Week',
+      allergy: 'Allergy',
+      dietary: 'Dietary',
+      certification: 'Certification',
+    },
+
+    // Pregnancy and development
+    week: 'Week',
+    trimester: 'Trimester',
     trimesterShort: 'th Trimester',
+    pregnancyWeek: 'Pregnancy week',
+    quickActions: 'Quick Actions',
+    development: "Your baby's development",
+    milestones: 'Milestones of this week',
+    babySizeThisWeek: "Your baby's size this week",
+    approxWeight: 'Approximate weight',
+    nextAppointment: 'Next appointment',
+
+    // Store
+    storeSubtitle: 'Certified products with detailed medical explanations',
+    seeCart: 'See cart',
+    cart: 'Cart',
+    searchProducts: 'Search products...',
+    products: 'Products',
+    items: 'items',
+    recommended: 'Recommended',
+    reviews: 'reviews',
+    details: 'Details',
+    add: 'Add',
+    noProductsFound: 'No products found',
+    tryOtherSearchTerms: 'Try other search terms or categories',
+    productDetails: 'Product details',
+    outOfFive: 'out of 5',
+    medicalBenefits: 'Medical benefits',
+    qualityCertified: '✓ Quality certified',
+    medicalExplanations: '✓ Medical explanations',
+    noToxicChemicals: '✓ No toxic chemicals',
+
+    // Community
+    communitySubtitle: 'Connect with other moms and experts in a safe, moderated space',
+    articles: 'Articles',
+    videos: 'Videos',
+    checklist: 'Checklist',
+    all: 'All',
+
+    // Supplements
     recommendationsForYou: 'Recommendations for you',
     basedOnYourProfile: 'Based on your profile',
     allergies: 'Allergies',
@@ -492,21 +449,31 @@ I18n.translations = {
     sideEffects: 'Side effects',
     contraindications: 'Contraindications',
     certifications: 'Certifications',
-    qualityCertified: '✓ Quality certified',
-    medicalExplanations: '✓ Medical explanations',
-    noToxicChemicals: '✓ No toxic chemicals',
-    searchProducts: 'Search products...',
-    products: 'Products',
-    items: 'items',
-    recommended: 'Recommended',
-    reviews: 'reviews',
-    details: 'Details',
-    add: 'Add',
-    noProductsFound: 'No products found',
-    tryOtherSearchTerms: 'Try other search terms or categories',
-    productDetails: 'Product details',
-    outOfFive: 'out of 5',
-    medicalBenefits: 'Medical benefits',
+
+    // Last period date
+    selectDate: 'Select date',
+    confirm: 'Confirm',
+    customWeeks: 'Save custom week',
+    lastMenstruationDate: 'Date of your last period',
+    thisAllowsUsToCalculateYourPregnancyWeek: 'This allows us to calculate your pregnancy week.',
+    selectedDate: 'Selected',
+    confirmPregnancyWeek: 'Confirm pregnancy week',
+    accordingToTheDateEnteredYouHave: 'According to the date entered, you have',
+    pregnancyWeeks: 'weeks of pregnancy. Is it correct?',
+    ifNotCorrectYouCanModifyItManually: 'If not correct, you can modify it manually',
+
+    // Trimester recommendations
+    firstTrimesterRecommendation: 'In the first trimester, folic acid is essential for neural tube development.',
+    secondTrimesterRecommendation: "The second trimester requires calcium and vitamin D for the baby's bone development.",
+    thirdTrimesterRecommendation: 'The third trimester needs omega-3 DHA for final brain development.',
+    customRecommendation: 'Consult your doctor for personalized recommendations.',
+
+    // Loading states
+    loadingRealInfo: 'Loading real information...',
+    loadingInfo: 'Loading information...',
+    weekOf: 'Week {{week}} of 40',
+
+    // Mock data
     mockUserName: 'Maria Garcia',
     noRelevantHistory: 'No relevant history',
     vegetarian: 'Vegetarian',
@@ -546,98 +513,10 @@ I18n.translations = {
     mercuryFree: 'Mercury free',
     mayCauseFishyBurps: 'May cause fishy burps',
     fishAllergy: 'Fish allergy',
-    loadingRealInfo: 'Loading real information...',
-    loadingInfo: 'Loading information...',
-    weekOf: 'Week {{week}} of 40',
-    babySizeThisWeek: "Your baby's size this week",
-    approxWeight: 'Approximate weight',
-    nextAppointment: 'Next appointment',
-    // Recomendaciones de trimestre
-    firstTrimesterRecommendation: 'In the first trimester, folic acid is essential for neural tube development.',
-    secondTrimesterRecommendation: "The second trimester requires calcium and vitamin D for the baby's bone development.",
-    thirdTrimesterRecommendation: 'The third trimester needs omega-3 DHA for final brain development.',
-    customRecommendation: 'Consult your doctor for personalized recommendations.',
-    // Chat translations
-    chat: {
-      title: 'AI Assistant',
-      subtitle: 'Your intelligent pregnancy companion',
-      welcome: "Hello! I'm your pregnancy assistant. I can help you with questions about nutrition, exercise, symptoms, medications, and medical appointments. How can I help you today?",
-      placeholder: 'Type your question...',
-      typing: 'Typing...',
-      error: "Sorry, I couldn't process your message. Please try again.",
-      errorTitle: 'Connection Error',
-      errorMessage: 'Could not connect to server. Please check your internet connection.',
-      quickQuestions: 'Quick questions',
-      suggestions: 'Here are some suggestions to continue the conversation:',
-      questions: {
-        nutrition: 'What should I eat?',
-        exercise: 'Can I exercise?',
-        symptoms: 'Is this symptom normal?',
-        medication: 'What medications can I take?',
-        appointments: 'When is my next appointment?',
-      },
-    },
-    // Profile and settings
-    profile: {
-      title: 'Profile',
-      editProfile: 'Edit profile',
-      save: 'Save',
-      cancel: 'Cancel',
-      logout: 'Logout',
-      pregnancyInfo: 'Pregnancy Information',
-      age: 'Age',
-      currentPregnancyWeek: 'Current pregnancy week',
-      previousChildren: 'Previous children',
-      dietType: 'Diet type',
-      hasBoughtSupplements: 'Has bought supplements',
-      hasNotBoughtSupplements: 'Has not bought supplements',
-      supplements: 'Supplements',
-      yes: 'Yes',
-      no: 'No',
-      years: 'years',
-      language: 'Language / Idioma',
-      emailVerification: 'Email Verification',
-      emailVerified: 'Email verified',
-      emailNotVerified: 'Email not verified',
-      resendVerification: 'Resend verification',
-      verificationSent: 'Verification email sent. Check your inbox.',
-      profileUpdated: 'Profile updated successfully.',
-      errorSavingProfile: 'Error saving profile.',
-      noAuthenticatedUser: 'No authenticated user.',
-      loadingProfile: 'Loading profile...',
-      errorLogout: 'Error logging out.',
-    },
-    // Diets
-    diets: {
-      omnivorous: 'Omnivorous',
-      vegetarian: 'Vegetarian',
-      vegan: 'Vegan',
-    },
-    // Medical feedback
-    medicalFeedback: {
-      title: 'Medical Feedback',
-      doctorName: 'Doctor name',
-      recommendations: 'Doctor recommendations',
-      concerns: 'Concerns or symptoms',
-      nextAppointment: 'Next medical appointment',
-      notes: 'Additional notes',
-      supplementsPrescribed: 'Prescribed supplements',
-      testsOrdered: 'Tests ordered',
-      weight: 'Weight (kg)',
-      bloodPressure: 'Blood pressure',
-      babyHeartbeat: 'Baby heartbeat (bpm)',
-      ultrasoundNotes: 'Ultrasound notes',
-      saveFeedback: 'Save feedback',
-      feedbackSaved: 'Medical feedback saved successfully.',
-      errorSavingFeedback: 'Error saving medical feedback.',
-      requiredFields: 'Please complete all required fields.',
-      invalidWeight: 'Invalid weight',
-      invalidHeartbeat: 'Invalid baby heartbeat',
-    },
   },
 };
 
-I18n.locale = Localization.locale || 'es';
+I18n.locale = Localization.getLocales()[0]?.languageCode || 'es';
 I18n.fallbacks = true;
 I18n.defaultLocale = 'es';
 
@@ -647,8 +526,8 @@ const initializeLanguage = async () => {
     if (savedLanguage && (savedLanguage === 'es' || savedLanguage === 'en')) {
       I18n.locale = savedLanguage;
     } else {
-      const locale = Localization.locale;
-      if (typeof locale === 'string' && locale.startsWith('es')) {
+      const locale = Localization.getLocales()[0]?.languageCode;
+      if (locale && locale.startsWith('es')) {
         I18n.locale = 'es';
       } else {
         I18n.locale = 'en';
