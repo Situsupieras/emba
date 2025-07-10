@@ -1,4 +1,5 @@
 import { FetalDevelopment } from '../types';
+import { getCurrentLanguage } from './i18n';
 
 export const fetalDevelopmentData: FetalDevelopment[] = [
   {
@@ -652,6 +653,664 @@ export const fetalDevelopmentData: FetalDevelopment[] = [
   }
 ];
 
+// Datos de desarrollo fetal en inglés
+export const fetalDevelopmentDataEn: FetalDevelopment[] = [
+  {
+    week: 1,
+    size: "Microscopic",
+    weight: "<0.1g",
+    description: "Fertilization and implantation. The fertilized egg travels through the fallopian tube and implants in the uterus.",
+    milestones: [
+      "Fertilization",
+      "Uterine implantation",
+      "Blastocyst formation"
+    ],
+    tips: [
+      "Take folic acid",
+      "Avoid alcohol and tobacco",
+      "Consult your doctor"
+    ],
+    animation: "week1"
+  },
+  {
+    week: 2,
+    size: "Microscopic",
+    weight: "<0.1g",
+    description: "The embryo implants completely and placenta formation begins.",
+    milestones: [
+      "Complete implantation",
+      "Placenta formation",
+      "Beginning of embryonic development"
+    ],
+    tips: [
+      "Maintain a healthy diet",
+      "Get enough rest"
+    ],
+    animation: "week2"
+  },
+  {
+    week: 3,
+    size: "Microscopic",
+    weight: "<0.1g",
+    description: "Neural tube formation begins, which will give rise to the brain and spinal cord.",
+    milestones: [
+      "Neural tube formation",
+      "Beginning of nervous system development"
+    ],
+    tips: [
+      "Continue taking folic acid",
+      "Avoid over-the-counter medications"
+    ],
+    animation: "week3"
+  },
+  {
+    week: 4,
+    size: "Poppy seed",
+    weight: "0.4g",
+    description: "The primitive heart begins to beat. The first blood vessels form.",
+    milestones: [
+      "First heartbeats",
+      "Blood vessel formation",
+      "Initial placenta development"
+    ],
+    tips: [
+      "Schedule your first prenatal appointment",
+      "Avoid stress"
+    ],
+    animation: "week4"
+  },
+  {
+    week: 5,
+    size: "Sesame seed",
+    weight: "0.5g",
+    description: "Arm and leg buds form. The heart beats regularly.",
+    milestones: [
+      "Formation of limb buds",
+      "Heart development",
+      "Beginning of major organ formation"
+    ],
+    tips: [
+      "Maintain adequate hydration",
+      "Consult about prenatal supplements"
+    ],
+    animation: "week5"
+  },
+  {
+    week: 6,
+    size: "Lentil",
+    weight: "0.8g",
+    description: "The embryo has a C-shape. The heart beats regularly and eyes and ears form.",
+    milestones: [
+      "Formation of eyes and ears",
+      "Heart beats regularly",
+      "Appearance of arm and leg buds"
+    ],
+    tips: [
+      "Avoid harmful substances",
+      "Follow medical instructions"
+    ],
+    animation: "week6"
+  },
+  {
+    week: 7,
+    size: "Blueberry",
+    weight: "1.1g",
+    description: "Fingers and toes develop. The brain grows rapidly.",
+    milestones: [
+      "Finger formation",
+      "Rapid brain growth",
+      "Development of major organs"
+    ],
+    tips: [
+      "Maintain a balanced diet",
+      "Get enough rest"
+    ],
+    animation: "week7"
+  },
+  {
+    week: 8,
+    size: "Raspberry",
+    weight: "1.5g",
+    description: "All major organs are forming. The heart beats regularly.",
+    milestones: [
+      "Formation of all major organs",
+      "Development of arms and legs",
+      "Heart beats regularly"
+    ],
+    tips: [
+      "Eat small frequent meals",
+      "Avoid raw foods",
+      "Practice gentle exercises"
+    ],
+    animation: "week8"
+  },
+  {
+    week: 9,
+    size: "Olive",
+    weight: "2g",
+    description: "The embryo is now a fetus. Eyelids and reproductive organs develop.",
+    milestones: [
+      "Beginning of fetal stage",
+      "Eyelid development",
+      "Formation of reproductive organs"
+    ],
+    tips: [
+      "Continue with prenatal checkups",
+      "Avoid stress"
+    ],
+    animation: "week9"
+  },
+  {
+    week: 10,
+    size: "Cherry",
+    weight: "4g",
+    description: "The fetus can move arms and legs. Vital organs are in place and begin to function.",
+    milestones: [
+      "Limb movement",
+      "Vital organs functioning",
+      "Nail development"
+    ],
+    tips: [
+      "Maintain a varied diet",
+      "Consult about prenatal exercises"
+    ],
+    animation: "week10"
+  },
+  {
+    week: 11,
+    size: "Fig",
+    weight: "7g",
+    description: "The fetus grows rapidly. Hair follicles develop and genital organs begin to differentiate.",
+    milestones: [
+      "Hair follicle development",
+      "Genital organ differentiation",
+      "Diaphragm formation"
+    ],
+    tips: [
+      "Maintain prenatal checkups",
+      "Follow an iron-rich diet"
+    ],
+    animation: "week11"
+  },
+  {
+    week: 12,
+    size: "Lime",
+    weight: "14g",
+    description: "Organs are completely formed and the fetal period begins. The baby can move fingers.",
+    milestones: [
+      "End of first trimester",
+      "Organs completely formed",
+      "Fetal movements (not yet perceptible)"
+    ],
+    tips: [
+      "Nausea usually improves",
+      "Your energy increases",
+      "Consider prenatal exercise"
+    ],
+    animation: "week12"
+  },
+  {
+    week: 13,
+    size: "Plum",
+    weight: "23g",
+    description: "The fetus begins to practice breathing movements. The head is proportionally larger.",
+    milestones: [
+      "Breathing practice movements",
+      "Proportional head growth",
+      "Development of reflexes"
+    ],
+    tips: [
+      "You may feel more energetic",
+      "Continue with prenatal vitamins",
+      "Stay hydrated"
+    ],
+    animation: "week13"
+  },
+  {
+    week: 14,
+    size: "Lemon",
+    weight: "43g",
+    description: "The fetus can make facial expressions and begins to suck its thumb. The fine hair (lanugo) covers its body.",
+    milestones: [
+      "First facial expressions",
+      "Thumb sucking",
+      "Appearance of lanugo"
+    ],
+    tips: [
+      "Eat foods rich in calcium",
+      "Avoid stress"
+    ],
+    animation: "week14"
+  },
+  {
+    week: 15,
+    size: "Small apple",
+    weight: "70g",
+    description: "The fetus can perceive light through closed eyelids. The middle ear bones develop.",
+    milestones: [
+      "Light perception",
+      "Middle ear bone development",
+      "Extremity growth"
+    ],
+    tips: [
+      "Practice gentle walks",
+      "Consult about relaxation exercises"
+    ],
+    animation: "week15"
+  },
+  {
+    week: 16,
+    size: "Apple",
+    weight: "100g",
+    description: "You can start feeling the first movements. Nails and hair develop.",
+    milestones: [
+      "First perceptible movements",
+      "Nail and hair development",
+      "The baby can make facial gestures"
+    ],
+    tips: [
+      "Pay attention to the first movements",
+      "Maintain a good posture",
+      "Use moisturizing cream for the skin"
+    ],
+    animation: "week16"
+  },
+  {
+    week: 17,
+    size: "Turnip",
+    weight: "140g",
+    description: "The baby's skeleton transforms from cartilage to bone. Fatty tissue develops.",
+    milestones: [
+      "Cartilage to bone transformation",
+      "Fatty tissue development",
+      "Umbilical cord strengthening"
+    ],
+    tips: [
+      "Include foods rich in vitamin D",
+      "Rest with legs elevated"
+    ],
+    animation: "week17"
+  },
+  {
+    week: 18,
+    size: "Pepper",
+    weight: "190g",
+    description: "The fetus can hear external sounds. Fingerprints and reproductive organs develop.",
+    milestones: [
+      "Fingerprint development",
+      "Differentiated reproductive organs",
+      "The baby responds to sounds"
+    ],
+    tips: [
+      "Talk and sing to your baby",
+      "Practice breathing exercises"
+    ],
+    animation: "week18"
+  },
+  {
+    week: 19,
+    size: "Tomato",
+    weight: "240g",
+    description: "The fetus develops caseous vernix (protective layer). Senses are refined and movements are more coordinated.",
+    milestones: [
+      "Caseous vernix formation",
+      "Movement coordination",
+      "Sense development"
+    ],
+    tips: [
+      "Maintain a varied diet",
+      "Practice stretching exercises"
+    ],
+    animation: "week19"
+  },
+  {
+    week: 20,
+    size: "Banana",
+    weight: "300g",
+    description: "It's half of pregnancy. The fetus can hear your voice and the sense of taste develops.",
+    milestones: [
+      "Half of pregnancy",
+      "Sense development",
+      "The fetus can hear your voice"
+    ],
+    tips: [
+      "Talk and sing to your baby",
+      "Have a morphological ultrasound",
+      "Prepare the baby's room"
+    ],
+    animation: "week20"
+  },
+  {
+    week: 21,
+    size: "Carrot",
+    weight: "360g",
+    description: "The fetus measures about 27 cm. Eyebrows and nails develop. It can perceive external sounds.",
+    milestones: [
+      "Eyebrow and nail development",
+      "Perception of external sounds",
+      "More coordinated movements"
+    ],
+    tips: [
+      "Listen to relaxing music",
+      "Maintain a protein-rich diet"
+    ],
+    animation: "week21"
+  },
+  {
+    week: 22,
+    size: "Cucumber",
+    weight: "430g",
+    description: "The fetus responds to the mother's voice. Plantar and palmar footprints form.",
+    milestones: [
+      "Response to mother's voice",
+      "Formation of plantar and palmar footprints",
+      "Eyelash development"
+    ],
+    tips: [
+      "Talk and read aloud",
+      "Rest with legs elevated"
+    ],
+    animation: "week22"
+  },
+  {
+    week: 23,
+    size: "Eggplant",
+    weight: "500g",
+    description: "The fetus can open and close its eyes. Its skin is reddish and wrinkled, but soon will gain fat.",
+    milestones: [
+      "Eye opening",
+      "Subcutaneous fat development",
+      "Greater motor activity"
+    ],
+    tips: [
+      "Maintain adequate hydration",
+      "Consult about labor preparation classes"
+    ],
+    animation: "week23"
+  },
+  {
+    week: 24,
+    size: "Corn",
+    weight: "600g",
+    description: "The lungs produce surfactant. The fetus responds to sounds and movements.",
+    milestones: [
+      "Development of fingerprints",
+      "Lungs produce surfactant",
+      "The fetus responds to sounds"
+    ],
+    tips: [
+      "Practice breathing exercises",
+      "Maintain good dental hygiene",
+      "Prepare your birth plan"
+    ],
+    animation: "week24"
+  },
+  {
+    week: 25,
+    size: "Large turnip",
+    weight: "700g",
+    description: "The fetus begins to accumulate fat. Its skin becomes more opaque and less wrinkled.",
+    milestones: [
+      "Fat accumulation",
+      "Less wrinkled skin",
+      "Development of reflexes"
+    ],
+    tips: [
+      "Include foods rich in omega 3",
+      "Rest frequently"
+    ],
+    animation: "week25"
+  },
+  {
+    week: 26,
+    size: "Lettuce",
+    weight: "800g",
+    description: "The central nervous system matures. The fetus can open its eyes and respond to light.",
+    milestones: [
+      "Central nervous system maturation",
+      "Response to light",
+      "Greater movement coordination"
+    ],
+    tips: [
+      "Avoid standing for long periods",
+      "Practice relaxation exercises"
+    ],
+    animation: "week26"
+  },
+  {
+    week: 27,
+    size: "Broccoli",
+    weight: "900g",
+    description: "The fetus can dream (rapid eye movements). The lungs and brain develop.",
+    milestones: [
+      "Lung and brain development",
+      "Rapid eye movements (REM)",
+      "Greater sensitivity to stimuli"
+    ],
+    tips: [
+      "Rest on the left side",
+      "Prepare the hospital bag"
+    ],
+    animation: "week27"
+  },
+  {
+    week: 28,
+    size: "Eggplant",
+    weight: "1 kilogram",
+    description: "The third trimester begins. Eyes can open and close. The fetus has sleep cycles.",
+    milestones: [
+      "Beginning of third trimester",
+      "Eyes can open and close",
+      "Fetus has sleep cycles"
+    ],
+    tips: [
+      "Rest more frequently",
+      "Maintain adequate hydration",
+      "Prepare the hospital bag"
+    ],
+    animation: "week28"
+  },
+  {
+    week: 29,
+    size: "Small pumpkin",
+    weight: "1.2kg",
+    description: "The fetus can distinguish tastes. Its brain and muscles develop rapidly.",
+    milestones: [
+      "Rapid brain development",
+      "Taste discrimination",
+      "Greater muscle strength"
+    ],
+    tips: [
+      "Include foods rich in magnesium",
+      "Practice stretching exercises"
+    ],
+    animation: "week29"
+  },
+  {
+    week: 30,
+    size: "Cabbage",
+    weight: "1.4kg",
+    description: "The fetus regulates body temperature better. Its movements are stronger and more defined.",
+    milestones: [
+      "Body temperature regulation",
+      "Stronger movements",
+      "Bone marrow development"
+    ],
+    tips: [
+      "Rest with legs elevated",
+      "Prepare space for the baby"
+    ],
+    animation: "week30"
+  },
+  {
+    week: 31,
+    size: "Coconut",
+    weight: "1.6kg",
+    description: "The fetus gains weight rapidly. Its lungs and nervous system continue maturing.",
+    milestones: [
+      "Rapid weight gain",
+      "Pulmonary maturation",
+      "Greater movement coordination"
+    ],
+    tips: [
+      "Rest frequently",
+      "Prepare the suitcase for the hospital"
+    ],
+    animation: "week31"
+  },
+  {
+    week: 32,
+    size: "Pineapple",
+    weight: "1.7 kilograms",
+    description: "It's gaining weight rapidly. Bones harden and the fetus practices breathing.",
+    milestones: [
+      "Rapid weight gain",
+      "Bones harden",
+      "Fetus practices breathing"
+    ],
+    tips: [
+      "Eat foods rich in calcium",
+      "Practice labor positions",
+      "Maintain contact with your doctor"
+    ],
+    animation: "week32"
+  },
+  {
+    week: 33,
+    size: "Leek",
+    weight: "1.9kg",
+    description: "The skull remains flexible. The fetus detects light and prepares for birth.",
+    milestones: [
+      "Flexible skull",
+      "Greater light perception",
+      "Preparation for birth"
+    ],
+    tips: [
+      "Rest on the left side",
+      "Practice relaxation exercises"
+    ],
+    animation: "week33"
+  },
+  {
+    week: 34,
+    size: "Melon",
+    weight: "2.1kg",
+    description: "The immune system strengthens. The fetus positions itself for birth.",
+    milestones: [
+      "Strengthening of the immune system",
+      "Positioning for birth",
+      "Development of reflexes"
+    ],
+    tips: [
+      "Prepare space for the baby",
+      "Consult about labor signs"
+    ],
+    animation: "week34"
+  },
+  {
+    week: 35,
+    size: "Cantaloupe melon",
+    weight: "2.4kg",
+    description: "The fetus almost fills the uterus. Its kidneys are completely developed.",
+    milestones: [
+      "Completely developed kidneys",
+      "Greater fat accumulation",
+      "Final preparation for birth"
+    ],
+    tips: [
+      "Have your hospital bag ready",
+      "Rest as much as possible"
+    ],
+    animation: "week35"
+  },
+  {
+    week: 36,
+    size: "Romaine lettuce",
+    weight: "2.6 kilograms",
+    description: "It's almost ready to be born. Most organs are mature and positioning for birth.",
+    milestones: [
+      "The baby is almost completely developed",
+      "Most organs are mature",
+      "The fetus positions itself for birth"
+    ],
+    tips: [
+      "Recognize labor signs",
+      "Have everything ready for the hospital",
+      "Rest as much as possible",
+      "Stay calm"
+    ],
+    animation: "week36"
+  },
+  {
+    week: 37,
+    size: "Swiss chard",
+    weight: "2.9kg",
+    description: "The fetus is considered early term. Their lungs are ready to function outside the uterus.",
+    milestones: [
+      "Lungs ready for birth",
+      "Greater fat accumulation",
+      "Preparation for labor"
+    ],
+    tips: [
+      "Stay calm",
+      "Trust your body"
+    ],
+    animation: "week37"
+  },
+  {
+    week: 38,
+    size: "Large leek",
+    weight: "3.1kg",
+    description: "The fetus continues gaining weight. The vernix caseosa and lanugo almost completely disappear.",
+    milestones: [
+      "Lanugo disappearance",
+      "Greater fat accumulation",
+      "Final preparation for birth"
+    ],
+    tips: [
+      "Rest and relax",
+      "Prepare everything for arrival"
+    ],
+    animation: "week38"
+  },
+  {
+    week: 39,
+    size: "Small watermelon",
+    weight: "3.3kg",
+    description: "The fetus is full term. All organs are mature and ready to be born at any moment.",
+    milestones: [
+      "Completely mature organs",
+      "Preparation for birth",
+      "The baby can be born at any moment",
+      "Full term"
+    ],
+    tips: [
+      "Stay calm",
+      "Trust your medical team"
+    ],
+    animation: "week39"
+  },
+  {
+    week: 40,
+    size: "Small watermelon",
+    weight: "3.4 kilograms",
+    description: "It's time to meet your baby! All organs are mature and the baby can survive outside the uterus.",
+    milestones: [
+      "Your baby is ready to be born!",
+      "All organs are mature",
+      "The baby can survive outside the uterus",
+      "The miracle of life!"
+    ],
+    tips: [
+      "Stay calm",
+      "Trust your body",
+      "Enjoy the moment!",
+      "Prepare for the greatest love"
+    ],
+    animation: "week40"
+  }
+];
+
 // Semanario emocional y visual de las 40 semanas del embarazo
 // Cada semana incluye textos en español e inglés y una imagen visual (fruta/objeto)
 
@@ -1034,4 +1693,17 @@ export const fetalDevelopment: WeekDevelopment[] = [
       image: 'https://images.unsplash.com/photo-1566385101042-1a0aa0c1268c?auto=format&fit=crop&w=400&q=80', // Watermelon
     },
   }
-]; 
+];
+
+// Función para obtener datos según el idioma actual
+export const getFetalDevelopmentData = (week: number): FetalDevelopment | null => {
+  const currentLanguage = getCurrentLanguage();
+  const data = currentLanguage === 'en' ? fetalDevelopmentDataEn : fetalDevelopmentData;
+  return data.find(d => d.week === week) || null;
+};
+
+// Función para obtener todos los datos según el idioma actual
+export const getAllFetalDevelopmentData = (): FetalDevelopment[] => {
+  const currentLanguage = getCurrentLanguage();
+  return currentLanguage === 'en' ? fetalDevelopmentDataEn : fetalDevelopmentData;
+}; 

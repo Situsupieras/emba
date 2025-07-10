@@ -1,75 +1,50 @@
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { theme } from './src/theme';
-import HomeScreen from './src/screens/HomeScreen';
-import SupplementsScreen from './src/screens/SupplementsScreen';
-import GuideScreen from './src/screens/GuideScreen';
-import CommunityScreen from './src/screens/CommunityScreen';
-import StoreScreen from './src/screens/StoreScreen';
-import ChatScreen from './src/screens/ChatScreen';
 import AuthScreen from './src/screens/AuthScreen';
 import UltimaReglaScreen from './src/screens/UltimaReglaScreen';
 import MedicalFeedbackScreen from './src/screens/MedicalFeedbackScreen';
-import { Ionicons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
-import type { RootStackParamList, MainTabParamList } from './src/types/navigation';
+import type { RootStackParamList } from './src/types/navigation';
 import { View, Text, Platform } from 'react-native';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './src/data/firebaseConfig';
-import ProfileScreen from './src/screens/ProfileScreen';
 import * as Notifications from 'expo-notifications';
+import { t } from './src/data/i18n';
+import { LanguageProvider } from './src/context/LanguageContext';
+import LanguageAwareNavigator from './src/components/LanguageAwareNavigator';
 
-const Tab = createBottomTabNavigator<MainTabParamList>();
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function MainTabs() {
-  return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName: any;
-          if (route.name === 'Home') iconName = focused ? 'home' : 'home-outline';
-          else if (route.name === 'Suplementos') iconName = 'flask';
-          else if (route.name === 'Guía') iconName = focused ? 'book' : 'book-outline';
-          else if (route.name === 'Comunidad') iconName = focused ? 'people' : 'people-outline';
-          else if (route.name === 'Tienda') iconName = focused ? 'cart' : 'cart-outline';
-          else if (route.name === 'Chat') iconName = focused ? 'chatbubbles' : 'chatbubbles-outline';
-          else if (route.name === 'Perfil') iconName = focused ? 'person' : 'person-outline';
-          else iconName = 'help-outline';
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
-        tabBarActiveTintColor: theme.colors.primary,
-        tabBarInactiveTintColor: 'gray',
-        tabBarStyle: {
-          backgroundColor: 'white',
-          borderTopWidth: 1,
-          borderTopColor: '#e0e0e0',
-          paddingBottom: 5,
-          paddingTop: 5,
-          height: 60,
-        },
-        headerStyle: { backgroundColor: theme.colors.primary },
-        headerTintColor: 'white',
-        headerTitleStyle: { fontWeight: 'bold' },
-      })}
-    >
-      <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Mi Embarazo', headerShown: false }} />
-      <Tab.Screen name="Suplementos" component={SupplementsScreen} options={{ title: 'Suplementos' }} />
-      <Tab.Screen name="Guía" component={GuideScreen} options={{ title: 'Guía Trimestral' }} />
-      <Tab.Screen name="Comunidad" component={CommunityScreen} options={{ title: 'Comunidad' }} />
-      <Tab.Screen name="Tienda" component={StoreScreen} options={{ title: 'Tienda Ética' }} />
-      <Tab.Screen name="Chat" component={ChatScreen} options={{ title: 'Asistente IA', headerShown: false }} />
-      <Tab.Screen name="Perfil" component={ProfileScreen} options={{ title: 'Mi Perfil' }} />
-    </Tab.Navigator>
-  );
+  return <LanguageAwareNavigator />;
 }
 
 export default function App() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [hasUserData, setHasUserData] = useState(false);
+
+  useEffect(() => {
+    const checkUserData = async () => {
+      try {
+        // Verificar si hay datos de usuario guardados
+        const userProfile = await SecureStore.getItemAsync('userProfile');
+        const userName = await SecureStore.getItemAsync('userName');
+        const semanas = await SecureStore.getItemAsync('semanas');
+        
+        if (userProfile || userName || semanas) {
+          setHasUserData(true);
+        }
+      } catch (error) {
+        console.log('Error verificando datos de usuario:', error);
+      }
+    };
+
+    checkUserData();
+  }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
@@ -92,7 +67,7 @@ export default function App() {
 
   // Solicitar permisos y mostrar notificación de bienvenida
   useEffect(() => {
-    if (user) {
+    if (user || hasUserData) {
       (async () => {
         const { status } = await Notifications.requestPermissionsAsync();
         if (status === 'granted') {
@@ -116,32 +91,39 @@ export default function App() {
         }
       })();
     }
-  }, [user]);
+  }, [user, hasUserData]);
 
   if (loading) {
-    return null; // O un splash screen
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.colors.primary }}>
+        <Text style={{ color: 'white', fontSize: 18 }}>Cargando Inteligencia Prenatal...</Text>
+      </View>
+    );
   }
 
-  return user ? (
-    <PaperProvider theme={theme}>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Main" screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Auth" component={AuthScreen} />
-          <Stack.Screen name="UltimaRegla" component={UltimaReglaScreen} />
-          <Stack.Screen name="Main" component={MainTabs} />
-          <Stack.Screen 
-            name="MedicalFeedback" 
-            component={MedicalFeedbackScreen} 
-            options={{ 
-              headerShown: true,
-              title: 'Retroalimentación Médica',
-              presentation: 'modal'
-            }} 
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
-  ) : (
-    <AuthScreen />
+  // Si hay datos de usuario guardados o usuario autenticado, mostrar la app principal
+  const shouldShowMain = user || hasUserData;
+
+  return (
+    <LanguageProvider>
+      <PaperProvider theme={theme}>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName={shouldShowMain ? "Main" : "Auth"} screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Auth" component={AuthScreen} />
+            <Stack.Screen name="UltimaRegla" component={UltimaReglaScreen} />
+            <Stack.Screen name="Main" component={MainTabs} />
+            <Stack.Screen 
+              name="MedicalFeedback" 
+              component={MedicalFeedbackScreen} 
+              options={{ 
+                headerShown: true,
+                title: t('medicalFeedback.title'),
+                presentation: 'modal'
+              }} 
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
+    </LanguageProvider>
   );
 }

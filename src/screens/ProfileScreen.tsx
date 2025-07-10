@@ -6,8 +6,8 @@ import * as ImagePicker from 'expo-image-picker';
 import * as SecureStore from 'expo-secure-store';
 import { Picker } from '@react-native-picker/picker';
 import { auth } from '../data/firebaseConfig';
-import { t, setLanguage, getCurrentLanguage } from '../data/i18n';
-import I18n from 'i18n-js';
+import { t } from '../data/i18n';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function ProfileScreen() {
   const user = auth.currentUser;
@@ -17,7 +17,7 @@ export default function ProfileScreen() {
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
   const [verifMsg, setVerifMsg] = useState('');
-  const [language, setLanguageState] = useState('es');
+  const { currentLanguage, changeLanguage } = useLanguage();
   
   // Campos del perfil de embarazo
   const [age, setAge] = useState('25');
@@ -30,20 +30,7 @@ export default function ProfileScreen() {
   // Cargar datos del perfil al montar el componente
   useEffect(() => {
     loadUserProfile();
-    loadUserLanguage();
   }, []);
-
-  const loadUserLanguage = async () => {
-    try {
-      const savedLanguage = await SecureStore.getItemAsync('userLanguage');
-      if (savedLanguage) {
-        setLanguageState(savedLanguage);
-        setLanguage(savedLanguage);
-      }
-    } catch (error) {
-      console.error('Error loading language:', error);
-    }
-  };
 
   const loadUserProfile = async () => {
     try {
@@ -156,12 +143,8 @@ export default function ProfileScreen() {
   };
 
   const handleChangeLanguage = async (lang: string) => {
-    setLanguageState(lang);
-    setLanguage(lang);
     try {
-      await SecureStore.setItemAsync('userLanguage', lang);
-      // Forzar actualización del idioma en toda la app
-      I18n.locale = lang;
+      await changeLanguage(lang);
     } catch (error) {
       console.error('Error saving language:', error);
     }
@@ -275,7 +258,7 @@ export default function ProfileScreen() {
             <Title style={styles.sectionTitle}>{t('profile.language')}</Title>
             <View style={styles.languageButtons}>
               <Button 
-                mode={language === 'es' ? 'contained' : 'outlined'} 
+                mode={currentLanguage === 'es' ? 'contained' : 'outlined'} 
                 onPress={() => handleChangeLanguage('es')} 
                 style={styles.langButton}
                 icon="flag"
@@ -283,7 +266,7 @@ export default function ProfileScreen() {
                 Español
               </Button>
               <Button 
-                mode={language === 'en' ? 'contained' : 'outlined'} 
+                mode={currentLanguage === 'en' ? 'contained' : 'outlined'} 
                 onPress={() => handleChangeLanguage('en')} 
                 style={styles.langButton}
                 icon="flag"

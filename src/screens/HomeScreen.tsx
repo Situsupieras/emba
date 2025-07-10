@@ -20,7 +20,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { theme, customColors } from '../theme';
 import { FetalDevelopment, User } from '../types';
-import { fetalDevelopmentData } from '../data/fetalDevelopment';
+import { getFetalDevelopmentData } from '../data/fetalDevelopment';
 import { mockUser } from '../data/mockData';
 import { Ionicons } from '@expo/vector-icons';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
@@ -28,11 +28,13 @@ import type { MainTabParamList } from '../types/navigation';
 import * as SecureStore from 'expo-secure-store';
 import { getAuth, signOut } from 'firebase/auth';
 import { t } from '../data/i18n';
+import { useLanguage } from '../context/LanguageContext';
 
 const { width } = Dimensions.get('window');
 
 export default function HomeScreen() {
   const navigation = useNavigation<BottomTabNavigationProp<MainTabParamList>>();
+  const { currentLanguage, changeLanguage } = useLanguage();
   const [user, setUser] = useState<User>(mockUser);
   const [currentDevelopment, setCurrentDevelopment] = useState<FetalDevelopment | null>(null);
   const [fadeAnim] = useState(new Animated.Value(0));
@@ -87,8 +89,6 @@ export default function HomeScreen() {
           trimester = 3;
         }
 
-        // El nombre ya se obtuvo arriba del perfil del usuario
-
         console.log('HomeScreen - Semana cargada:', currentWeek);
         console.log('HomeScreen - Nombre cargado:', userName);
         console.log('HomeScreen - Trimestre calculado:', trimester);
@@ -108,14 +108,16 @@ export default function HomeScreen() {
   }, []);
 
   useEffect(() => {
-    const development = fetalDevelopmentData.find(d => d.week === user.currentWeek);
+    // Redondear la semana al entero más cercano para encontrar datos de desarrollo fetal
+    const weekForDevelopment = Math.round(user.currentWeek);
+    const development = getFetalDevelopmentData(weekForDevelopment);
     setCurrentDevelopment(development || null);
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 1000,
       useNativeDriver: true,
     }).start();
-  }, [user.currentWeek]);
+  }, [user.currentWeek, currentLanguage]);
 
   // Recalcular trimestre cuando cambie la semana
   useEffect(() => {
@@ -155,6 +157,7 @@ export default function HomeScreen() {
   };
 
   if (loading) {
+    console.log('Mostrando loader');
     return (
       <View style={styles.container}>
         <Card style={styles.loadingCard}>
@@ -167,11 +170,23 @@ export default function HomeScreen() {
   }
 
   if (!currentDevelopment) {
+    console.log('No hay desarrollo fetal para la semana', user.currentWeek);
     return (
       <View style={styles.container}>
         <Card style={styles.loadingCard}>
           <Card.Content>
-            <Title>{t('loadingInfo')}</Title>
+            <Title>{t('week')} {Math.round(user.currentWeek)}</Title>
+            <Paragraph style={{ marginTop: 16 }}>
+              {t('weekOf', { week: user.currentWeek })}. 
+              {t('messages.disclaimer')}
+            </Paragraph>
+            <Button 
+              mode="contained" 
+              onPress={() => navigation.navigate('Suplementos')}
+              style={{ marginTop: 16 }}
+            >
+              {t('supplements')}
+            </Button>
           </Card.Content>
         </Card>
       </View>
@@ -181,9 +196,18 @@ export default function HomeScreen() {
   return (
     <ScrollView style={styles.container}>
       <Animated.View style={{ opacity: fadeAnim }}>
-        <Button mode="outlined" onPress={handleLogout} style={{ marginBottom: 16, alignSelf: 'flex-end' }}>
-          {t('logout')}
-        </Button>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
+          <Button 
+            mode="outlined" 
+            onPress={() => changeLanguage(currentLanguage === 'es' ? 'en' : 'es')}
+            style={{ flex: 1, marginRight: 8 }}
+          >
+            {currentLanguage === 'es' ? 'English' : 'Español'}
+          </Button>
+          <Button mode="outlined" onPress={handleLogout} style={{ flex: 1, marginLeft: 8 }}>
+            {t('logout')}
+          </Button>
+        </View>
         {/* Header with user info */}
         <Card style={[styles.headerCard, { backgroundColor: getTrimesterColor() }]}>
           <Card.Content>
@@ -288,7 +312,7 @@ export default function HomeScreen() {
             <View style={styles.actionButtons}>
               <Button
                 mode="contained"
-                icon="medical"
+                icon="stethoscope"
                 style={[styles.actionButton, styles.medicalButton]}
                 onPress={() => {
                   // Navigate to medical feedback screen
@@ -297,7 +321,7 @@ export default function HomeScreen() {
                   }
                 }}
               >
-                Retroalimentación Médica
+                {t('medicalFeedback.title')}
               </Button>
             </View>
           </Card.Content>

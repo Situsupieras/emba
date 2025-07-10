@@ -122,7 +122,7 @@ export default function GuideScreen() {
       <View style={styles.container}>
         <Card style={styles.headerCard}>
           <Card.Content>
-            <Title>Cargando información...</Title>
+            <Title>{t('messages.loading')}</Title>
           </Card.Content>
         </Card>
       </View>
@@ -136,10 +136,10 @@ export default function GuideScreen() {
           <Card.Content>
             <Title style={styles.headerTitle}>{t('guide')} {user.trimester}er {t('trimester') || 'Trimestre'}</Title>
             <Paragraph style={styles.headerSubtitle}>
-              Información personalizada para tu etapa del embarazo
+              {t('recommendationsForYou')}
             </Paragraph>
             <Paragraph style={styles.headerSubtitle}>
-              Semana actual: {user.currentWeek}
+              {t('week')}: {user.currentWeek}
             </Paragraph>
           </Card.Content>
         </Card>
@@ -160,7 +160,7 @@ export default function GuideScreen() {
           <>
             {/* Search and Filter */}
             <Searchbar
-              placeholder="Buscar artículos..."
+              placeholder={t('searchProducts')}
               onChangeText={setSearchQuery}
               value={searchQuery}
               style={styles.searchBar}
@@ -172,28 +172,28 @@ export default function GuideScreen() {
                 onPress={() => setSelectedCategory('all')}
                 style={styles.categoryChip}
               >
-                Todos
+                {t('all')}
               </Chip>
               <Chip
                 mode={selectedCategory === 'Nutrición' ? 'flat' : 'outlined'}
                 onPress={() => setSelectedCategory('Nutrición')}
                 style={styles.categoryChip}
               >
-                Nutrición
+                {t('categories.nutrition')}
               </Chip>
               <Chip
                 mode={selectedCategory === 'Ejercicio' ? 'flat' : 'outlined'}
                 onPress={() => setSelectedCategory('Ejercicio')}
                 style={styles.categoryChip}
               >
-                Ejercicio
+                {t('categories.exercise')}
               </Chip>
               <Chip
                 mode={selectedCategory === 'Salud' ? 'flat' : 'outlined'}
                 onPress={() => setSelectedCategory('Salud')}
                 style={styles.categoryChip}
               >
-                Salud
+                {t('categories.health')}
               </Chip>
             </ScrollView>
 

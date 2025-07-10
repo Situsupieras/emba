@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme, Card, Avatar, Chip, FAB } from 'react-native-paper';
-import I18n from 'i18n-js';
+import { t } from '../data/i18n';
 import chatService, { ChatResponse } from '../data/chatService';
 import ChatMessage from '../components/ChatMessage';
 
@@ -31,7 +31,7 @@ const ChatScreen: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: I18n.t('chat.welcome'),
+      text: t('chat.welcome'),
       isUser: false,
       timestamp: new Date(),
     },
@@ -41,11 +41,11 @@ const ChatScreen: React.FC = () => {
   const flatListRef = useRef<FlatList>(null);
 
   const quickQuestions = [
-    I18n.t('chat.questions.nutrition'),
-    I18n.t('chat.questions.exercise'),
-    I18n.t('chat.questions.symptoms'),
-    I18n.t('chat.questions.medication'),
-    I18n.t('chat.questions.appointments'),
+    t('chat.questions.nutrition'),
+    t('chat.questions.exercise'),
+    t('chat.questions.symptoms'),
+    t('chat.questions.medication'),
+    t('chat.questions.appointments'),
   ];
 
   const sendMessage = async (text: string) => {
@@ -86,7 +86,7 @@ const ChatScreen: React.FC = () => {
       if (data.suggestions && data.suggestions.length > 0) {
         const suggestionsMessage: Message = {
           id: (Date.now() + 2).toString(),
-          text: I18n.t('chat.suggestions'),
+          text: t('chat.suggestions'),
           isUser: false,
           timestamp: new Date(),
         };
@@ -100,13 +100,13 @@ const ChatScreen: React.FC = () => {
           msg.id === botMessage.id 
             ? { 
                 ...msg, 
-                text: I18n.t('chat.error'), 
+                text: t('chat.error'), 
                 isLoading: false 
               }
             : msg
         )
       );
-      Alert.alert(I18n.t('chat.errorTitle'), I18n.t('chat.errorMessage'));
+      Alert.alert(t('chat.errorTitle'), t('chat.errorMessage'));
     } finally {
       setIsLoading(false);
     }
@@ -140,7 +140,7 @@ const ChatScreen: React.FC = () => {
   const renderQuickQuestions = () => (
     <View style={styles.quickQuestionsContainer}>
       <Text style={[styles.quickQuestionsTitle, { color: theme.colors.onSurface }]}>
-        {I18n.t('chat.quickQuestions')}
+        {t('chat.quickQuestions')}
       </Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {quickQuestions.map((question, index) => (
@@ -173,10 +173,10 @@ const ChatScreen: React.FC = () => {
           />
           <View style={styles.headerText}>
             <Text style={[styles.headerTitle, { color: theme.colors.onSurface }]}>
-              {I18n.t('chat.title')}
+              {t('chat.title')}
             </Text>
             <Text style={[styles.headerSubtitle, { color: theme.colors.onSurfaceVariant }]}>
-              {I18n.t('chat.subtitle')}
+              {t('chat.subtitle')}
             </Text>
           </View>
         </View>
@@ -228,7 +228,7 @@ const ChatScreen: React.FC = () => {
           ]}
           value={inputText}
           onChangeText={setInputText}
-          placeholder={I18n.t('chat.placeholder')}
+          placeholder={t('chat.placeholder')}
           placeholderTextColor={theme.colors.onSurfaceVariant}
           multiline
           maxLength={500}
