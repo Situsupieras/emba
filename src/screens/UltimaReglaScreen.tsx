@@ -31,7 +31,8 @@ export default function UltimaReglaScreen({ navigation }: any) {
 
   const handleConfirm = async () => {
     await SecureStore.setItemAsync('ultimaRegla', date.toISOString());
-    await SecureStore.setItemAsync('semanas', semanas?.toString() || '');
+    await SecureStore.deleteItemAsync('fechaReferenciaSemana');
+    await SecureStore.deleteItemAsync('semanas');
     navigation.replace('Main');
   };
 
@@ -43,8 +44,9 @@ export default function UltimaReglaScreen({ navigation }: any) {
     }
     setError('');
     setSemanas(semanasNum);
-    await SecureStore.setItemAsync('ultimaRegla', date.toISOString());
     await SecureStore.setItemAsync('semanas', semanasNum.toString());
+    await SecureStore.setItemAsync('fechaReferenciaSemana', new Date().toISOString());
+    await SecureStore.deleteItemAsync('ultimaRegla');
     setConfirmDialog(false);
     navigation.replace('Main');
   };

@@ -11,6 +11,8 @@ import {
   ActivityIndicator,
   Alert,
   ScrollView,
+  Keyboard,
+  SafeAreaView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme, Card, Avatar, Chip, FAB } from 'react-native-paper';
@@ -50,6 +52,7 @@ const ChatScreen: React.FC = () => {
 
   const sendMessage = async (text: string) => {
     if (!text.trim()) return;
+    Keyboard.dismiss(); // Oculta el teclado al enviar
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -160,100 +163,106 @@ const ChatScreen: React.FC = () => {
   );
 
   return (
-    <KeyboardAvoidingView 
-      style={styles.container} 
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <View style={styles.header}>
-        <View style={styles.headerContent}>
-          <Avatar.Icon 
-            size={40} 
-            icon="robot" 
-            style={[styles.headerAvatar, { backgroundColor: theme.colors.primary }]}
-          />
-          <View style={styles.headerText}>
-            <Text style={[styles.headerTitle, { color: theme.colors.onSurface }]}>
-              {t('chat.title')}
-            </Text>
-            <Text style={[styles.headerSubtitle, { color: theme.colors.onSurfaceVariant }]}>
-              {t('chat.subtitle')}
-            </Text>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#f5f5f5' }}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 24 : 0}
+      >
+        <View style={styles.header}>
+          <View style={styles.headerContent}>
+            <Avatar.Icon 
+              size={40} 
+              icon="robot" 
+              style={[styles.headerAvatar, { backgroundColor: theme.colors.primary }]}
+            />
+            <View style={styles.headerText}>
+              <Text style={[styles.headerTitle, { color: theme.colors.onSurface }]}>
+                {t('chat.title')}
+              </Text>
+              <Text style={[styles.headerSubtitle, { color: theme.colors.onSurfaceVariant }]}>
+                {t('chat.subtitle')}
+              </Text>
+            </View>
           </View>
         </View>
-      </View>
 
-      <FlatList
-        ref={flatListRef}
-        data={messages}
-        renderItem={renderMessage}
-        keyExtractor={(item) => item.id}
-        style={styles.messagesList}
-        contentContainerStyle={styles.messagesContainer}
-        onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
-        showsVerticalScrollIndicator={false}
-      />
-
-      {messages.length === 1 && renderQuickQuestions()}
-
-      {/* FAB for clearing chat */}
-      {messages.length > 1 && (
-        <FAB
-          icon="delete"
-          style={styles.fab}
-          onPress={() => {
-            setMessages([messages[0]]); // Keep only welcome message
-          }}
-          small
+        <FlatList
+          ref={flatListRef}
+          data={messages}
+          renderItem={renderMessage}
+          keyExtractor={(item) => item.id}
+          style={styles.messagesList}
+          contentContainerStyle={[styles.messagesContainer, { paddingBottom: 100 }]}
+          onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+          showsVerticalScrollIndicator={false}
         />
-      )}
 
-      {/* Test connection FAB */}
-      <FAB
-        icon="wifi"
-        style={[styles.fab, { bottom: 140 }]}
-        onPress={testConnection}
-        small
-        label="Test"
-      />
+        {messages.length === 1 && renderQuickQuestions()}
 
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={[
-            styles.textInput,
-            { 
-              backgroundColor: theme.colors.surface,
-              color: theme.colors.onSurface,
-              borderColor: theme.colors.outline
-            }
-          ]}
-          value={inputText}
-          onChangeText={setInputText}
-          placeholder={t('chat.placeholder')}
-          placeholderTextColor={theme.colors.onSurfaceVariant}
-          multiline
-          maxLength={500}
-          editable={!isLoading}
-        />
-        <TouchableOpacity
-          style={[
-            styles.sendButton,
-            { 
-              backgroundColor: inputText.trim() && !isLoading 
-                ? theme.colors.primary 
-                : theme.colors.outline 
-            }
-          ]}
-          onPress={() => sendMessage(inputText)}
-          disabled={!inputText.trim() || isLoading}
-        >
-          <Ionicons 
-            name="send" 
-            size={20} 
-            color={inputText.trim() && !isLoading ? 'white' : theme.colors.onSurfaceVariant} 
+        {/* FAB for clearing chat */}
+        {messages.length > 1 && (
+          <FAB
+            icon="delete"
+            style={styles.fab}
+            onPress={() => {
+              setMessages([messages[0]]); // Keep only welcome message
+            }}
+            small
           />
-        </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
+        )}
+
+        {/* Test connection FAB */}
+        <FAB
+          icon="wifi"
+          style={[styles.fab, { bottom: 140 }]}
+          onPress={testConnection}
+          small
+          label="Test"
+        />
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={[
+              styles.textInput,
+              {
+                backgroundColor: theme.colors.surface,
+                color: theme.colors.onSurface,
+                borderColor: theme.colors.outline,
+              },
+            ]}
+            value={inputText}
+            onChangeText={setInputText}
+            placeholder={t('chat.placeholder')}
+            placeholderTextColor={theme.colors.onSurfaceVariant}
+            multiline
+            maxLength={500}
+            editable={!isLoading}
+            onSubmitEditing={() => sendMessage(inputText)}
+            blurOnSubmit={false}
+          />
+          <TouchableOpacity
+            style={[
+              styles.sendButton,
+              {
+                backgroundColor:
+                  inputText.trim() && !isLoading
+                    ? theme.colors.primary
+                    : theme.colors.outline,
+              },
+            ]}
+            onPress={() => sendMessage(inputText)}
+            disabled={!inputText.trim() || isLoading}
+          >
+            <Ionicons
+              name="send"
+              size={20}
+              color={inputText.trim() && !isLoading ? 'white' : theme.colors.onSurfaceVariant}
+            />
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 

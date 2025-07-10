@@ -46,6 +46,7 @@ export default function HomeScreen() {
         const name = await SecureStore.getItemAsync('userName');
         const userProfileData = await SecureStore.getItemAsync('userProfile');
         const semanasStr = await SecureStore.getItemAsync('semanas');
+        const fechaReferenciaSemanaStr = await SecureStore.getItemAsync('fechaReferenciaSemana');
         const ultimaReglaStr = await SecureStore.getItemAsync('ultimaRegla');
         
         let currentWeek = 1;
@@ -65,18 +66,20 @@ export default function HomeScreen() {
             console.log('Error parsing user profile:', e);
           }
         }
-        
-        // Si no hay perfil o no tiene semana, usar los datos de última regla
-        if (currentWeek === 1) {
-          if (semanasStr && !isNaN(Number(semanasStr))) {
-            currentWeek = Number(semanasStr);
-          } else if (ultimaReglaStr) {
-            const ultimaRegla = new Date(ultimaReglaStr);
-            const hoy = new Date();
-            const diff = hoy.getTime() - ultimaRegla.getTime();
-            const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
-            currentWeek = Math.max(1, Math.floor(dias / 7));
-          }
+
+        // Cálculo automático de semana
+        const hoy = new Date();
+        if (ultimaReglaStr) {
+          const ultimaRegla = new Date(ultimaReglaStr);
+          const diff = hoy.getTime() - ultimaRegla.getTime();
+          const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+          currentWeek = Math.max(1, dias / 7);
+        } else if (semanasStr && fechaReferenciaSemanaStr) {
+          const semanasBase = Number(semanasStr);
+          const fechaRef = new Date(fechaReferenciaSemanaStr);
+          const diff = hoy.getTime() - fechaRef.getTime();
+          const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+          currentWeek = Math.max(1, semanasBase + dias / 7);
         }
 
         // Calcular trimestre basado en la semana actual

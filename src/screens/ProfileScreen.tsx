@@ -8,6 +8,7 @@ import { Picker } from '@react-native-picker/picker';
 import { auth } from '../data/firebaseConfig';
 import { t } from '../data/i18n';
 import { useLanguage } from '../context/LanguageContext';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function ProfileScreen() {
   const user = auth.currentUser;
@@ -26,10 +27,43 @@ export default function ProfileScreen() {
   const [previousChildren, setPreviousChildren] = useState('0');
   const [hasBoughtSupplements, setHasBoughtSupplements] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [fum, setFum] = useState<string | null>(null);
+  const [fechaReferenciaSemana, setFechaReferenciaSemana] = useState<string | null>(null);
+  const [showFumPicker, setShowFumPicker] = useState(false);
+
+  // Sincronizar semana y FUM
+  useEffect(() => {
+    if (fum) {
+      // Si hay FUM, calcular semana
+      const hoy = new Date();
+      const ultimaRegla = new Date(fum);
+      const diff = hoy.getTime() - ultimaRegla.getTime();
+      const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const semanas = (dias / 7).toFixed(1);
+      setCurrentWeek(semanas);
+    }
+  }, [fum]);
+
+  useEffect(() => {
+    if (currentWeek && !isNaN(Number(currentWeek))) {
+      // Si hay semana, calcular FUM estimada
+      const hoy = new Date();
+      const semanasNum = Number(currentWeek);
+      const dias = Math.round(semanasNum * 7);
+      const fumEstimada = new Date(hoy.getTime() - dias * 24 * 60 * 60 * 1000);
+      setFum(fumEstimada.toISOString());
+    }
+  }, [currentWeek]);
 
   // Cargar datos del perfil al montar el componente
   useEffect(() => {
     loadUserProfile();
+    (async () => {
+      const fumStr = await SecureStore.getItemAsync('ultimaRegla');
+      setFum(fumStr || null);
+      const fechaRefStr = await SecureStore.getItemAsync('fechaReferenciaSemana');
+      setFechaReferenciaSemana(fechaRefStr || null);
+    })();
   }, []);
 
   const loadUserProfile = async () => {
@@ -70,6 +104,16 @@ export default function ProfileScreen() {
     } catch (error) {
       setError(t('profile.errorSavingProfile'));
       console.error('Error saving user profile:', error);
+    }
+  };
+
+  const savePregnancyReference = async () => {
+    if (fum) {
+      await SecureStore.setItemAsync('ultimaRegla', fum);
+    }
+    if (currentWeek) {
+      await SecureStore.setItemAsync('semanas', currentWeek);
+      await SecureStore.setItemAsync('fechaReferenciaSemana', new Date().toISOString());
     }
   };
 
@@ -124,6 +168,7 @@ export default function ProfileScreen() {
         photoURL: photoURL || undefined,
       });
       await saveUserProfile();
+      await savePregnancyReference();
     } catch (e: any) {
       setError(e.message);
     } finally {
@@ -202,14 +247,31 @@ export default function ProfileScreen() {
                   style={styles.input}
                   mode="outlined"
                 />
-                <TextInput
-                  label={t('profile.previousChildren')}
-                  value={previousChildren}
-                  onChangeText={setPreviousChildren}
-                  keyboardType="numeric"
-                  style={styles.input}
-                  mode="outlined"
-                />
+                <TouchableOpacity onPress={() => setShowFumPicker(true)}>
+                  <TextInput
+                    label={t('lastMenstruationDate')}
+                    value={fum ? new Date(fum).toLocaleDateString() : ''}
+                    editable={false}
+                    style={styles.input}
+                    mode="outlined"
+                    placeholder="YYYY-MM-DD"
+                  />
+                </TouchableOpacity>
+                {showFumPicker && (
+                  <DateTimePicker
+                    value={fum ? new Date(fum) : new Date()}
+                    mode="date"
+                    display="default"
+                    onChange={(_, selectedDate) => {
+                      setShowFumPicker(false);
+                      if (selectedDate) setFum(selectedDate.toISOString());
+                    }}
+                    maximumDate={new Date()}
+                  />
+                )}
+                <Paragraph style={{ fontSize: 12, color: '#888', marginTop: 4 }}>
+                  {t('profile.editPregnancyReferenceHint')}
+                </Paragraph>
                 
                 <Paragraph style={styles.pickerLabel}>{t('profile.dietType')}</Paragraph>
                 <View style={styles.pickerContainer}>

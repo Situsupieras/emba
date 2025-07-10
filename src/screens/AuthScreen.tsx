@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { TextInput, Button, Title, Paragraph, Card, Divider, ActivityIndicator } from 'react-native-paper';
-import * as Google from 'expo-auth-session/providers/google';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithCredential, FacebookAuthProvider, GoogleAuthProvider, sendPasswordResetEmail } from 'firebase/auth';
+import { TextInput, Button, Title, Paragraph, Card, Divider } from 'react-native-paper';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../data/firebaseConfig';
 import { t } from '../data/i18n';
 import { Picker } from '@react-native-picker/picker';
@@ -14,11 +13,6 @@ export default function AuthScreen({ navigation }: any) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    clientId: '567704618820-2v6v7k1q7k1v7k1v.apps.googleusercontent.com', // Reemplaza por tu clientId de Google
-    iosClientId: '567704618820-2v6v7k1q7k1v7k1v.apps.googleusercontent.com', // Reemplaza por tu clientId de Google iOS
-    androidClientId: '567704618820-2v6v7k1q7k1v7k1v.apps.googleusercontent.com', // Reemplaza por tu clientId de Google Android
-  });
   const [resetSent, setResetSent] = useState(false);
   const [name, setName] = useState('');
   const [age, setAge] = useState('25');
@@ -27,18 +21,6 @@ export default function AuthScreen({ navigation }: any) {
   const [hasBoughtSupplements, setHasBoughtSupplements] = useState(false);
   const [supplements, setSupplements] = useState([]);
   const [previousChildren, setPreviousChildren] = useState('0');
-
-  React.useEffect(() => {
-    if (response?.type === 'success') {
-      const { id_token } = response.params;
-      const credential = GoogleAuthProvider.credential(id_token);
-      setLoading(true);
-      signInWithCredential(auth, credential)
-        .then(() => navigation.replace('Main'))
-        .catch(e => setError(e.message))
-        .finally(() => setLoading(false));
-    }
-  }, [response]);
 
   const handleAuth = async () => {
     setLoading(true);
@@ -182,26 +164,7 @@ export default function AuthScreen({ navigation }: any) {
           <Button mode="text" onPress={() => setIsLogin(!isLogin)} style={styles.switchButton}>
             {isLogin ? '¿No tienes cuenta? ' + t('register') : '¿Ya tienes cuenta? ' + t('login')}
           </Button>
-          <Divider style={styles.divider} />
-          <Button
-            mode="outlined"
-            icon="google"
-            onPress={() => promptAsync()}
-            style={styles.socialButton}
-            disabled={!request || loading}
-          >
-            Google
-          </Button>
-          <Button
-            mode="outlined"
-            icon="facebook"
-            onPress={handleFacebookLogin}
-            style={styles.socialButton}
-            disabled={loading}
-          >
-            Facebook
-          </Button>
-          {loading && <ActivityIndicator style={{ marginTop: 16 }} />}
+          {loading && <Paragraph style={{ marginTop: 16, textAlign: 'center' }}>Cargando...</Paragraph>}
         </Card.Content>
       </Card>
     </View>

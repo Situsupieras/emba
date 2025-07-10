@@ -21,6 +21,27 @@ export interface UserContext {
   supplements: any[];
   email?: string;
   language: string;
+  // Calcular trimestre basado en la semana actual
+  trimester: number;
+  // Datos médicos adicionales
+  medicalHistory?: string[];
+  allergies?: string[];
+  dietaryRestrictions?: string[];
+  // Última consulta médica
+  lastMedicalVisit?: {
+    doctorName: string;
+    date: string;
+    recommendations: string[];
+    concerns: string[];
+    supplementsPrescribed: string[];
+    testsOrdered: string[];
+    weight?: number;
+    bloodPressure?: string;
+    babyHeartbeat?: number;
+    ultrasoundNotes?: string;
+  };
+  // Recomendaciones médicas activas
+  activeMedicalRecommendations?: string[];
 }
 
 export interface ChatResponse {
@@ -42,21 +63,68 @@ class ChatService {
   private async getUserContext(): Promise<UserContext> {
     try {
       const userProfileData = await SecureStore.getItemAsync('userProfile');
+      const medicalFeedbackData = await SecureStore.getItemAsync('medicalFeedback');
+      
+      let profile: any = {};
+      let medicalFeedback: any[] = [];
+      
       if (userProfileData) {
-        const profile = JSON.parse(userProfileData);
-        return {
-          id: profile.id || 'user-unknown',
-          name: profile.name || 'Usuario',
-          age: profile.age || 25,
-          currentWeek: profile.currentWeek || 12,
-          diet: profile.diet || 'omnívora',
-          previousChildren: profile.previousChildren || 0,
-          hasBoughtSupplements: profile.hasBoughtSupplements || false,
-          supplements: profile.supplements || [],
-          email: profile.email || '',
-          language: await this.getCurrentLanguage(),
+        profile = JSON.parse(userProfileData);
+      }
+      
+      if (medicalFeedbackData) {
+        medicalFeedback = JSON.parse(medicalFeedbackData);
+      }
+      
+      // Obtener la última consulta médica
+      let lastMedicalVisit = undefined;
+      if (medicalFeedback.length > 0) {
+        const lastVisit = medicalFeedback[medicalFeedback.length - 1];
+        lastMedicalVisit = {
+          doctorName: lastVisit.doctorName || '',
+          date: lastVisit.date || new Date().toISOString(),
+          recommendations: lastVisit.recommendations || [],
+          concerns: lastVisit.concerns || [],
+          supplementsPrescribed: lastVisit.supplementsPrescribed || [],
+          testsOrdered: lastVisit.testsOrdered || [],
+          weight: lastVisit.weight,
+          bloodPressure: lastVisit.bloodPressure,
+          babyHeartbeat: lastVisit.babyHeartbeat,
+          ultrasoundNotes: lastVisit.ultrasoundNotes,
         };
       }
+      
+      // Obtener recomendaciones médicas activas
+      const activeRecommendations = medicalFeedback
+        .flatMap(visit => visit.recommendations || [])
+        .filter(rec => rec && rec.trim() !== '');
+      
+      return {
+        id: profile.id || 'user-unknown',
+        name: profile.name || 'Usuario',
+        age: profile.age || 25,
+        currentWeek: profile.currentWeek || 12,
+        diet: profile.diet || 'omnívora',
+        previousChildren: profile.previousChildren || 0,
+        hasBoughtSupplements: profile.hasBoughtSupplements || false,
+        supplements: profile.supplements || [],
+        email: profile.email || '',
+        language: await this.getCurrentLanguage(),
+        // Calcular trimestre basado en la semana actual
+        trimester: (() => {
+          const week = profile.currentWeek || 12;
+          if (week >= 1 && week <= 13) return 1;
+          if (week >= 14 && week <= 27) return 2;
+          if (week >= 28) return 3;
+          return 1;
+        })(),
+        // Datos médicos adicionales
+        medicalHistory: profile.medicalHistory || [],
+        allergies: profile.allergies || [],
+        dietaryRestrictions: profile.dietaryRestrictions || [],
+        lastMedicalVisit,
+        activeMedicalRecommendations: activeRecommendations,
+      };
     } catch (error) {
       console.error('Error loading user context:', error);
     }
@@ -73,24 +141,23 @@ class ChatService {
       supplements: [],
       email: '',
       language: await this.getCurrentLanguage(),
+      trimester: 1,
+      medicalHistory: [],
+      allergies: [],
+      dietaryRestrictions: [],
+      activeMedicalRecommendations: [],
     };
   }
 
   private async getCurrentLanguage(): Promise<string> {
     try {
-      // Intentar obtener el idioma desde SecureStore
-      const language = await SecureStore.getItemAsync('userLanguage');
+      // Usar la misma clave que el contexto global
+      const language = await SecureStore.getItemAsync('language');
       if (language) {
         return language;
       }
-      
       // Si no hay idioma guardado, usar el idioma del sistema
-      const systemLanguage = await SecureStore.getItemAsync('systemLanguage');
-      if (systemLanguage) {
-        return systemLanguage;
-      }
-      
-      // Por defecto español
+      // (opcional: puedes usar expo-localization aquí si quieres)
       return 'es';
     } catch (error) {
       console.error('Error getting language:', error);

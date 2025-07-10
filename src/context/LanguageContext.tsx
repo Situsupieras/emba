@@ -20,6 +20,7 @@ export const useLanguage = () => {
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentLanguage, setCurrentLanguageState] = useState('es');
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     loadLanguage();
@@ -38,6 +39,11 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       }
     } catch (error) {
       console.log('Error loading language:', error);
+      // Fallback a español
+      setCurrentLanguageState('es');
+      I18n.locale = 'es';
+    } finally {
+      setIsLoaded(true);
     }
   };
 
@@ -50,6 +56,11 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       console.log('Error saving language:', error);
     }
   };
+
+  // No renderizar hasta que se haya cargado el idioma
+  if (!isLoaded) {
+    return null;
+  }
 
   return (
     <LanguageContext.Provider value={{ currentLanguage, changeLanguage }}>

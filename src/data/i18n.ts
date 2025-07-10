@@ -12,7 +12,7 @@ I18n.translations = {
     community: 'Comunidad',
     store: 'Tienda',
     chat: 'Chat',
-    profile: 'Perfil',
+    profileTitle: 'Perfil',
     
     // Autenticación
     login: 'Iniciar sesión',
@@ -22,6 +22,7 @@ I18n.translations = {
     forgotPassword: '¿Olvidaste tu contraseña?',
     logout: 'Cerrar sesión',
     send: 'Enviar',
+    name: 'Nombre',
     
     // Información del embarazo
     week: 'Semana',
@@ -96,7 +97,7 @@ I18n.translations = {
       typing: 'Escribiendo...',
       error: 'Lo siento, no pude procesar tu mensaje. Por favor, intenta de nuevo.',
       errorTitle: 'Error de conexión',
-      errorMessage: 'No se pudo conectar con el servidor. Verifica tu conexión a internet.',
+      errorMessage: 'No se pudo conectar al servidor. Verifica tu conexión a internet.',
       quickQuestions: 'Preguntas rápidas',
       suggestions: 'Aquí tienes algunas sugerencias para continuar la conversación:',
       questions: {
@@ -264,7 +265,7 @@ I18n.translations = {
     community: 'Community',
     store: 'Store',
     chat: 'Chat',
-    profile: 'Profile',
+    profileTitle: 'Profile',
     
     // Authentication
     login: 'Login',
@@ -274,6 +275,7 @@ I18n.translations = {
     forgotPassword: 'Forgot password?',
     logout: 'Logout',
     send: 'Send',
+    name: 'Name',
     
     // Pregnancy information
     week: 'Week',
