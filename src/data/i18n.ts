@@ -84,6 +84,7 @@ I18n.translations = {
       noAuthenticatedUser: 'No hay usuario autenticado.',
       loadingProfile: 'Cargando perfil...',
       errorLogout: 'Error al cerrar sesión.',
+      logout: 'Cerrar sesión',
     },
     
     // Chat
@@ -335,6 +336,7 @@ I18n.translations = {
       noAuthenticatedUser: 'No authenticated user.',
       loadingProfile: 'Loading profile...',
       errorLogout: 'Error logging out.',
+      logout: 'Logout',
     },
     
     // Chat

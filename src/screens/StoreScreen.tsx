@@ -222,7 +222,6 @@ export default function StoreScreen() {
 
                     <View style={styles.certificationsContainer}>
                       {(isSupplement ? (item as Supplement).certifications : (item as Product).certifications)
-                        .slice(0, 2)
                         .map((cert) => (
                           <Chip key={cert} mode="outlined" style={styles.certificationChip}>
                             {cert}
@@ -298,7 +297,7 @@ export default function StoreScreen() {
 
                 <Divider style={styles.divider} />
 
-                <Title style={styles.dialogSectionTitle}>Certificaciones de calidad</Title>
+                <Title style={styles.dialogSectionTitle}>{t('certifications')}</Title>
                 <View style={styles.dialogCertifications}>
                   {selectedProduct.certifications.map((cert) => (
                     <Chip key={cert} mode="outlined" style={styles.dialogCertificationChip}>
@@ -321,7 +320,7 @@ export default function StoreScreen() {
             )}
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={() => setProductDialogVisible(false)}>Cerrar</Button>
+            <Button onPress={() => setProductDialogVisible(false)}>{t('messages.close')}</Button>
             <Button 
               mode="contained" 
               onPress={() => {
@@ -331,7 +330,7 @@ export default function StoreScreen() {
                 }
               }}
             >
-              Agregar al carrito
+              {t('add')}
             </Button>
           </Dialog.Actions>
         </Dialog>
@@ -340,7 +339,7 @@ export default function StoreScreen() {
       {/* Supplement Details Dialog */}
       <Portal>
         <Dialog visible={supplementDialogVisible} onDismiss={() => setSupplementDialogVisible(false)}>
-          <Dialog.Title>Información médica del suplemento</Dialog.Title>
+          <Dialog.Title>{t('detailedMedicalInfo')}</Dialog.Title>
           <Dialog.Content>
             {selectedSupplement && (
               <ScrollView>
@@ -350,14 +349,14 @@ export default function StoreScreen() {
 
                 <Divider style={styles.divider} />
 
-                <Title style={styles.dialogSectionTitle}>Explicación médica</Title>
+                <Title style={styles.dialogSectionTitle}>{t('medicalExplanations')}</Title>
                 <Paragraph style={styles.medicalExplanation}>
                   {selectedSupplement.medicalExplanation}
                 </Paragraph>
 
                 <Divider style={styles.divider} />
 
-                <Title style={styles.dialogSectionTitle}>Beneficios</Title>
+                <Title style={styles.dialogSectionTitle}>{t('benefits')}</Title>
                 {selectedSupplement.benefits.map((benefit) => (
                   <List.Item
                     key={benefit}
@@ -368,12 +367,12 @@ export default function StoreScreen() {
 
                 <Divider style={styles.divider} />
 
-                <Title style={styles.dialogSectionTitle}>Dosificación</Title>
+                <Title style={styles.dialogSectionTitle}>{t('folicAcidDosage')}</Title>
                 <Paragraph style={styles.dosageText}>{selectedSupplement.dosage}</Paragraph>
 
                 <Divider style={styles.divider} />
 
-                <Title style={styles.dialogSectionTitle}>Efectos secundarios</Title>
+                <Title style={styles.dialogSectionTitle}>{t('sideEffects')}</Title>
                 {selectedSupplement.sideEffects.map((effect) => (
                   <List.Item
                     key={effect}
@@ -384,7 +383,7 @@ export default function StoreScreen() {
 
                 <Divider style={styles.divider} />
 
-                <Title style={styles.dialogSectionTitle}>Certificaciones</Title>
+                <Title style={styles.dialogSectionTitle}>{t('certifications')}</Title>
                 <View style={styles.dialogCertifications}>
                   {selectedSupplement.certifications.map((cert) => (
                     <Chip key={cert} mode="outlined" style={styles.dialogCertificationChip}>
@@ -402,7 +401,7 @@ export default function StoreScreen() {
             )}
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={() => setSupplementDialogVisible(false)}>Cerrar</Button>
+            <Button onPress={() => setSupplementDialogVisible(false)}>{t('messages.close')}</Button>
             <Button 
               mode="contained" 
               onPress={() => {
@@ -412,7 +411,7 @@ export default function StoreScreen() {
                 }
               }}
             >
-              Agregar al carrito
+              {t('add')}
             </Button>
           </Dialog.Actions>
         </Dialog>
@@ -559,8 +558,9 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   certificationChip: {
-    height: 20,
-    fontSize: 10,
+    height: 24,
+    fontSize: 11,
+    paddingHorizontal: 6,
   },
   productActions: {
     flexDirection: 'row',
