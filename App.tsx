@@ -7,14 +7,18 @@ import AuthScreen from './src/screens/AuthScreen';
 import UltimaReglaScreen from './src/screens/UltimaReglaScreen';
 import MedicalFeedbackScreen from './src/screens/MedicalFeedbackScreen';
 import * as SecureStore from 'expo-secure-store';
-import type { RootStackParamList } from './src/types/navigation';
-import { View, Text, Platform } from 'react-native';
+import type { RootStackParamList, MainTabParamList } from './src/types/navigation';
+import { View, Text, Platform, ActivityIndicator } from 'react-native';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './src/data/firebaseConfig';
 import * as Notifications from 'expo-notifications';
 import { t } from './src/data/i18n';
 import { LanguageProvider } from './src/context/LanguageContext';
+import { UserProvider } from './src/context/UserContext';
 import LanguageAwareNavigator from './src/components/LanguageAwareNavigator';
+import { securityFramework } from './src/security';
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -26,6 +30,7 @@ export default function App() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [hasUserData, setHasUserData] = useState(false);
+  const [securityInitialized, setSecurityInitialized] = useState(false);
 
   useEffect(() => {
     const checkUserData = async () => {
@@ -47,12 +52,25 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
-      setLoading(false);
-    });
-    return unsubscribe;
+    initializeApp();
   }, []);
+
+  const initializeApp = async () => {
+    try {
+      // Inicializar framework de seguridad primero
+      await securityFramework.initialize();
+      setSecurityInitialized(true);
+      
+      // Luego inicializar el resto de la app
+      const auth = getAuth();
+      onAuthStateChanged(auth, (user) => {
+        setUser(user);
+        setLoading(false);
+      });
+    } catch (error) {
+      console.error('App initialization failed:', error);
+    }
+  };
 
   // Configuración de notificaciones
   Notifications.setNotificationHandler({
@@ -67,12 +85,12 @@ export default function App() {
 
   // Solicitar permisos y mostrar notificación de bienvenida
   useEffect(() => {
+    if (Platform.OS === 'web') return; // evitar listeners no soportados en web
     if (user || hasUserData) {
       (async () => {
         const { status } = await Notifications.requestPermissionsAsync();
         if (status === 'granted') {
-          const tokenData = await Notifications.getExpoPushTokenAsync();
-          // Aquí puedes guardar el token en Firestore si lo deseas
+          await Notifications.getExpoPushTokenAsync();
           await Notifications.scheduleNotificationAsync({
             content: {
               title: '¡Bienvenida a Inteligencia Prenatal!',
@@ -93,6 +111,16 @@ export default function App() {
     }
   }, [user, hasUserData]);
 
+  // No mostrar la app hasta que la seguridad esté inicializada
+  if (!securityInitialized) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#0000ff" />
+        <Text>Inicializando seguridad...</Text>
+      </View>
+    );
+  }
+
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.colors.primary }}>
@@ -105,25 +133,27 @@ export default function App() {
   const shouldShowMain = user || hasUserData;
 
   return (
-    <LanguageProvider>
-      <PaperProvider theme={theme}>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName={shouldShowMain ? "Main" : "Auth"} screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Auth" component={AuthScreen} />
-            <Stack.Screen name="UltimaRegla" component={UltimaReglaScreen} />
-            <Stack.Screen name="Main" component={MainTabs} />
-            <Stack.Screen 
-              name="MedicalFeedback" 
-              component={MedicalFeedbackScreen} 
-              options={{ 
-                headerShown: true,
-                title: t('medicalFeedback.title'),
-                presentation: 'modal'
-              }} 
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </PaperProvider>
-    </LanguageProvider>
+    <UserProvider>
+      <LanguageProvider>
+        <PaperProvider theme={theme}>
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName={shouldShowMain ? "Main" : "Auth"} screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Auth" component={AuthScreen} />
+              <Stack.Screen name="UltimaRegla" component={UltimaReglaScreen} />
+              <Stack.Screen name="Main" component={MainTabs} />
+              <Stack.Screen 
+                name="MedicalFeedback" 
+                component={MedicalFeedbackScreen} 
+                options={{ 
+                  headerShown: true,
+                  title: t('medicalFeedback.title'),
+                  presentation: 'modal'
+                }} 
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </PaperProvider>
+      </LanguageProvider>
+    </UserProvider>
   );
 }

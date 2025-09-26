@@ -29,6 +29,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 import { t } from '../data/i18n';
 import { medicalSyncService, SyncResult } from '../data/medicalSync';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface MedicalFeedbackScreenProps {
   navigation: any;
@@ -309,7 +310,7 @@ export default function MedicalFeedbackScreen({ navigation }: MedicalFeedbackScr
         <Card style={styles.headerCard}>
           <Card.Content>
             <Title style={styles.headerTitle}>
-              <Ionicons name="medical" size={24} color={theme.colors.primary} />
+              <MaterialCommunityIcons name="hospital-box" size={24} color={theme.colors.primary} />
               {' '}{t('medicalFeedback.title')}
             </Title>
             <Paragraph style={styles.headerSubtitle}>
