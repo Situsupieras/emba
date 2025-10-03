@@ -6,7 +6,7 @@ import { theme } from './src/theme';
 import AuthScreen from './src/screens/AuthScreen';
 import UltimaReglaScreen from './src/screens/UltimaReglaScreen';
 import MedicalFeedbackScreen from './src/screens/MedicalFeedbackScreen';
-import * as SecureStore from 'expo-secure-store';
+import SecureStoreCompat from './src/security/secureStore';
 import type { RootStackParamList, MainTabParamList } from './src/types/navigation';
 import { View, Text, Platform, ActivityIndicator } from 'react-native';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -36,9 +36,9 @@ export default function App() {
     const checkUserData = async () => {
       try {
         // Verificar si hay datos de usuario guardados
-        const userProfile = await SecureStore.getItemAsync('userProfile');
-        const userName = await SecureStore.getItemAsync('userName');
-        const semanas = await SecureStore.getItemAsync('semanas');
+        const userProfile = await SecureStoreCompat.getItemAsync('userProfile');
+        const userName = await SecureStoreCompat.getItemAsync('userName');
+        const semanas = await SecureStoreCompat.getItemAsync('semanas');
         
         if (userProfile || userName || semanas) {
           setHasUserData(true);

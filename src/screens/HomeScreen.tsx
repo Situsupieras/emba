@@ -25,7 +25,7 @@ import { mockUser } from '../data/mockData';
 import { Ionicons } from '@expo/vector-icons';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import type { MainTabParamList } from '../types/navigation';
-import * as SecureStore from 'expo-secure-store';
+import SecureStoreCompat from '../security/secureStore';
 import { getAuth, signOut } from 'firebase/auth';
 import { t } from '../data/i18n';
 import { useLanguage } from '../context/LanguageContext';
@@ -43,11 +43,11 @@ export default function HomeScreen() {
   useEffect(() => {
     (async () => {
       try {
-        const name = await SecureStore.getItemAsync('userName');
-        const userProfileData = await SecureStore.getItemAsync('userProfile');
-        const semanasStr = await SecureStore.getItemAsync('semanas');
-        const fechaReferenciaSemanaStr = await SecureStore.getItemAsync('fechaReferenciaSemana');
-        const ultimaReglaStr = await SecureStore.getItemAsync('ultimaRegla');
+        const name = await SecureStoreCompat.getItemAsync('userName');
+        const userProfileData = await SecureStoreCompat.getItemAsync('userProfile');
+        const semanasStr = await SecureStoreCompat.getItemAsync('semanas');
+        const fechaReferenciaSemanaStr = await SecureStoreCompat.getItemAsync('fechaReferenciaSemana');
+        const ultimaReglaStr = await SecureStoreCompat.getItemAsync('ultimaRegla');
         
         let currentWeek = 1;
         let userName = name || 'Usuario';

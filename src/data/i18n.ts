@@ -1,5 +1,5 @@
 import * as Localization from 'expo-localization';
-import * as SecureStore from 'expo-secure-store';
+import SecureStoreCompat from '../security/secureStore';
 import I18n from 'i18n-js';
 
 I18n.translations = {
@@ -11,7 +11,7 @@ I18n.translations = {
     guide: 'Guía Trimestral',
     community: 'Comunidad',
     store: 'Tienda',
-    chat: 'Chat',
+    chatTab: 'Chat',
     profileTitle: 'Perfil',
     
     // Autenticación
@@ -264,7 +264,7 @@ I18n.translations = {
     guide: 'Trimester Guide',
     community: 'Community',
     store: 'Store',
-    chat: 'Chat',
+    chatTab: 'Chat',
     profileTitle: 'Profile',
     
     // Authentication
@@ -519,7 +519,7 @@ I18n.defaultLocale = 'es';
 // Inicializar idioma desde almacenamiento
 const initializeLanguage = async () => {
   try {
-    const savedLanguage = await SecureStore.getItemAsync('language');
+    const savedLanguage = await SecureStoreCompat.getItemAsync('language');
     if (savedLanguage) {
       I18n.locale = savedLanguage;
     }
@@ -533,6 +533,6 @@ initializeLanguage();
 export const t = (key: string, config?: any) => I18n.t(key, config);
 export const setLanguage = (locale: string) => {
   I18n.locale = locale;
-  SecureStore.setItemAsync('language', locale);
+  SecureStoreCompat.setItemAsync('language', locale);
 };
 export const getCurrentLanguage = () => I18n.locale; 

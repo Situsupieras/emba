@@ -3,7 +3,7 @@ import { View, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-nat
 import { Card, Title, Paragraph, Button, Avatar, TextInput, ActivityIndicator, Chip } from 'react-native-paper';
 import { signOut, updateProfile, sendEmailVerification } from 'firebase/auth';
 import * as ImagePicker from 'expo-image-picker';
-import * as SecureStore from 'expo-secure-store';
+import SecureStoreCompat from '../security/secureStore';
 import { Picker } from '@react-native-picker/picker';
 import { auth } from '../data/firebaseConfig';
 import { t } from '../data/i18n';
@@ -59,16 +59,16 @@ export default function ProfileScreen() {
   useEffect(() => {
     loadUserProfile();
     (async () => {
-      const fumStr = await SecureStore.getItemAsync('ultimaRegla');
+      const fumStr = await SecureStoreCompat.getItemAsync('ultimaRegla');
       setFum(fumStr || null);
-      const fechaRefStr = await SecureStore.getItemAsync('fechaReferenciaSemana');
+      const fechaRefStr = await SecureStoreCompat.getItemAsync('fechaReferenciaSemana');
       setFechaReferenciaSemana(fechaRefStr || null);
     })();
   }, []);
 
   const loadUserProfile = async () => {
     try {
-      const userProfileData = await SecureStore.getItemAsync('userProfile');
+      const userProfileData = await SecureStoreCompat.getItemAsync('userProfile');
       if (userProfileData) {
         const profile = JSON.parse(userProfileData);
         setDisplayName(profile.name || '');
@@ -96,9 +96,9 @@ export default function ProfileScreen() {
         email: user?.email,
       };
       console.log('ProfileScreen - Guardando perfil actualizado:', userData);
-      await SecureStore.setItemAsync('userProfile', JSON.stringify(userData));
+      await SecureStoreCompat.setItemAsync('userProfile', JSON.stringify(userData));
       // También actualizar el campo 'semanas' para compatibilidad
-      await SecureStore.setItemAsync('semanas', currentWeek);
+      await SecureStoreCompat.setItemAsync('semanas', currentWeek);
       setSuccess(t('profile.profileUpdated'));
       setIsEditing(false);
     } catch (error) {
@@ -109,11 +109,11 @@ export default function ProfileScreen() {
 
   const savePregnancyReference = async () => {
     if (fum) {
-      await SecureStore.setItemAsync('ultimaRegla', fum);
+      await SecureStoreCompat.setItemAsync('ultimaRegla', fum);
     }
     if (currentWeek) {
-      await SecureStore.setItemAsync('semanas', currentWeek);
-      await SecureStore.setItemAsync('fechaReferenciaSemana', new Date().toISOString());
+      await SecureStoreCompat.setItemAsync('semanas', currentWeek);
+      await SecureStoreCompat.setItemAsync('fechaReferenciaSemana', new Date().toISOString());
     }
   };
 

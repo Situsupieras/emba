@@ -25,6 +25,20 @@ export default function AuthScreen({ navigation }: any) {
   const handleAuth = async () => {
     setLoading(true);
     setError('');
+    
+    // Validaciones básicas
+    if (!email || !password) {
+      setError('Por favor completa todos los campos requeridos');
+      setLoading(false);
+      return;
+    }
+    
+    if (!isLogin && (!name || !age || !currentWeek)) {
+      setError('Por favor completa todos los campos del perfil');
+      setLoading(false);
+      return;
+    }
+
     try {
       if (isLogin) {
         await signInWithEmailAndPassword(auth, email, password);
@@ -48,7 +62,24 @@ export default function AuthScreen({ navigation }: any) {
       }
       navigation.replace('Main');
     } catch (e: any) {
-      setError(e.message);
+      console.log('Error de autenticación:', e);
+      let errorMessage = 'Error de autenticación';
+      
+      if (e.code === 'auth/email-already-in-use') {
+        errorMessage = 'Este correo ya está registrado. Intenta iniciar sesión.';
+      } else if (e.code === 'auth/weak-password') {
+        errorMessage = 'La contraseña debe tener al menos 6 caracteres';
+      } else if (e.code === 'auth/invalid-email') {
+        errorMessage = 'Correo electrónico inválido';
+      } else if (e.code === 'auth/user-not-found') {
+        errorMessage = 'Usuario no encontrado. Verifica tu correo.';
+      } else if (e.code === 'auth/wrong-password') {
+        errorMessage = 'Contraseña incorrecta';
+      } else if (e.code === 'auth/too-many-requests') {
+        errorMessage = 'Demasiados intentos. Intenta más tarde.';
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

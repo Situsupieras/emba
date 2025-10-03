@@ -1,7 +1,16 @@
-import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 import { securityManager } from './encryption';
+
+// Importación condicional para evitar errores en Web
+let LocalAuthentication: any = null;
+if (Platform.OS !== 'web') {
+  try {
+    LocalAuthentication = require('expo-local-authentication');
+  } catch (error) {
+    console.warn('expo-local-authentication not available:', error);
+  }
+}
 
 export interface AuthSession {
   userId: string;
@@ -33,6 +42,16 @@ export class AuthenticationManager {
 
   async initialize(): Promise<void> {
     try {
+      // Solo inicializar autenticación biométrica en plataformas nativas
+      if (Platform.OS === 'web' || !LocalAuthentication) {
+        this.biometricConfig = {
+          enabled: false,
+          type: 'fingerprint',
+          fallbackEnabled: true
+        };
+        return;
+      }
+
       // Verificar disponibilidad de autenticación biométrica
       const hasHardware = await LocalAuthentication.hasHardwareAsync();
       const isEnrolled = await LocalAuthentication.isEnrolledAsync();
@@ -43,13 +62,28 @@ export class AuthenticationManager {
           type: await this.getBiometricType(),
           fallbackEnabled: true
         };
+      } else {
+        this.biometricConfig = {
+          enabled: false,
+          type: 'fingerprint',
+          fallbackEnabled: true
+        };
       }
     } catch (error) {
       console.error('Error initializing authentication:', error);
+      this.biometricConfig = {
+        enabled: false,
+        type: 'fingerprint',
+        fallbackEnabled: true
+      };
     }
   }
 
   private async getBiometricType(): Promise<'fingerprint' | 'face' | 'iris'> {
+    if (Platform.OS === 'web' || !LocalAuthentication) {
+      return 'fingerprint'; // Default para Web
+    }
+
     const supportedTypes = await LocalAuthentication.supportedAuthenticationTypesAsync();
     
     if (supportedTypes.includes(LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION)) {
@@ -62,7 +96,7 @@ export class AuthenticationManager {
   }
 
   async authenticateWithBiometrics(): Promise<boolean> {
-    if (!this.biometricConfig?.enabled) {
+    if (Platform.OS === 'web' || !LocalAuthentication || !this.biometricConfig?.enabled) {
       return false;
     }
 
@@ -97,9 +131,9 @@ export class AuthenticationManager {
       // Generar nuevo secreto
       const crypto = require('crypto');
       secret = crypto.randomBytes(20).toString('base32');
-      await SecureStore.setItemAsync('2fa_secret', secret);
+      await SecureStore.setItemAsync('2fa_secret', secret || '');
     }
-    return secret;
+    return secret || '';
   }
 
   private generateTOTP(secret: string, timestamp: number): number {
@@ -195,9 +229,9 @@ export class AuthenticationManager {
     if (!deviceId) {
       const crypto = require('crypto');
       deviceId = crypto.randomBytes(16).toString('hex');
-      await SecureStore.setItemAsync('device_id', deviceId);
+      await SecureStore.setItemAsync('device_id', deviceId || '');
     }
-    return deviceId;
+    return deviceId || '';
   }
 
   private async getAllSessionKeys(): Promise<string[]> {

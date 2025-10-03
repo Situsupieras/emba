@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import * as SecureStore from 'expo-secure-store';
+import SecureStoreCompat from '../security/secureStore';
 import * as Localization from 'expo-localization';
 import I18n from 'i18n-js';
 
@@ -28,7 +28,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const loadLanguage = async () => {
     try {
-      const savedLanguage = await SecureStore.getItemAsync('language');
+      const savedLanguage = await SecureStoreCompat.getItemAsync('language');
       if (savedLanguage) {
         setCurrentLanguageState(savedLanguage);
         I18n.locale = savedLanguage;
@@ -51,7 +51,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     try {
       setCurrentLanguageState(language);
       I18n.locale = language;
-      await SecureStore.setItemAsync('language', language);
+      await SecureStoreCompat.setItemAsync('language', language);
     } catch (error) {
       console.log('Error saving language:', error);
     }

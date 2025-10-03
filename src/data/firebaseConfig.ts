@@ -1,6 +1,7 @@
 // Configuración de Firebase para Inteligencia Prenatal
 import { initializeApp } from 'firebase/app';
-import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
+import { getAuth, initializeAuth } from 'firebase/auth';
+import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const firebaseConfig = {
@@ -15,6 +16,7 @@ const firebaseConfig = {
 
 export const firebaseApp = initializeApp(firebaseConfig);
 
-export const auth = initializeAuth(firebaseApp, {
-  persistence: getReactNativePersistence(AsyncStorage)
-}); 
+// Configuración de Auth compatible con Web y móvil
+export const auth = Platform.OS === 'web' 
+  ? getAuth(firebaseApp) // Para Web usar getAuth estándar
+  : initializeAuth(firebaseApp); // Para móvil usar initializeAuth básico 

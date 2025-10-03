@@ -27,7 +27,8 @@
     "plugins": [
       "expo-notifications",
       "expo-secure-store",
-      "expo-sqlite"
+      "expo-sqlite",
+      "expo-font"
     ],
     "extra": {
       "eas": {

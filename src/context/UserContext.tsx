@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useCallback } from 'react';
-import * as SecureStore from 'expo-secure-store';
+import SecureStoreCompat from '../security/secureStore';
 import { User } from '../types';
 
 interface UserContextType {
@@ -17,7 +17,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const reloadUser = useCallback(async () => {
     try {
-      const userData = await SecureStore.getItemAsync('userProfile');
+      const userData = await SecureStoreCompat.getItemAsync('userProfile');
       if (userData) {
         setUser(JSON.parse(userData));
       }
