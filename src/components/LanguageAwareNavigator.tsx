@@ -93,7 +93,7 @@ export default function LanguageAwareNavigator() {
         name="Chat" 
         component={ChatScreen} 
         options={{ 
-          title: t('chat.title'),
+          title: t('chatTitle'),
           headerShown: true
         }} 
       />
@@ -101,7 +101,7 @@ export default function LanguageAwareNavigator() {
         name="Perfil" 
         component={ProfileScreen} 
         options={{ 
-          title: t('profile.title'),
+          title: t('profileTitle'),
           headerShown: true
         }} 
       />

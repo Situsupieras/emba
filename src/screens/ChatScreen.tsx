@@ -33,7 +33,7 @@ const ChatScreen: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: t('chat.welcome'),
+      text: t('chatWelcome'),
       isUser: false,
       timestamp: new Date(),
     },
@@ -43,11 +43,11 @@ const ChatScreen: React.FC = () => {
   const flatListRef = useRef<FlatList>(null);
 
   const quickQuestions = [
-    t('chat.questions.nutrition'),
-    t('chat.questions.exercise'),
-    t('chat.questions.symptoms'),
-    t('chat.questions.medication'),
-    t('chat.questions.appointments'),
+    t('chatQuestionNutrition'),
+    t('chatQuestionExercise'),
+    t('chatQuestionSymptoms'),
+    t('chatQuestionMedication'),
+    t('chatQuestionAppointments'),
   ];
 
   const sendMessage = async (text: string) => {
@@ -143,7 +143,7 @@ const ChatScreen: React.FC = () => {
   const renderQuickQuestions = () => (
     <View style={styles.quickQuestionsContainer}>
       <Text style={[styles.quickQuestionsTitle, { color: theme.colors.onSurface }]}>
-        {t('chat.quickQuestions')}
+        {t('chatQuickQuestions')}
       </Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {quickQuestions.map((question, index) => (
@@ -178,10 +178,10 @@ const ChatScreen: React.FC = () => {
             />
             <View style={styles.headerText}>
               <Text style={[styles.headerTitle, { color: theme.colors.onSurface }]}>
-                {t('chat.title')}
+                {t('chatTitle')}
               </Text>
               <Text style={[styles.headerSubtitle, { color: theme.colors.onSurfaceVariant }]}>
-                {t('chat.subtitle')}
+                {t('chatSubtitle')}
               </Text>
             </View>
           </View>
@@ -233,7 +233,7 @@ const ChatScreen: React.FC = () => {
             ]}
             value={inputText}
             onChangeText={setInputText}
-            placeholder={t('chat.placeholder')}
+            placeholder={t('chatPlaceholder')}
             placeholderTextColor={theme.colors.onSurfaceVariant}
             multiline
             maxLength={500}

@@ -311,7 +311,7 @@ export default function MedicalFeedbackScreen({ navigation }: MedicalFeedbackScr
           <Card.Content>
             <Title style={styles.headerTitle}>
               <MaterialCommunityIcons name="hospital-box" size={24} color={theme.colors.primary} />
-              {' '}{t('medicalFeedback.title')}
+              {' '}{t('medicalFeedbackTitle')}
             </Title>
             <Paragraph style={styles.headerSubtitle}>
               Registra las recomendaciones de tu médico para mantener la app sincronizada

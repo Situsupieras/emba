@@ -122,7 +122,7 @@ export default function GuideScreen() {
       <View style={styles.container}>
         <Card style={styles.headerCard}>
           <Card.Content>
-            <Title>{t('messages.loading')}</Title>
+            <Title>{t('loading')}</Title>
           </Card.Content>
         </Card>
       </View>
@@ -179,21 +179,21 @@ export default function GuideScreen() {
                 onPress={() => setSelectedCategory('Nutrición')}
                 style={styles.categoryChip}
               >
-                {t('categories.nutrition')}
+                {t('categoryNutrition')}
               </Chip>
               <Chip
                 mode={selectedCategory === 'Ejercicio' ? 'flat' : 'outlined'}
                 onPress={() => setSelectedCategory('Ejercicio')}
                 style={styles.categoryChip}
               >
-                {t('categories.exercise')}
+                {t('categoryExercise')}
               </Chip>
               <Chip
                 mode={selectedCategory === 'Salud' ? 'flat' : 'outlined'}
                 onPress={() => setSelectedCategory('Salud')}
                 style={styles.categoryChip}
               >
-                {t('categories.health')}
+                {t('categoryHealth')}
               </Chip>
             </ScrollView>
 

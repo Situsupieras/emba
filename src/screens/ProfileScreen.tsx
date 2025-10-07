@@ -298,7 +298,7 @@ export default function ProfileScreen() {
             ) : (
               <View style={styles.infoDisplay}>
                 <View style={styles.infoRow}>
-                  <Chip icon="calendar" style={styles.infoChip}>{t('profile.age')}: {age} {t('profile.years')}</Chip>
+                  <Chip icon="calendar" style={styles.infoChip}>{t('profile.age')}: {age} {t('years')}</Chip>
                   <Chip icon="heart" style={styles.infoChip}>{t('common.week')}: {currentWeek}</Chip>
                 </View>
                 <View style={styles.infoRow}>
@@ -309,7 +309,7 @@ export default function ProfileScreen() {
                   icon={hasBoughtSupplements ? 'check-circle' : 'close-circle'} 
                   style={[styles.infoChip, hasBoughtSupplements ? styles.positiveChip : styles.negativeChip]}
                 >
-                  {t('profile.supplements')}: {hasBoughtSupplements ? t('profile.yes') : t('profile.no')}
+                  {t('supplements')}: {hasBoughtSupplements ? t('profile.yes') : t('no')}
                 </Chip>
               </View>
             )}
@@ -317,7 +317,7 @@ export default function ProfileScreen() {
 
           {/* Configuración de idioma */}
           <View style={styles.section}>
-            <Title style={styles.sectionTitle}>{t('profile.language')}</Title>
+            <Title style={styles.sectionTitle}>{t('language')}</Title>
             <View style={styles.languageButtons}>
               <Button 
                 mode={currentLanguage === 'es' ? 'contained' : 'outlined'} 
@@ -406,7 +406,7 @@ export default function ProfileScreen() {
               style={styles.logoutButton}
               icon="logout"
             >
-              {t('profile.logout')}
+              {t('logout')}
             </Button>
           </View>
         </Card.Content>

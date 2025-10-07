@@ -106,5 +106,9 @@ export default {
     "omnivorous": "Omnívora",
     "vegetarian": "Vegetariana",
     "vegan": "Vegana"
-  }
+  },
+  "motherChanges": "Cambios en la madre",
+  "categoryNutrition": "Nutrición",
+  "categoryExercise": "Ejercicio",
+  "categoryHealth": "Salud"
 };

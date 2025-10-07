@@ -320,7 +320,7 @@ export default function StoreScreen() {
             )}
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={() => setProductDialogVisible(false)}>{t('messages.close')}</Button>
+            <Button onPress={() => setProductDialogVisible(false)}>{t('close')}</Button>
             <Button 
               mode="contained" 
               onPress={() => {
@@ -401,7 +401,7 @@ export default function StoreScreen() {
             )}
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={() => setSupplementDialogVisible(false)}>{t('messages.close')}</Button>
+            <Button onPress={() => setSupplementDialogVisible(false)}>{t('close')}</Button>
             <Button 
               mode="contained" 
               onPress={() => {
