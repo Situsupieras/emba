@@ -1,3 +1,4 @@
+// Tipos base para la aplicación
 export interface User {
   id: string;
   name: string;
@@ -7,6 +8,31 @@ export interface User {
   trimester: number;
   medicalHistory: string[];
   preferences: UserPreferences;
+  createdAt: Date;
+  updatedAt: Date;
+  isEmailVerified: boolean;
+  lastLoginAt: Date;
+}
+
+// Tipos específicos para Firebase
+export interface FirebaseUser {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+  photoURL: string | null;
+  emailVerified: boolean;
+  isAnonymous: boolean;
+  metadata: {
+    creationTime: string;
+    lastSignInTime: string;
+  };
+}
+
+export interface FirebaseAuthError {
+  code: string;
+  message: string;
+  email?: string;
+  credential?: any;
 }
 
 export interface UserPreferences {
@@ -31,6 +57,7 @@ export interface FetalDevelopment {
   milestones: string[];
   tips: string[];
   animation: string;
+  motherChanges: string[];
 }
 
 export interface Supplement {

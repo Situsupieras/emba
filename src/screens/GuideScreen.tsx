@@ -22,7 +22,7 @@ import {
 import { theme, customColors } from '../theme';
 import { Article, ChecklistItem, User } from '../types';
 import { mockArticles, useUserData } from '../data/mockData';
-import { t } from '../data/i18n';
+import { t } from '../config/i18n';
 
 const { width } = Dimensions.get('window');
 
@@ -134,12 +134,12 @@ export default function GuideScreen() {
         {/* Header */}
         <Card style={[styles.headerCard, { backgroundColor: getTrimesterColor() }]}>
           <Card.Content>
-            <Title style={styles.headerTitle}>{t('guide')} {user.trimester}er {t('trimester') || 'Trimestre'}</Title>
+            <Title style={styles.headerTitle}>{t('common.guide')} {user.trimester}er {t('common.trimester') || 'Trimestre'}</Title>
             <Paragraph style={styles.headerSubtitle}>
-              {t('recommendationsForYou')}
+              {t('supplements.recommendationsForYou')}
             </Paragraph>
             <Paragraph style={styles.headerSubtitle}>
-              {t('week')}: {user.currentWeek}
+              {t('common.week')}: {user.currentWeek}
             </Paragraph>
           </Card.Content>
         </Card>
@@ -149,9 +149,9 @@ export default function GuideScreen() {
           value={selectedTab}
           onValueChange={setSelectedTab}
           buttons={[
-            { value: 'articles', label: t('articles') || 'Artículos' },
-            { value: 'videos', label: t('videos') || 'Videos' },
-            { value: 'checklist', label: t('checklist') || 'Checklist' },
+            { value: 'articles', label: t('common.articles') || 'Artículos' },
+            { value: 'videos', label: t('common.videos') || 'Videos' },
+            { value: 'checklist', label: t('common.checklist') || 'Checklist' },
           ]}
           style={styles.tabButtons}
         />
@@ -160,7 +160,7 @@ export default function GuideScreen() {
           <>
             {/* Search and Filter */}
             <Searchbar
-              placeholder={t('searchProducts')}
+              placeholder={t('common.searchProducts')}
               onChangeText={setSearchQuery}
               value={searchQuery}
               style={styles.searchBar}
@@ -172,7 +172,7 @@ export default function GuideScreen() {
                 onPress={() => setSelectedCategory('all')}
                 style={styles.categoryChip}
               >
-                {t('all')}
+                {t('common.all')}
               </Chip>
               <Chip
                 mode={selectedCategory === 'Nutrición' ? 'flat' : 'outlined'}
@@ -253,9 +253,9 @@ export default function GuideScreen() {
 
         {selectedTab === 'checklist' && (
           <>
-            <Title style={styles.checklistTitle}>{t('checklistOfTrimester') || 'Checklist del trimestre'}</Title>
+            <Title style={styles.checklistTitle}>{t('common.checklistOfTrimester') || 'Checklist del trimestre'}</Title>
             <Paragraph style={styles.checklistSubtitle}>
-              {t('markTasks') || 'Marca las tareas completadas para llevar un mejor control'}
+              {t('common.markTasks') || 'Marca las tareas completadas para llevar un mejor control'}
             </Paragraph>
             {checklistItems.map((item) => (
               <Card key={item.id} style={styles.checklistCard}>

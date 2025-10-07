@@ -1,0 +1,23 @@
+export default {
+  "profileTitle": "Profile",
+  "editProfile": "Edit profile",
+  "save": "Save",
+  "cancel": "Cancel",
+  "pregnancyInfo": "Pregnancy Information",
+  "age": "Age",
+  "currentPregnancyWeek": "Current pregnancy week",
+  "previousChildren": "Previous children",
+  "dietType": "Diet type",
+  "hasBoughtSupplements": "Has bought supplements",
+  "hasNotBoughtSupplements": "Has not bought supplements",
+  "emailVerification": "Email Verification",
+  "emailVerified": "Email verified",
+  "emailNotVerified": "Email not verified",
+  "resendVerification": "Resend verification",
+  "verificationSent": "Verification email sent. Check your inbox.",
+  "profileUpdated": "Profile updated successfully.",
+  "errorSavingProfile": "Error saving profile.",
+  "noAuthenticatedUser": "No authenticated user.",
+  "loadingProfile": "Loading profile...",
+  "errorLogout": "Error logging out."
+};

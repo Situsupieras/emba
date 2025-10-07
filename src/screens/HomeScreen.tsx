@@ -17,17 +17,17 @@ import {
   Avatar,
   List,
 } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { theme, customColors } from '../theme';
 import { FetalDevelopment, User } from '../types';
-import { getFetalDevelopmentData } from '../data/fetalDevelopment';
+import { getFetalDevelopmentData } from '../services/fetalDevelopmentService';
 import { mockUser } from '../data/mockData';
 import { Ionicons } from '@expo/vector-icons';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import type { MainTabParamList } from '../types/navigation';
-import SecureStoreCompat from '../security/secureStore';
-import { getAuth, signOut } from 'firebase/auth';
-import { t } from '../data/i18n';
+import * as SecureStore from 'expo-secure-store';
+import { auth } from '../data/firebaseConfig';
+import { t } from '../config/i18n';
 import { useLanguage } from '../context/LanguageContext';
 
 const { width } = Dimensions.get('window');
@@ -43,46 +43,43 @@ export default function HomeScreen() {
   useEffect(() => {
     (async () => {
       try {
-        const name = await SecureStoreCompat.getItemAsync('userName');
-        const userProfileData = await SecureStoreCompat.getItemAsync('userProfile');
-        const semanasStr = await SecureStoreCompat.getItemAsync('semanas');
-        const fechaReferenciaSemanaStr = await SecureStoreCompat.getItemAsync('fechaReferenciaSemana');
-        const ultimaReglaStr = await SecureStoreCompat.getItemAsync('ultimaRegla');
-        
+        const name = await SecureStore.getItemAsync('userName');
+        const userProfileData = await SecureStore.getItemAsync('userProfile');
+        const semanasStr = await SecureStore.getItemAsync('semanas');
+        const ultimaReglaStr = await SecureStore.getItemAsync('ultimaRegla');
+
         let currentWeek = 1;
         let userName = name || 'Usuario';
-        
-        // Primero intentar obtener la semana del perfil del usuario
+
         if (userProfileData) {
           try {
             const profile = JSON.parse(userProfileData);
-            if (profile.currentWeek && !isNaN(Number(profile.currentWeek))) {
-              currentWeek = Number(profile.currentWeek);
-            }
             if (profile.name && profile.name.trim()) {
               userName = profile.name;
+            }
+            if (profile.currentWeek && !isNaN(Number(profile.currentWeek))) {
+              currentWeek = Number(profile.currentWeek);
+              console.log('Usando semana del perfil:', currentWeek);
             }
           } catch (e) {
             console.log('Error parsing user profile:', e);
           }
         }
 
-        // Cálculo automático de semana
-        const hoy = new Date();
-        if (ultimaReglaStr) {
+        if (currentWeek === 1 && ultimaReglaStr) {
           const ultimaRegla = new Date(ultimaReglaStr);
+          const hoy = new Date();
           const diff = hoy.getTime() - ultimaRegla.getTime();
           const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
-          currentWeek = Math.max(1, dias / 7);
-        } else if (semanasStr && fechaReferenciaSemanaStr) {
-          const semanasBase = Number(semanasStr);
-          const fechaRef = new Date(fechaReferenciaSemanaStr);
-          const diff = hoy.getTime() - fechaRef.getTime();
-          const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
-          currentWeek = Math.max(1, semanasBase + dias / 7);
+          currentWeek = Math.max(1, Math.floor(dias / 7));
+          console.log('Usando cálculo automático:', currentWeek);
         }
 
-        // Calcular trimestre basado en la semana actual
+        if (currentWeek === 1 && semanasStr && !isNaN(Number(semanasStr))) {
+          currentWeek = Number(semanasStr);
+          console.log('Usando valor guardado:', currentWeek);
+        }
+
         let trimester = 1;
         if (currentWeek >= 1 && currentWeek <= 13) {
           trimester = 1;
@@ -92,10 +89,10 @@ export default function HomeScreen() {
           trimester = 3;
         }
 
-        console.log('HomeScreen - Semana cargada:', currentWeek);
+        console.log('HomeScreen - Semana final:', currentWeek);
         console.log('HomeScreen - Nombre cargado:', userName);
         console.log('HomeScreen - Trimestre calculado:', trimester);
-        
+
         setUser((prev) => ({
           ...prev,
           name: userName,
@@ -111,7 +108,6 @@ export default function HomeScreen() {
   }, []);
 
   useEffect(() => {
-    // Redondear la semana al entero más cercano para encontrar datos de desarrollo fetal
     const weekForDevelopment = Math.round(user.currentWeek);
     const development = getFetalDevelopmentData(weekForDevelopment);
     setCurrentDevelopment(development || null);
@@ -122,7 +118,6 @@ export default function HomeScreen() {
     }).start();
   }, [user.currentWeek, currentLanguage]);
 
-  // Recalcular trimestre cuando cambie la semana
   useEffect(() => {
     let newTrimester = 1;
     if (user.currentWeek >= 1 && user.currentWeek <= 13) {
@@ -141,8 +136,36 @@ export default function HomeScreen() {
     }
   }, [user.currentWeek, user.trimester]);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      const reloadData = async () => {
+        try {
+          const userProfileData = await SecureStore.getItemAsync('userProfile');
+          if (userProfileData) {
+            const profile = JSON.parse(userProfileData);
+            if (profile.currentWeek && !isNaN(Number(profile.currentWeek))) {
+              const newWeek = Number(profile.currentWeek);
+              if (newWeek !== user.currentWeek) {
+                console.log('HomeScreen - Actualizando semana desde perfil:', newWeek);
+                setUser(prev => ({
+                  ...prev,
+                  currentWeek: newWeek,
+                  trimester: newWeek >= 1 && newWeek <= 13 ? 1 : newWeek >= 14 && newWeek <= 27 ? 2 : 3,
+                }));
+              }
+            }
+          }
+        } catch (e) {
+          console.log('Error recargando datos:', e);
+        }
+      };
+
+      reloadData();
+    }, [user.currentWeek])
+  );
+
   const calculateProgress = () => {
-    return user.currentWeek / 40; // 40 weeks total pregnancy
+    return user.currentWeek / 40;
   };
 
   const getTrimesterColor = () => {
@@ -155,12 +178,10 @@ export default function HomeScreen() {
   };
 
   const handleLogout = async () => {
-    const auth = getAuth();
-    await signOut(auth);
+    await auth.signOut();
   };
 
   if (loading) {
-    console.log('Mostrando loader');
     return (
       <View style={styles.container}>
         <Card style={styles.loadingCard}>
@@ -180,11 +201,10 @@ export default function HomeScreen() {
           <Card.Content>
             <Title>{t('week')} {Math.round(user.currentWeek)}</Title>
             <Paragraph style={{ marginTop: 16 }}>
-              {t('weekOf', { week: user.currentWeek })}. 
-              {t('messages.disclaimer')}
+              {t('weekOf', { week: user.currentWeek })}.
             </Paragraph>
-            <Button 
-              mode="contained" 
+            <Button
+              mode="contained"
               onPress={() => navigation.navigate('Suplementos')}
               style={{ marginTop: 16 }}
             >
@@ -200,8 +220,8 @@ export default function HomeScreen() {
     <ScrollView style={styles.container}>
       <Animated.View style={{ opacity: fadeAnim }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
-          <Button 
-            mode="outlined" 
+          <Button
+            mode="outlined"
             onPress={() => changeLanguage(currentLanguage === 'es' ? 'en' : 'es')}
             style={{ flex: 1, marginRight: 8 }}
           >
@@ -211,20 +231,22 @@ export default function HomeScreen() {
             {t('logout')}
           </Button>
         </View>
-        {/* Header with user info */}
         <Card style={[styles.headerCard, { backgroundColor: getTrimesterColor() }]}>
           <Card.Content>
             <View style={styles.headerContent}>
-              <Avatar.Text size={60} label={user.name.charAt(0)} />
+              <Avatar.Text 
+                size={60} 
+                label={user.name && user.name.trim() ? user.name.trim().charAt(0).toUpperCase() : 'U'} 
+              />
               <View style={styles.userInfo}>
                 <Title style={styles.userName}>
-                  {t('welcome')}, {user.name}!
+                  {t('common.welcome')}, {user.name}!
                 </Title>
                 <Paragraph>
-                  {t('weekOf', { week: user.currentWeek })}
+                  {t('common.weekOf', { week: user.currentWeek })}
                 </Paragraph>
                 <Chip mode="outlined" style={styles.trimesterChip}>
-                  {user.trimester}{t('trimesterShort')} {t('trimester')}
+                  {user.trimester}{t('common.trimesterShort')}
                 </Chip>
               </View>
             </View>
@@ -236,7 +258,6 @@ export default function HomeScreen() {
           </Card.Content>
         </Card>
 
-        {/* Weekly Development */}
         <Card style={styles.card}>
           <Card.Content>
             <Title style={styles.cardTitle}>{t('development')}</Title>
@@ -256,7 +277,6 @@ export default function HomeScreen() {
           </Card.Content>
         </Card>
 
-        {/* Milestones */}
         <Card style={styles.card}>
           <Card.Content>
             <Title style={styles.cardTitle}>{t('milestones')}</Title>
@@ -268,7 +288,6 @@ export default function HomeScreen() {
           </Card.Content>
         </Card>
 
-        {/* Tips */}
         <Card style={styles.card}>
           <Card.Content>
             <Title style={styles.cardTitle}>{t('tips')}</Title>
@@ -280,7 +299,17 @@ export default function HomeScreen() {
           </Card.Content>
         </Card>
 
-        {/* Quick Actions */}
+        <Card style={styles.card}>
+          <Card.Content>
+            <Title style={styles.cardTitle}>{t('motherChanges')}</Title>
+            {currentDevelopment.motherChanges.map((change, index) => (
+              <View key={`motherChange-${index}`} style={styles.tipItem}>
+                <Paragraph style={styles.tipText}>{change}</Paragraph>
+              </View>
+            ))}
+          </Card.Content>
+        </Card>
+
         <Card style={styles.card}>
           <Card.Content>
             <Title style={styles.cardTitle}>{t('quickActions')}</Title>
@@ -289,12 +318,7 @@ export default function HomeScreen() {
                 mode="contained"
                 icon="pill"
                 style={styles.actionButton}
-                onPress={() => {
-                  // Navigate to supplements tab
-                  if (navigation) {
-                    navigation.navigate('Suplementos');
-                  }
-                }}
+                onPress={() => navigation.navigate('Suplementos')}
               >
                 {t('supplements')}
               </Button>
@@ -302,12 +326,7 @@ export default function HomeScreen() {
                 mode="outlined"
                 icon="calendar"
                 style={styles.actionButton}
-                onPress={() => {
-                  // Navigate to guide tab for appointments info
-                  if (navigation) {
-                    navigation.navigate('Guía');
-                  }
-                }}
+                onPress={() => navigation.navigate('Guía')}
               >
                 {t('nextAppointment')}
               </Button>
@@ -317,21 +336,15 @@ export default function HomeScreen() {
                 mode="contained"
                 icon="stethoscope"
                 style={[styles.actionButton, styles.medicalButton]}
-                onPress={() => {
-                  // Navigate to medical feedback screen
-                  if (navigation) {
-                    navigation.navigate('MedicalFeedback');
-                  }
-                }}
+                onPress={() => navigation.navigate('MedicalFeedback')}
               >
-                {t('medicalFeedback.title')}
+                {t('chat.medicalFeedbackTitle')}
               </Button>
             </View>
           </Card.Content>
         </Card>
       </Animated.View>
-      
-      {/* Floating Chat Button */}
+
       <TouchableOpacity
         style={styles.floatingChatButton}
         onPress={() => navigation.navigate('Chat')}
@@ -489,4 +502,4 @@ const styles = StyleSheet.create({
     backgroundColor: customColors.pregnancyPink,
     marginTop: 8,
   },
-}); 
+});

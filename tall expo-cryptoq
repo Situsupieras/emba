@@ -1,0 +1,53 @@
+[33mcommit acec11fda93491b8ee77d285b2f1430d4ac6b68d[m[33m ([m[1;33mtag: v1.1.0[m[33m)[m
+Author: Si Tu Supieras El Poder de la IA <contacto@stselpoderdelaia.online>
+Date:   Thu Oct 2 20:33:25 2025 -0600
+
+    feat: Fix app functionality and authentication
+    
+    - Update dependencies to compatible versions with Expo SDK 53
+    - Remove eas-cli from project dependencies
+    - Add expo-font dependency for @expo/vector-icons compatibility
+    - Fix Firebase authentication with proper error handling
+    - Remove demo mode and implement real authentication
+    - Add proper field validation for auth forms
+    - Improve error messages for better user experience
+    - Update .gitignore to exclude .expo/ directory
+    - Fix security framework initialization
+    - Ensure app runs correctly on web platform
+
+[33mcommit 59b87745c9095f2b97735985ae3ff35e46ed6b3c[m[33m ([m[1;33mtag: v1.2.0[m[33m)[m
+Merge: 448e5c9 d4439e5
+Author: Si Tu Supieras El Poder de la IA <contacto@stselpoderdelaia.online>
+Date:   Fri Sep 26 10:03:45 2025 -0600
+
+    feat: Integración completa de mejoras y correcciones científicas
+    
+    - MEJORA: Corrección científica de datos de desarrollo fetal
+      * Semana 24: 'Maíz'  'Mazorca de maíz' (más preciso para 30cm)
+      * Semana 30: Peso corregido a 1.3kg, agregada longitud 39cm
+      * Semana 40: Peso corregido a 3.2-3.4kg, agregada longitud 50cm
+      * Milestones científicos agregados (surfactante, grasa subcutánea)
+    
+    - FIX: Resolución de problemas de Web
+      * Notificaciones deshabilitadas en Web (evita warnings)
+      * useNativeDriver solo en nativo (evita errores de animación)
+      * Imágenes placeholder reemplazadas por picsum.photos
+    
+    - FEAT: Integración de framework de seguridad
+      * UserContext integrado con LanguageContext
+      * Sistema de auditoría y monitoreo
+      * Cumplimiento GDPR y backup automático
+      * Encriptación de datos sensibles
+    
+    - REFACTOR: Arquitectura mejorada
+      * App.tsx con inicialización de seguridad
+      * Manejo de estados de carga mejorado
+      * Navegación condicional optimizada
+    
+    Todas las correcciones respaldadas por fuentes médicas confiables.
+
+[33mcommit d4439e5cc629e88a76b3e58e828e31516ea72050[m
+Author: Si Tu Supieras El Poder de la IA <contacto@stselpoderdelaia.online>
+Date:   Mon Jul 7 23:19:54 2025 -0600
+
+     IMPLEMENTACIÓN COMPLETA: Sistema de Seguridad ISO 27001 y GDPR - Encriptación AES-256, autenticación biométrica, auditoría, monitoreo, backup automático, derechos GDPR y documentación completa

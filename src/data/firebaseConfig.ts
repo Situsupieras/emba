@@ -1,22 +1,33 @@
 // Configuración de Firebase para Inteligencia Prenatal
-import { initializeApp } from 'firebase/app';
-import { getAuth, initializeAuth } from 'firebase/auth';
-import { Platform } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { initializeApp, getApps } from 'firebase/app';
+import { getAuth, Auth } from 'firebase/auth';
+import { ENV } from '../config/environment';
 
+// Configuración de Firebase desde variables de entorno
 const firebaseConfig = {
-  apiKey: "AIzaSyCsNRmRkCugFoGP74aWR_086dQ7EN0ChXc",
-  authDomain: "inteligencia-prenatal.firebaseapp.com",
-  projectId: "inteligencia-prenatal",
-  storageBucket: "inteligencia-prenatal.firebasestorage.app",
-  messagingSenderId: "567704618820",
-  appId: "1:567704618820:web:7b25e7a4e3660dd3c87911",
-  measurementId: "G-TTCFEMFK96"
+  apiKey: ENV.FIREBASE.API_KEY,
+  authDomain: ENV.FIREBASE.AUTH_DOMAIN,
+  projectId: ENV.FIREBASE.PROJECT_ID,
+  storageBucket: ENV.FIREBASE.STORAGE_BUCKET,
+  messagingSenderId: ENV.FIREBASE.MESSAGING_SENDER_ID,
+  appId: ENV.FIREBASE.APP_ID,
+  measurementId: ENV.FIREBASE.MEASUREMENT_ID
 };
 
-export const firebaseApp = initializeApp(firebaseConfig);
+// Inicializar Firebase solo si no hay instancias previas
+let firebaseApp;
+if (getApps().length === 0) {
+  try {
+    firebaseApp = initializeApp(firebaseConfig);
+  } catch (error) {
+    console.error('Error initializing Firebase:', error);
+    throw new Error('Failed to initialize Firebase');
+  }
+} else {
+  firebaseApp = getApps()[0];
+}
 
-// Configuración de Auth compatible con Web y móvil
-export const auth = Platform.OS === 'web' 
-  ? getAuth(firebaseApp) // Para Web usar getAuth estándar
-  : initializeAuth(firebaseApp); // Para móvil usar initializeAuth básico 
+// Inicializar Auth
+const auth: Auth = getAuth(firebaseApp);
+
+export { firebaseApp, auth }; 

@@ -27,7 +27,7 @@ import { theme, customColors } from '../theme';
 import { MedicalFeedback, MedicalRecommendation, User, MedicalConflict } from '../types';
 import { Ionicons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
-import { t } from '../data/i18n';
+import { t } from '../config/i18n';
 import { medicalSyncService, SyncResult } from '../data/medicalSync';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -323,7 +323,7 @@ export default function MedicalFeedbackScreen({ navigation }: MedicalFeedbackScr
         {user && (
           <Card style={styles.weekCard}>
             <Card.Content>
-              <Title style={styles.weekTitle}>{t('week')} {user.currentWeek}</Title>
+              <Title style={styles.weekTitle}>{t('common.week')} {user.currentWeek}</Title>
               <Paragraph>Última actualización: {formatDate(new Date())}</Paragraph>
             </Card.Content>
           </Card>
@@ -340,7 +340,7 @@ export default function MedicalFeedbackScreen({ navigation }: MedicalFeedbackScr
                     <Text style={styles.doctorName}>Dr. {feedback.doctorName}</Text>
                     <Text style={styles.feedbackDate}>{formatDate(feedback.date)}</Text>
                   </View>
-                  <Text style={styles.feedbackWeek}>{t('week')} {feedback.week}</Text>
+                  <Text style={styles.feedbackWeek}>{t('common.week')} {feedback.week}</Text>
                   {feedback.recommendations.length > 0 && (
                     <View style={styles.recommendationsList}>
                       <Text style={styles.sectionTitle}>{t('medicalFeedback.recommendations')}:</Text>

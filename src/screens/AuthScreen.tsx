@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { TextInput, Button, Title, Paragraph, Card, Divider } from 'react-native-paper';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../data/firebaseConfig';
-import { t } from '../data/i18n';
+import { t } from '../config/i18n';
 import { Picker } from '@react-native-picker/picker';
 import * as SecureStore from 'expo-secure-store';
 
@@ -108,11 +108,11 @@ export default function AuthScreen({ navigation }: any) {
     <View style={styles.container}>
       <Card style={styles.card}>
         <Card.Content>
-          <Title style={styles.title}>{isLogin ? t('login') : t('register')}</Title>
+          <Title style={styles.title}>{isLogin ? t('common.login') : t('common.register')}</Title>
           {!isLogin && (
             <>
               <TextInput
-                label={t('name')}
+                label={t('common.name')}
                 value={name}
                 onChangeText={setName}
                 style={styles.input}
@@ -162,7 +162,7 @@ export default function AuthScreen({ navigation }: any) {
             </>
           )}
           <TextInput
-            label={t('email')}
+            label={t('common.email')}
             value={email}
             onChangeText={setEmail}
             autoCapitalize="none"
@@ -171,7 +171,7 @@ export default function AuthScreen({ navigation }: any) {
             mode="outlined"
           />
           <TextInput
-            label={t('password')}
+            label={t('common.password')}
             value={password}
             onChangeText={setPassword}
             secureTextEntry
@@ -180,11 +180,11 @@ export default function AuthScreen({ navigation }: any) {
           />
           {error ? <Paragraph style={styles.error}>{error}</Paragraph> : null}
           <Button mode="contained" onPress={handleAuth} style={styles.button} disabled={loading}>
-            {isLogin ? t('login') : t('register')}
+            {isLogin ? t('common.login') : t('common.register')}
           </Button>
           {isLogin && (
             <Button mode="text" onPress={handlePasswordReset} style={styles.switchButton} disabled={loading}>
-              {t('forgotPassword')}
+              {t('common.forgotPassword')}
             </Button>
           )}
           {resetSent && (
@@ -193,7 +193,7 @@ export default function AuthScreen({ navigation }: any) {
             </Paragraph>
           )}
           <Button mode="text" onPress={() => setIsLogin(!isLogin)} style={styles.switchButton}>
-            {isLogin ? '¿No tienes cuenta? ' + t('register') : '¿Ya tienes cuenta? ' + t('login')}
+            {isLogin ? '¿No tienes cuenta? ' + t('common.register') : '¿Ya tienes cuenta? ' + t('common.login')}
           </Button>
           {loading && <Paragraph style={{ marginTop: 16, textAlign: 'center' }}>Cargando...</Paragraph>}
         </Card.Content>

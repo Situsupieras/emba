@@ -24,7 +24,7 @@ import {
 import { theme, customColors } from '../theme';
 import { CommunityPost, Comment, User } from '../types';
 import { mockCommunityPosts, useUserData } from '../data/mockData';
-import { t } from '../data/i18n';
+import { t } from '../config/i18n';
 
 const { width } = Dimensions.get('window');
 
@@ -140,9 +140,9 @@ export default function CommunityScreen() {
           {/* Header */}
           <Card style={styles.headerCard}>
             <Card.Content>
-              <Title style={styles.headerTitle}>{t('community')}</Title>
+              <Title style={styles.headerTitle}>{t('common.community')}</Title>
               <Paragraph style={styles.headerSubtitle}>
-                {t('communitySubtitle') || 'Conecta con otras mamás y expertos en un espacio seguro y moderado'}
+                {t('common.communitySubtitle') || 'Conecta con otras mamás y expertos en un espacio seguro y moderado'}
               </Paragraph>
             </Card.Content>
           </Card>
@@ -154,7 +154,7 @@ export default function CommunityScreen() {
               onPress={() => setSelectedCategory('all')}
               style={styles.categoryChip}
             >
-              {t('all') || 'Todos'}
+              {t('common.all') || 'Todos'}
             </Chip>
             <Chip
               mode={selectedCategory === 'Desarrollo del bebé' ? 'flat' : 'outlined'}

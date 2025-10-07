@@ -1,4 +1,5 @@
 import * as SecureStore from 'expo-secure-store';
+import * as Crypto from 'expo-crypto';
 import { Platform } from 'react-native';
 import { securityManager } from './encryption';
 
@@ -128,21 +129,40 @@ export class AuthenticationManager {
   private async getTwoFactorSecret(): Promise<string> {
     let secret = await SecureStore.getItemAsync('2fa_secret');
     if (!secret) {
-      // Generar nuevo secreto
-      const crypto = require('crypto');
-      secret = crypto.randomBytes(20).toString('base32');
-      await SecureStore.setItemAsync('2fa_secret', secret || '');
+      // Generar nuevo secreto usando expo-crypto
+      const randomBytes = await Crypto.getRandomBytesAsync(20);
+      secret = this.bytesToBase32(randomBytes);
+      await SecureStore.setItemAsync('2fa_secret', secret);
     }
-    return secret || '';
+    return secret;
   }
 
-  private generateTOTP(secret: string, timestamp: number): number {
-    // Implementación simplificada de TOTP
-    // En producción usar librería como 'otplib'
-    const hash = require('crypto').createHmac('sha1', secret)
-      .update(timestamp.toString())
-      .digest('hex');
+  private bytesToBase32(bytes: Uint8Array): string {
+    const base32chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+    let bits = '';
+    let result = '';
     
+    for (let i = 0; i < bytes.length; i++) {
+      bits += bytes[i].toString(2).padStart(8, '0');
+    }
+    
+    for (let i = 0; i < bits.length; i += 5) {
+      const chunk = bits.substr(i, 5).padEnd(5, '0');
+      result += base32chars[parseInt(chunk, 2)];
+    }
+    
+    return result;
+  }
+
+  private async generateTOTP(secret: string, timestamp: number): Promise<number> {
+    // Implementación simplificada de TOTP usando expo-crypto
+    const message = timestamp.toString();
+    const hash = await Crypto.digestStringAsync(
+      Crypto.CryptoDigestAlgorithm.SHA1,
+      secret + message
+    );
+    
+    // Convertir hash a número
     const offset = parseInt(hash.slice(-1), 16);
     const code = parseInt(hash.slice(offset, offset + 6), 16) % 1000000;
     return code;
@@ -220,18 +240,22 @@ export class AuthenticationManager {
   }
 
   private async generateSessionId(): Promise<string> {
-    const crypto = require('crypto');
-    return crypto.randomBytes(32).toString('hex');
+    const randomBytes = await Crypto.getRandomBytesAsync(32);
+    return Array.from(randomBytes)
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
   }
 
   private async getDeviceId(): Promise<string> {
     let deviceId = await SecureStore.getItemAsync('device_id');
     if (!deviceId) {
-      const crypto = require('crypto');
-      deviceId = crypto.randomBytes(16).toString('hex');
-      await SecureStore.setItemAsync('device_id', deviceId || '');
+      const randomBytes = await Crypto.getRandomBytesAsync(16);
+      deviceId = Array.from(randomBytes)
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+      await SecureStore.setItemAsync('device_id', deviceId);
     }
-    return deviceId || '';
+    return deviceId;
   }
 
   private async getAllSessionKeys(): Promise<string[]> {
@@ -257,4 +281,4 @@ export class AuthenticationManager {
   }
 }
 
-export const authManager = AuthenticationManager.getInstance(); 
+export const authManager = AuthenticationManager.getInstance();

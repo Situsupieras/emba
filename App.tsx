@@ -12,7 +12,7 @@ import { View, Text, Platform, ActivityIndicator } from 'react-native';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './src/data/firebaseConfig';
 import * as Notifications from 'expo-notifications';
-import { t } from './src/data/i18n';
+import { t } from './src/config/i18n';
 import { LanguageProvider } from './src/context/LanguageContext';
 import { UserProvider } from './src/context/UserContext';
 import LanguageAwareNavigator from './src/components/LanguageAwareNavigator';

@@ -1,4 +1,5 @@
 import * as SecureStore from 'expo-secure-store';
+import * as Crypto from 'expo-crypto';
 import { securityManager } from './encryption';
 import { auditManager } from './audit';
 
@@ -257,7 +258,7 @@ export class GDPRManager {
 
       request.status = GDPRRequestStatus.COMPLETED;
       request.completedAt = new Date();
-    } catch (error) {
+    } catch (error: any) {
       request.status = GDPRRequestStatus.REJECTED;
       request.details.error = error.message;
     }
@@ -367,9 +368,11 @@ Para ejercer sus derechos GDPR, contacte: [email]
   }
 
   private async generateId(): Promise<string> {
-    const crypto = require('crypto');
-    return crypto.randomBytes(16).toString('hex');
+    const randomBytes = await Crypto.getRandomBytesAsync(16);
+    return Array.from(randomBytes)
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
   }
 }
 
-export const gdprManager = GDPRManager.getInstance(); 
+export const gdprManager = GDPRManager.getInstance();

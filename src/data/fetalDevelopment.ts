@@ -1,5 +1,5 @@
 import { FetalDevelopment } from '../types';
-import { getCurrentLanguage } from './i18n';
+import { getCurrentLanguage } from '../config/i18n';
 
 export const fetalDevelopmentData: FetalDevelopment[] = [
   {

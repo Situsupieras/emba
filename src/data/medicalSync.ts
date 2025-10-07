@@ -1,5 +1,5 @@
 import { MedicalRecommendation, MedicalConflict, MedicalSync } from '../types';
-import { fetalDevelopmentData } from './fetalDevelopment';
+import { getFetalDevelopmentData } from '../services/fetalDevelopmentService';
 
 export interface SyncResult {
   conflicts: MedicalConflict[];
@@ -26,13 +26,13 @@ export class MedicalSyncService {
 
   // Generar recomendaciones de la app basadas en la semana actual
   generateAppRecommendations(week: number): MedicalRecommendation[] {
-    const weekData = fetalDevelopmentData.find(d => d.week === week);
+    const weekData = getFetalDevelopmentData(week);
     if (!weekData) return [];
 
     const recommendations: MedicalRecommendation[] = [];
 
     // Convertir tips en recomendaciones
-    weekData.tips.forEach((tip, index) => {
+    weekData.tips.forEach((tip: string, index: number) => {
       recommendations.push({
         id: `app-${week}-${index}`,
         week,
@@ -55,7 +55,7 @@ export class MedicalSyncService {
   // Categorizar recomendaciones automáticamente
   private categorizeRecommendation(recommendation: string): MedicalRecommendation['category'] {
     const lowerRec = recommendation.toLowerCase();
-    
+
     if (lowerRec.includes('dieta') || lowerRec.includes('comida') || lowerRec.includes('aliment') || lowerRec.includes('vitamina')) {
       return 'diet';
     }
@@ -71,21 +71,21 @@ export class MedicalSyncService {
     if (lowerRec.includes('médico') || lowerRec.includes('consulta') || lowerRec.includes('control')) {
       return 'medical';
     }
-    
+
     return 'general';
   }
 
   // Evaluar prioridad de recomendaciones
   private assessPriority(recommendation: string): MedicalRecommendation['priority'] {
     const lowerRec = recommendation.toLowerCase();
-    
+
     if (lowerRec.includes('importante') || lowerRec.includes('urgente') || lowerRec.includes('consulta')) {
       return 'high';
     }
     if (lowerRec.includes('recomendado') || lowerRec.includes('sugerido')) {
       return 'medium';
     }
-    
+
     return 'low';
   }
 
@@ -105,7 +105,7 @@ export class MedicalSyncService {
         dateAdded: new Date(),
         isFollowed: false,
       });
-      
+
       if (week >= 8) {
         recommendations.push({
           id: `app-${week}-specific-2`,
@@ -194,7 +194,7 @@ export class MedicalSyncService {
       { app: 'actividad', doc: 'inactividad' },
     ];
 
-    return conflicts.some(conflict => 
+    return conflicts.some(conflict =>
       (appText.includes(conflict.app) && docText.includes(conflict.doc)) ||
       (appText.includes(conflict.doc) && docText.includes(conflict.app))
     );
@@ -206,7 +206,7 @@ export class MedicalSyncService {
     if (conflict) {
       conflict.resolution = resolution;
       conflict.notes = notes;
-      
+
       // Mover a conflictos resueltos
       this.syncData.resolvedConflicts.push(conflict);
       this.syncData.conflicts = this.syncData.conflicts.filter(c => c.id !== conflictId);
@@ -226,10 +226,10 @@ export class MedicalSyncService {
 
     // Agregar recomendaciones de la app que no tengan conflictos
     appRecommendations.forEach(appRec => {
-      const hasConflict = conflicts.some(conflict => 
+      const hasConflict = conflicts.some(conflict =>
         conflict.appRecommendation === appRec.recommendation
       );
-      
+
       if (!hasConflict) {
         synced.push(appRec);
       }
@@ -244,7 +244,7 @@ export class MedicalSyncService {
     const doctorRecommendations = this.syncData.doctorRecommendations.filter(
       rec => rec.week === week
     );
-    
+
     const conflicts = this.detectConflicts(appRecommendations, doctorRecommendations);
     const syncedRecommendations = this.getSyncedRecommendations(appRecommendations, doctorRecommendations);
 
@@ -266,4 +266,4 @@ export class MedicalSyncService {
   }
 }
 
-export const medicalSyncService = MedicalSyncService.getInstance(); 
+export const medicalSyncService = MedicalSyncService.getInstance();

@@ -1,20 +1,19 @@
 import { User, Supplement, Article, CommunityPost, Product } from '../types';
 import { useEffect, useState } from 'react';
 import * as SecureStore from 'expo-secure-store';
-import { t } from './i18n';
 
 export const mockUser: User = {
   id: '1',
-  name: t('mockUserName'),
+  name: 'María García',
   email: 'maria@example.com',
   dueDate: new Date('2025-06-15'),
   currentWeek: 20,
   trimester: 2,
-  medicalHistory: [t('noRelevantHistory')],
+  medicalHistory: ['Sin antecedentes relevantes'],
   preferences: {
-    dietaryRestrictions: [t('vegetarian')],
-    allergies: [t('nuts')],
-    supplementPreferences: [t('natural'), t('glutenFree')],
+    dietaryRestrictions: ['Vegetariana'],
+    allergies: ['Nueces'],
+    supplementPreferences: ['Natural', 'Sin gluten'],
     notificationSettings: {
       weeklyUpdates: true,
       supplementReminders: true,
@@ -27,57 +26,57 @@ export const mockUser: User = {
 export const mockSupplements: Supplement[] = [
   {
     id: '1',
-    name: t('folicAcidPremium'),
-    description: t('folicAcidDescription'),
+    name: 'Ácido Fólico Premium',
+    description: 'Suplemento esencial para el desarrollo del tubo neural del bebé',
     benefits: [
-      t('preventsNeuralTubeDefects'),
-      t('supportsBrainDevelopment'),
-      t('reducesPreeclampsiaRisk')
+      'Previene defectos del tubo neural',
+      'Apoya el desarrollo cerebral',
+      'Reduce el riesgo de preeclampsia'
     ],
-    dosage: t('folicAcidDosage'),
+    dosage: '400 mcg diarios',
     trimester: [1, 2, 3],
     price: 25.99,
     image: 'https://via.placeholder.com/150',
-    medicalExplanation: t('folicAcidMedicalExplanation'),
-    certifications: [t('fdaApproved'), t('gmpCertified'), t('glutenFree')],
-    sideEffects: [t('mayCauseMildNausea')],
-    contraindications: [t('folicAcidAllergy')]
+    medicalExplanation: 'El ácido fólico es una vitamina B esencial que ayuda a formar el tubo neural del bebé durante las primeras semanas del embarazo. Es crucial para prevenir defectos congénitos como la espina bífida.',
+    certifications: ['FDA Aprobado', 'GMP Certificado', 'Sin gluten'],
+    sideEffects: ['Puede causar náuseas leves'],
+    contraindications: ['Alergia al ácido fólico']
   },
   {
     id: '2',
-    name: t('calciumVitaminD'),
-    description: t('calciumDescription'),
+    name: 'Calcio + Vitamina D',
+    description: 'Fórmula especial para fortalecer huesos y dientes',
     benefits: [
-      t('strengthensBonesTeeth'),
-      t('preventsOsteoporosis'),
-      t('supportsSkeletalDevelopment')
+      'Fortalece huesos y dientes',
+      'Previene osteoporosis',
+      'Apoya el desarrollo esquelético del bebé'
     ],
-    dosage: t('calciumDosage'),
+    dosage: '1000 mg calcio + 400 UI vitamina D',
     trimester: [2, 3],
     price: 32.50,
     image: 'https://via.placeholder.com/150',
-    medicalExplanation: t('calciumMedicalExplanation'),
-    certifications: [t('uspVerified'), t('lactoseFree')],
-    sideEffects: [t('mayCauseConstipation')],
-    contraindications: [t('kidneyStones')]
+    medicalExplanation: 'Durante el embarazo, el bebé necesita calcio para desarrollar huesos y dientes fuertes. Si no consumes suficiente calcio, tu cuerpo lo tomará de tus propios huesos.',
+    certifications: ['USP Verificado', 'Sin lactosa'],
+    sideEffects: ['Puede causar estreñimiento'],
+    contraindications: ['Cálculos renales']
   },
   {
     id: '3',
-    name: t('omega3dha'),
-    description: t('omega3Description'),
+    name: 'Omega-3 DHA',
+    description: 'Ácidos grasos esenciales para el desarrollo cerebral',
     benefits: [
-      t('babyBrainDevelopment'),
-      t('improvesCognitiveFunction'),
-      t('reducesPretermBirthRisk')
+      'Desarrollo cerebral del bebé',
+      'Mejora la función cognitiva',
+      'Reduce riesgo de parto prematuro'
     ],
-    dosage: t('omega3Dosage'),
+    dosage: '200 mg DHA diarios',
     trimester: [2, 3],
     price: 45.00,
     image: 'https://via.placeholder.com/150',
-    medicalExplanation: t('omega3MedicalExplanation'),
-    certifications: [t('sustainableFishing'), t('mercuryFree')],
-    sideEffects: [t('mayCauseFishyBurps')],
-    contraindications: [t('fishAllergy')]
+    medicalExplanation: 'El DHA es un ácido graso omega-3 que es fundamental para el desarrollo del cerebro y los ojos del bebé. Es especialmente importante durante el segundo y tercer trimestre.',
+    certifications: ['Pesca Sostenible', 'Libre de mercurio'],
+    sideEffects: ['Puede causar eructos con sabor a pescado'],
+    contraindications: ['Alergia al pescado']
   }
 ];
 
@@ -205,4 +204,4 @@ export function useUserData() {
   }, []);
 
   return { user, loading };
-} 
+}

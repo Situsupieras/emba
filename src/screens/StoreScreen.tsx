@@ -25,7 +25,7 @@ import {
 import { theme, customColors } from '../theme';
 import { Product, Supplement, User } from '../types';
 import { mockProducts, mockSupplements, mockUser } from '../data/mockData';
-import { t } from '../data/i18n';
+import { t } from '../config/i18n';
 
 const { width } = Dimensions.get('window');
 
@@ -119,19 +119,19 @@ export default function StoreScreen() {
           {/* Header */}
           <Card style={styles.headerCard}>
             <Card.Content>
-              <Title style={styles.headerTitle}>{t('store')}</Title>
+              <Title style={styles.headerTitle}>{t('common.store')}</Title>
               <Paragraph style={styles.headerSubtitle}>
-                {t('storeSubtitle') || 'Productos certificados con explicaciones médicas detalladas'}
+                {t('common.storeSubtitle') || 'Productos certificados con explicaciones médicas detalladas'}
               </Paragraph>
               <View style={styles.ethicalBadges}>
                 <Chip mode="outlined" style={styles.ethicalChip}>
-                  {t('qualityCertified')}
+                  {t('supplements.qualityCertified')}
                 </Chip>
                 <Chip mode="outlined" style={styles.ethicalChip}>
-                  {t('medicalExplanations')}
+                  {t('supplements.medicalExplanations')}
                 </Chip>
                 <Chip mode="outlined" style={styles.ethicalChip}>
-                  {t('noToxicChemicals')}
+                  {t('supplements.noToxicChemicals')}
                 </Chip>
               </View>
             </Card.Content>
@@ -139,7 +139,7 @@ export default function StoreScreen() {
 
           {/* Search and Filter */}
           <Searchbar
-            placeholder={t('searchProducts')}
+            placeholder={t('common.searchProducts')}
             onChangeText={setSearchQuery}
             value={searchQuery}
             style={styles.searchBar}
@@ -149,9 +149,9 @@ export default function StoreScreen() {
             value={selectedCategory}
             onValueChange={setSelectedCategory}
             buttons={[
-              { value: 'all', label: t('all') },
-              { value: 'supplements', label: t('supplements') },
-              { value: 'products', label: t('products') },
+              { value: 'all', label: t('common.all') },
+              { value: 'supplements', label: t('common.supplements') },
+              { value: 'products', label: t('common.products') },
             ]}
             style={styles.categoryButtons}
           />
@@ -162,9 +162,9 @@ export default function StoreScreen() {
               <Card.Content>
                 <View style={styles.cartSummary}>
                   <View style={styles.cartInfo}>
-                    <Title style={styles.cartTitle}>{t('cart') || 'Carrito'}</Title>
+                    <Title style={styles.cartTitle}>{t('common.cart') || 'Carrito'}</Title>
                     <Paragraph style={styles.cartItems}>
-                      {getCartItemCount()} {t('items')}
+                      {getCartItemCount()} {t('common.items')}
                     </Paragraph>
                   </View>
                   <View style={styles.cartTotal}>
@@ -172,7 +172,7 @@ export default function StoreScreen() {
                       {formatPrice(getCartTotal())}
                     </Title>
                     <Button mode="contained" onPress={() => {/* Navigate to checkout */}}>
-                      {t('seeCart')}
+                      {t('common.seeCart')}
                     </Button>
                   </View>
                 </View>
@@ -194,7 +194,7 @@ export default function StoreScreen() {
                         {item.name}
                       </Title>
                       {isSupplement && (item as Supplement).trimester.includes(user.trimester) && (
-                        <Badge style={styles.recommendedBadge}>{t('recommended')}</Badge>
+                        <Badge style={styles.recommendedBadge}>{t('supplements.recommended')}</Badge>
                       )}
                     </View>
                     
@@ -205,7 +205,7 @@ export default function StoreScreen() {
                     <View style={styles.productRating}>
                       <Paragraph style={styles.ratingText}>
                         {isSupplement ? '4.5' : (item as Product).rating} 
-                        ({isSupplement ? '128' : (item as Product).reviews} {t('reviews')})
+                        ({isSupplement ? '128' : (item as Product).reviews} {t('common.reviews')})
                       </Paragraph>
                     </View>
 
@@ -236,7 +236,7 @@ export default function StoreScreen() {
                         style={styles.actionButton}
                         onPress={() => isSupplement ? showSupplementDetails(item as Supplement) : showProductDetails(item as Product)}
                       >
-                        {t('details')}
+                        {t('common.details')}
                       </Button>
                       <Button
                         mode="contained"
@@ -244,7 +244,7 @@ export default function StoreScreen() {
                         style={styles.actionButton}
                         onPress={() => addToCart(item.id, isSupplement ? 'supplement' : 'product')}
                       >
-                        {t('add')}
+                        {t('common.add')}
                       </Button>
                     </View>
                   </Card.Content>
@@ -257,9 +257,9 @@ export default function StoreScreen() {
           {getFilteredItems().length === 0 && (
             <Card style={styles.emptyCard}>
               <Card.Content>
-                <Title style={styles.emptyTitle}>{t('noProductsFound')}</Title>
+                <Title style={styles.emptyTitle}>{t('common.noProductsFound')}</Title>
                 <Paragraph style={styles.emptyText}>
-                  {t('tryOtherSearchTerms')}
+                  {t('common.tryOtherSearchTerms')}
                 </Paragraph>
               </Card.Content>
             </Card>
@@ -270,7 +270,7 @@ export default function StoreScreen() {
       {/* Product Details Dialog */}
       <Portal>
         <Dialog visible={productDialogVisible} onDismiss={() => setProductDialogVisible(false)}>
-          <Dialog.Title>{t('productDetails')}</Dialog.Title>
+          <Dialog.Title>{t('common.productDetails')}</Dialog.Title>
           <Dialog.Content>
             {selectedProduct && (
               <ScrollView>
@@ -280,13 +280,13 @@ export default function StoreScreen() {
                 
                 <View style={styles.dialogRating}>
                   <Paragraph style={styles.dialogRatingText}>
-                    {selectedProduct.rating} {t('outOfFive')} ({selectedProduct.reviews} {t('reviews')})
+                    {selectedProduct.rating} {t('common.outOfFive')} ({selectedProduct.reviews} {t('common.reviews')})
                   </Paragraph>
                 </View>
 
                 <Divider style={styles.divider} />
 
-                <Title style={styles.dialogSectionTitle}>{t('medicalBenefits')}</Title>
+                <Title style={styles.dialogSectionTitle}>{t('supplements.medicalBenefits')}</Title>
                 {selectedProduct.medicalBenefits.map((benefit) => (
                   <List.Item
                     key={benefit}
@@ -297,7 +297,7 @@ export default function StoreScreen() {
 
                 <Divider style={styles.divider} />
 
-                <Title style={styles.dialogSectionTitle}>{t('certifications')}</Title>
+                <Title style={styles.dialogSectionTitle}>{t('supplements.certifications')}</Title>
                 <View style={styles.dialogCertifications}>
                   {selectedProduct.certifications.map((cert) => (
                     <Chip key={cert} mode="outlined" style={styles.dialogCertificationChip}>
@@ -330,7 +330,7 @@ export default function StoreScreen() {
                 }
               }}
             >
-              {t('add')}
+              {t('common.add')}
             </Button>
           </Dialog.Actions>
         </Dialog>
@@ -339,7 +339,7 @@ export default function StoreScreen() {
       {/* Supplement Details Dialog */}
       <Portal>
         <Dialog visible={supplementDialogVisible} onDismiss={() => setSupplementDialogVisible(false)}>
-          <Dialog.Title>{t('detailedMedicalInfo')}</Dialog.Title>
+          <Dialog.Title>{t('supplements.detailedMedicalInfo')}</Dialog.Title>
           <Dialog.Content>
             {selectedSupplement && (
               <ScrollView>
@@ -349,14 +349,14 @@ export default function StoreScreen() {
 
                 <Divider style={styles.divider} />
 
-                <Title style={styles.dialogSectionTitle}>{t('medicalExplanations')}</Title>
+                <Title style={styles.dialogSectionTitle}>{t('supplements.medicalExplanations')}</Title>
                 <Paragraph style={styles.medicalExplanation}>
                   {selectedSupplement.medicalExplanation}
                 </Paragraph>
 
                 <Divider style={styles.divider} />
 
-                <Title style={styles.dialogSectionTitle}>{t('benefits')}</Title>
+                <Title style={styles.dialogSectionTitle}>{t('supplements.benefits')}</Title>
                 {selectedSupplement.benefits.map((benefit) => (
                   <List.Item
                     key={benefit}
@@ -372,7 +372,7 @@ export default function StoreScreen() {
 
                 <Divider style={styles.divider} />
 
-                <Title style={styles.dialogSectionTitle}>{t('sideEffects')}</Title>
+                <Title style={styles.dialogSectionTitle}>{t('supplements.sideEffects')}</Title>
                 {selectedSupplement.sideEffects.map((effect) => (
                   <List.Item
                     key={effect}
@@ -383,7 +383,7 @@ export default function StoreScreen() {
 
                 <Divider style={styles.divider} />
 
-                <Title style={styles.dialogSectionTitle}>{t('certifications')}</Title>
+                <Title style={styles.dialogSectionTitle}>{t('supplements.certifications')}</Title>
                 <View style={styles.dialogCertifications}>
                   {selectedSupplement.certifications.map((cert) => (
                     <Chip key={cert} mode="outlined" style={styles.dialogCertificationChip}>
@@ -411,7 +411,7 @@ export default function StoreScreen() {
                 }
               }}
             >
-              {t('add')}
+              {t('common.add')}
             </Button>
           </Dialog.Actions>
         </Dialog>

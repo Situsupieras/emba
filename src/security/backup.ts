@@ -1,5 +1,6 @@
 import * as SecureStore from 'expo-secure-store';
 import * as FileSystem from 'expo-file-system';
+import * as Crypto from 'expo-crypto';
 import { securityManager } from './encryption';
 import { auditManager } from './audit';
 
@@ -279,8 +280,11 @@ export class BackupManager {
 
   private async calculateChecksum(data: Record<string, any>): Promise<string> {
     const dataString = JSON.stringify(data);
-    const crypto = require('crypto');
-    return crypto.createHash('sha256').update(dataString).digest('hex');
+    const hash = await Crypto.digestStringAsync(
+      Crypto.CryptoDigestAlgorithm.SHA256,
+      dataString
+    );
+    return hash;
   }
 
   private async saveBackup(backupId: string, data: Record<string, any>): Promise<void> {
@@ -424,8 +428,10 @@ export class BackupManager {
   }
 
   private async generateBackupId(): Promise<string> {
-    const crypto = require('crypto');
-    return crypto.randomBytes(16).toString('hex');
+    const randomBytes = await Crypto.getRandomBytesAsync(16);
+    return Array.from(randomBytes)
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
   }
 
   // Método para verificar estado de backups
@@ -445,4 +451,4 @@ export class BackupManager {
   }
 }
 
-export const backupManager = BackupManager.getInstance(); 
+export const backupManager = BackupManager.getInstance();

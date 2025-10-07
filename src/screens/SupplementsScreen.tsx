@@ -26,7 +26,7 @@ import { Supplement, User } from '../types';
 import { mockSupplements, useUserData } from '../data/mockData';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import type { MainTabParamList } from '../types/navigation';
-import { t } from '../data/i18n';
+import { t } from '../config/i18n';
 
 const { width } = Dimensions.get('window');
 
@@ -74,13 +74,13 @@ export default function SupplementsScreen() {
   const getTrimesterRecommendations = () => {
     switch (user.trimester) {
       case 1:
-        return t('firstTrimesterRecommendation');
+        return t('common.firstTrimesterRecommendation');
       case 2:
-        return t('secondTrimesterRecommendation');
+        return t('common.secondTrimesterRecommendation');
       case 3:
-        return t('thirdTrimesterRecommendation');
+        return t('common.thirdTrimesterRecommendation');
       default:
-        return t('customRecommendation');
+        return t('common.customRecommendation');
     }
   };
 
@@ -108,16 +108,16 @@ export default function SupplementsScreen() {
         {/* Header with trimester info */}
         <Card style={styles.headerCard}>
           <Card.Content>
-            <Title style={styles.headerTitle}>{t('supplements')}</Title>
+            <Title style={styles.headerTitle}>{t('common.supplements')}</Title>
             <Paragraph style={styles.headerSubtitle}>
               {getTrimesterRecommendations()}
             </Paragraph>
             <View style={styles.trimesterInfo}>
               <Chip mode="outlined" style={styles.trimesterChip}>
-                {user.trimester}{t('trimesterShort')}
+                {user.trimester}{t('common.trimesterShort')}
               </Chip>
               <Chip mode="outlined" style={styles.weekChip}>
-                {t('week')} {user.currentWeek}
+                {t('common.week')} {user.currentWeek}
               </Chip>
             </View>
           </Card.Content>
@@ -126,14 +126,14 @@ export default function SupplementsScreen() {
         {/* Personalized Recommendations */}
         <Card style={styles.card}>
           <Card.Content>
-            <Title style={styles.cardTitle}>{t('recommendationsForYou')}</Title>
+            <Title style={styles.cardTitle}>{t('supplements.recommendationsForYou')}</Title>
             {(user.preferences.dietaryRestrictions.length > 0 || user.preferences.allergies.length > 0) && (
               <Paragraph style={styles.recommendationText}>
                 {user.preferences.dietaryRestrictions.length > 0 && (
-                  <>{t('basedOnYourProfile')}: {user.preferences.dietaryRestrictions.join(', ')}</>
+                  <>{t('supplements.basedOnYourProfile')}: {user.preferences.dietaryRestrictions.join(', ')}</>
                 )}
                 {user.preferences.allergies.length > 0 && (
-                  <>| {t('allergies')}: {user.preferences.allergies.join(', ')}</>
+                  <>| {t('supplements.allergies')}: {user.preferences.allergies.join(', ')}</>
                 )}
               </Paragraph>
             )}
@@ -152,14 +152,14 @@ export default function SupplementsScreen() {
                   </Paragraph>
                   <View style={styles.supplementTags}>
                     {supplement.trimester.includes(user.trimester) && (
-                      <Badge style={styles.priorityBadge}>{t('priority')}</Badge>
+                      <Badge style={styles.priorityBadge}>{t('common.priority')}</Badge>
                     )}
                     <Chip 
                       mode="outlined" 
                       style={[styles.trimesterTag, { borderColor: getPriorityColor(supplement) }]}
                       textStyle={{ color: getPriorityColor(supplement) }}
                     >
-                      {supplement.trimester.join(', ')}{t('trimesterShort')}
+                      {supplement.trimester.join(', ')}{t('common.trimesterShort')}
                     </Chip>
                   </View>
                 </View>
@@ -170,7 +170,7 @@ export default function SupplementsScreen() {
               </View>
               
               <View style={styles.benefitsContainer}>
-                <Paragraph style={styles.benefitsTitle}>{t('mainBenefits')}</Paragraph>
+                <Paragraph style={styles.benefitsTitle}>{t('supplements.mainBenefits')}</Paragraph>
                 {supplement.benefits.slice(0, 2).map((benefit, idx) => (
                   <View key={`benefit-${idx}`} style={styles.benefitItem}>
                     <View style={styles.benefitContent}>
@@ -196,7 +196,7 @@ export default function SupplementsScreen() {
                   style={styles.actionButton}
                   onPress={() => showSupplementDetails(supplement)}
                 >
-                  {t('seeMedicalDetails')}
+                  {t('supplements.seeMedicalDetails')}
                 </Button>
                 <Button
                   mode="contained"
@@ -208,7 +208,7 @@ export default function SupplementsScreen() {
                     }
                   }}
                 >
-                  {t('buy')}
+                  {t('supplements.buy')}
                 </Button>
               </View>
             </Card.Content>
@@ -218,9 +218,9 @@ export default function SupplementsScreen() {
         {/* Medical Disclaimer */}
         <Card style={styles.disclaimerCard}>
           <Card.Content>
-            <Title style={styles.cardTitle}>{t('important')}</Title>
+            <Title style={styles.cardTitle}>{t('supplements.important')}</Title>
             <Paragraph style={styles.disclaimerText}>
-              {t('medicalDisclaimer')}
+              {t('supplements.medicalDisclaimer')}
             </Paragraph>
           </Card.Content>
         </Card>
@@ -229,7 +229,7 @@ export default function SupplementsScreen() {
       {/* Supplement Details Dialog */}
       <Portal>
         <Dialog visible={dialogVisible} onDismiss={() => setDialogVisible(false)}>
-          <Dialog.Title>{t('detailedMedicalInfo')}</Dialog.Title>
+          <Dialog.Title>{t('supplements.detailedMedicalInfo')}</Dialog.Title>
           <Dialog.Content>
             {selectedSupplement && (
               <ScrollView>
@@ -241,7 +241,7 @@ export default function SupplementsScreen() {
 
                 <Divider style={styles.divider} />
                 
-                <Title style={styles.dialogSectionTitle}>{t('benefits')}</Title>
+                <Title style={styles.dialogSectionTitle}>{t('supplements.benefits')}</Title>
                 {selectedSupplement.benefits.map((benefit, index) => (
                   <List.Item
                     key={benefit}
@@ -253,7 +253,7 @@ export default function SupplementsScreen() {
 
                 <Divider style={styles.divider} />
 
-                <Title style={styles.dialogSectionTitle}>{t('sideEffects')}</Title>
+                <Title style={styles.dialogSectionTitle}>{t('supplements.sideEffects')}</Title>
                 {selectedSupplement.sideEffects.map((effect, index) => (
                   <List.Item
                     key={effect}
@@ -265,7 +265,7 @@ export default function SupplementsScreen() {
 
                 <Divider style={styles.divider} />
 
-                <Title style={styles.dialogSectionTitle}>{t('contraindications')}</Title>
+                <Title style={styles.dialogSectionTitle}>{t('supplements.contraindications')}</Title>
                 {selectedSupplement.contraindications.map((contraindication, index) => (
                   <List.Item
                     key={contraindication}
@@ -277,7 +277,7 @@ export default function SupplementsScreen() {
 
                 <Divider style={styles.divider} />
 
-                <Title style={styles.dialogSectionTitle}>{t('certifications')}</Title>
+                <Title style={styles.dialogSectionTitle}>{t('supplements.certifications')}</Title>
                 <View style={styles.certificationsGrid}>
                   {selectedSupplement.certifications.map((cert) => (
                     <Chip key={cert} mode="outlined" style={styles.dialogCertificationChip}>
@@ -289,7 +289,7 @@ export default function SupplementsScreen() {
             )}
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={() => setDialogVisible(false)}>{t('close')}</Button>
+            <Button onPress={() => setDialogVisible(false)}>{t('common.close')}</Button>
             <Button mode="contained" onPress={() => {
               setDialogVisible(false);
               if (navigation) {

@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { TextInput, Button, Title, Paragraph, Card, Dialog, Portal } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as SecureStore from 'expo-secure-store';
-import { t } from '../data/i18n';
+import { t } from '../config/i18n';
 
 function calcularSemanas(ultimaRegla: Date) {
   const hoy = new Date();
@@ -55,12 +55,12 @@ export default function UltimaReglaScreen({ navigation }: any) {
     <View style={styles.container}>
       <Card style={styles.card}>
         <Card.Content>
-          <Title style={styles.title}>{t('lastMenstruationDate')}</Title>
-          <Paragraph>{t('thisAllowsUsToCalculateYourPregnancyWeek')}</Paragraph>
+          <Title style={styles.title}>{t('common.lastMenstruationDate')}</Title>
+          <Paragraph>{t('common.thisAllowsUsToCalculateYourPregnancyWeek')}</Paragraph>
           <Button mode="outlined" onPress={() => setShowPicker(true)} style={styles.button}>
-            {t('selectDate')}
+            {t('common.selectDate')}
           </Button>
-          <Paragraph style={styles.selectedDate}>{t('selectedDate')}: {date.toLocaleDateString()}</Paragraph>
+          <Paragraph style={styles.selectedDate}>{t('common.selectedDate')}: {date.toLocaleDateString()}</Paragraph>
         </Card.Content>
       </Card>
       {showPicker && (
@@ -74,17 +74,17 @@ export default function UltimaReglaScreen({ navigation }: any) {
       )}
       <Portal>
         <Dialog visible={confirmDialog} onDismiss={() => setConfirmDialog(false)}>
-          <Dialog.Title>{t('confirmPregnancyWeek')}</Dialog.Title>
+          <Dialog.Title>{t('common.confirmPregnancyWeek')}</Dialog.Title>
           <Dialog.Content>
             <Paragraph>
-              {t('accordingToTheDateEnteredYouHave')} <Title>{semanas}</Title> {t('pregnancyWeeks')}
+              {t('common.accordingToTheDateEnteredYouHave')} <Title>{semanas}</Title> {t('pregnancyWeeks')}
             </Paragraph>
             <Button mode="contained" onPress={handleConfirm} style={styles.button}>
-              {t('confirm')}
+              {t('common.confirm')}
             </Button>
-            <Paragraph style={{ marginTop: 16 }}>{t('ifNotCorrectYouCanModifyItManually')}:</Paragraph>
+            <Paragraph style={{ marginTop: 16 }}>{t('common.ifNotCorrectYouCanModifyItManually')}:</Paragraph>
             <TextInput
-              label={t('pregnancyWeek')}
+              label={t('common.pregnancyWeek')}
               value={customWeeks}
               onChangeText={setCustomWeeks}
               keyboardType="numeric"
@@ -95,7 +95,7 @@ export default function UltimaReglaScreen({ navigation }: any) {
               <Paragraph style={{ color: 'red', marginTop: 4, textAlign: 'center' }}>{error}</Paragraph>
             ) : null}
             <Button mode="outlined" onPress={handleCustomWeeks} style={styles.button}>
-              {t('customWeeks')}
+              {t('common.customWeeks')}
             </Button>
           </Dialog.Content>
         </Dialog>

@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { useLanguage } from '../context/LanguageContext';
-import { t } from '../data/i18n';
+import { t } from '../config/i18n';
 import { theme } from '../theme';
 import HomeScreen from '../screens/HomeScreen';
 import SupplementsScreen from '../screens/SupplementsScreen';
@@ -53,7 +53,7 @@ export default function LanguageAwareNavigator() {
         name="Home" 
         component={HomeScreen} 
         options={{ 
-          title: t('home'),
+          title: t('common.home'),
           headerShown: true
         }} 
       />
@@ -61,7 +61,7 @@ export default function LanguageAwareNavigator() {
         name="Suplementos" 
         component={SupplementsScreen} 
         options={{ 
-          title: t('supplements'),
+          title: t('common.supplements'),
           headerShown: true
         }} 
       />
@@ -69,7 +69,7 @@ export default function LanguageAwareNavigator() {
         name="Guía" 
         component={GuideScreen} 
         options={{ 
-          title: t('guide'),
+          title: t('common.guide'),
           headerShown: true
         }} 
       />
@@ -77,7 +77,7 @@ export default function LanguageAwareNavigator() {
         name="Comunidad" 
         component={CommunityScreen} 
         options={{ 
-          title: t('community'),
+          title: t('common.community'),
           headerShown: true
         }} 
       />
@@ -85,7 +85,7 @@ export default function LanguageAwareNavigator() {
         name="Tienda" 
         component={StoreScreen} 
         options={{ 
-          title: t('store'),
+          title: t('common.store'),
           headerShown: true
         }} 
       />

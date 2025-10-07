@@ -1,3 +1,4 @@
+import * as Crypto from 'expo-crypto';
 import { auditManager, AuditEventType } from './audit';
 import { securityManager } from './encryption';
 import { authManager } from './authentication';
@@ -414,8 +415,10 @@ export class SecurityMonitoringManager {
   }
 
   private async generateAlertId(): Promise<string> {
-    const crypto = require('crypto');
-    return crypto.randomBytes(16).toString('hex');
+    const randomBytes = await Crypto.getRandomBytesAsync(16);
+    return Array.from(randomBytes)
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
   }
 
   // Método para obtener métricas de seguridad
@@ -477,4 +480,4 @@ export interface SecurityMetrics {
   recentActivity: any[];
 }
 
-export const securityMonitoring = SecurityMonitoringManager.getInstance(); 
+export const securityMonitoring = SecurityMonitoringManager.getInstance();

@@ -1,4 +1,5 @@
 import * as SecureStore from 'expo-secure-store';
+import * as Crypto from 'expo-crypto';
 import { securityManager } from './encryption';
 
 export interface AuditEvent {
@@ -234,8 +235,10 @@ export class AuditManager {
   }
 
   private async generateEventId(): Promise<string> {
-    const crypto = require('crypto');
-    return crypto.randomBytes(16).toString('hex');
+    const randomBytes = await Crypto.getRandomBytesAsync(16);
+    return Array.from(randomBytes)
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
   }
 
   private async getAllAuditKeys(): Promise<string[]> {
@@ -276,4 +279,4 @@ export interface AuditReport {
   dataModificationEvents: AuditEvent[];
 }
 
-export const auditManager = AuditManager.getInstance(); 
+export const auditManager = AuditManager.getInstance();

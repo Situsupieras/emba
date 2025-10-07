@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme, Card, Avatar, Chip, FAB } from 'react-native-paper';
-import { t } from '../data/i18n';
+import { t } from '../config/i18n';
 import chatService, { ChatResponse } from '../data/chatService';
 import ChatMessage from '../components/ChatMessage';
 

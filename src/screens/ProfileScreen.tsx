@@ -6,7 +6,7 @@ import * as ImagePicker from 'expo-image-picker';
 import SecureStoreCompat from '../security/secureStore';
 import { Picker } from '@react-native-picker/picker';
 import { auth } from '../data/firebaseConfig';
-import { t } from '../data/i18n';
+import { t } from '../config/i18n';
 import { useLanguage } from '../context/LanguageContext';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -214,7 +214,7 @@ export default function ProfileScreen() {
             </TouchableOpacity>
             <View style={styles.userInfo}>
               <TextInput
-                label={t('name')}
+                label={t('common.name')}
                 value={displayName}
                 onChangeText={setDisplayName}
                 style={styles.nameInput}
@@ -249,7 +249,7 @@ export default function ProfileScreen() {
                 />
                 <TouchableOpacity onPress={() => setShowFumPicker(true)}>
                   <TextInput
-                    label={t('lastMenstruationDate')}
+                    label={t('common.lastMenstruationDate')}
                     value={fum ? new Date(fum).toLocaleDateString() : ''}
                     editable={false}
                     style={styles.input}
@@ -299,7 +299,7 @@ export default function ProfileScreen() {
               <View style={styles.infoDisplay}>
                 <View style={styles.infoRow}>
                   <Chip icon="calendar" style={styles.infoChip}>{t('profile.age')}: {age} {t('profile.years')}</Chip>
-                  <Chip icon="heart" style={styles.infoChip}>{t('week')}: {currentWeek}</Chip>
+                  <Chip icon="heart" style={styles.infoChip}>{t('common.week')}: {currentWeek}</Chip>
                 </View>
                 <View style={styles.infoRow}>
                   <Chip icon="baby-face" style={styles.infoChip}>{t('profile.previousChildren')}: {previousChildren}</Chip>
