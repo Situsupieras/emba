@@ -10,7 +10,6 @@ const KEY_PREFIX = 'iprn_';
 async function getItemAsync(key: string): Promise<NullableString> {
   if (!isWeb) {
     const SecureStore = await import('expo-secure-store');
-    // @ts-expect-error dynamic import type
     return SecureStore.getItemAsync(key);
   }
   try {
@@ -24,7 +23,6 @@ async function getItemAsync(key: string): Promise<NullableString> {
 async function setItemAsync(key: string, value: string): Promise<void> {
   if (!isWeb) {
     const SecureStore = await import('expo-secure-store');
-    // @ts-expect-error dynamic import type
     return SecureStore.setItemAsync(key, value);
   }
   try {
@@ -37,7 +35,6 @@ async function setItemAsync(key: string, value: string): Promise<void> {
 async function deleteItemAsync(key: string): Promise<void> {
   if (!isWeb) {
     const SecureStore = await import('expo-secure-store');
-    // @ts-expect-error dynamic import type
     return SecureStore.deleteItemAsync(key);
   }
   try {

@@ -1,8 +1,7 @@
 import * as SecureStore from 'expo-secure-store';
-import * as FileSystem from 'expo-file-system';
 import * as Crypto from 'expo-crypto';
 import { securityManager } from './encryption';
-import { auditManager } from './audit';
+import { auditManager, AuditEventType } from './audit';
 
 export interface BackupMetadata {
   id: string;
@@ -38,7 +37,7 @@ export enum BackupStatus {
 
 export class BackupManager {
   private static instance: BackupManager;
-  private config: BackupConfig;
+  private config!: BackupConfig;
   private backups: BackupMetadata[] = [];
   private isBackupInProgress = false;
 
@@ -163,7 +162,7 @@ export class BackupManager {
       await auditManager.logEvent({
         userId: 'system',
         sessionId: 'system',
-        eventType: 'backup',
+        eventType: AuditEventType.BACKUP,
         resource: 'backup',
         action: 'backup_created',
         details: {
@@ -176,18 +175,18 @@ export class BackupManager {
       
     } catch (error) {
       metadata.status = BackupStatus.FAILED;
-      metadata.errorMessage = error.message;
+      metadata.errorMessage = (error instanceof Error ? error.message : String(error));
       
       // Registrar error en auditoría
       await auditManager.logEvent({
         userId: 'system',
         sessionId: 'system',
-        eventType: 'backup',
+        eventType: AuditEventType.BACKUP,
         resource: 'backup',
         action: 'backup_failed',
         details: {
           backupId,
-          error: error.message
+          error: (error instanceof Error ? error.message : String(error))
         },
         success: false
       });
@@ -345,7 +344,7 @@ export class BackupManager {
       await auditManager.logEvent({
         userId: 'system',
         sessionId: 'system',
-        eventType: 'restore',
+        eventType: AuditEventType.RESTORE,
         resource: 'backup',
         action: 'backup_restored',
         details: {
@@ -360,12 +359,12 @@ export class BackupManager {
       await auditManager.logEvent({
         userId: 'system',
         sessionId: 'system',
-        eventType: 'restore',
+        eventType: AuditEventType.RESTORE,
         resource: 'backup',
         action: 'backup_restore_failed',
         details: {
           backupId,
-          error: error.message
+          error: (error instanceof Error ? error.message : String(error))
         },
         success: false
       });

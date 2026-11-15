@@ -21,6 +21,10 @@ export const mockUser: User = {
       communityUpdates: false,
     },
   },
+  createdAt: new Date('2025-01-01'),
+  updatedAt: new Date('2025-01-01'),
+  isEmailVerified: true,
+  lastLoginAt: new Date('2025-01-01'),
 };
 
 export const mockSupplements: Supplement[] = [
