@@ -25,11 +25,10 @@ import {
 } from 'react-native-paper';
 import { theme, customColors } from '../theme';
 import { MedicalFeedback, MedicalRecommendation, User, MedicalConflict } from '../types';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 import { t } from '../config/i18n';
 import { medicalSyncService, SyncResult } from '../data/medicalSync';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface MedicalFeedbackScreenProps {
   navigation: any;
@@ -93,6 +92,10 @@ export default function MedicalFeedbackScreen({ navigation }: MedicalFeedbackScr
             communityUpdates: true,
           },
         },
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isEmailVerified: false,
+        lastLoginAt: new Date(),
       });
     } catch (error) {
       console.error('Error loading user data:', error);
