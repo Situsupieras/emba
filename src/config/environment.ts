@@ -1,14 +1,10 @@
 // Configuración de entorno para Inteligencia Prenatal
 export const ENV = {
-  // Firebase Configuration
-  FIREBASE: {
-    API_KEY: process.env.EXPO_PUBLIC_FIREBASE_API_KEY || "AIzaSyCsNRmRkCugFoGP74aWR_086dQ7EN0ChXc",
-    AUTH_DOMAIN: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN || "inteligencia-prenatal.firebaseapp.com",
-    PROJECT_ID: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID || "inteligencia-prenatal",
-    STORAGE_BUCKET: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET || "inteligencia-prenatal.firebasestorage.app",
-    MESSAGING_SENDER_ID: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "567704618820",
-    APP_ID: process.env.EXPO_PUBLIC_FIREBASE_APP_ID || "1:567704618820:web:7b25e7a4e3660dd3c87911",
-    MEASUREMENT_ID: process.env.EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID || "G-TTCFEMFK96"
+  // Supabase Configuration (valores en .env, ver .env.example)
+  SUPABASE: {
+    URL: process.env.EXPO_PUBLIC_SUPABASE_URL || "",
+    // Clave publishable (sb_publishable_...) o anon: es pública, la protección real es RLS
+    KEY: process.env.EXPO_PUBLIC_SUPABASE_KEY || ""
   },
   
   // App Configuration

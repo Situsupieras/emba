@@ -26,7 +26,7 @@ import { Ionicons } from '@expo/vector-icons';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import type { MainTabParamList } from '../types/navigation';
 import * as SecureStore from 'expo-secure-store';
-import { auth } from '../data/firebaseConfig';
+import { supabase } from '../data/supabaseClient';
 import { t } from '../config/i18n';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -178,7 +178,7 @@ export default function HomeScreen() {
   };
 
   const handleLogout = async () => {
-    await auth.signOut();
+    await supabase.auth.signOut();
   };
 
   if (loading) {

@@ -14,27 +14,6 @@ export interface User {
   lastLoginAt: Date;
 }
 
-// Tipos específicos para Firebase
-export interface FirebaseUser {
-  uid: string;
-  email: string | null;
-  displayName: string | null;
-  photoURL: string | null;
-  emailVerified: boolean;
-  isAnonymous: boolean;
-  metadata: {
-    creationTime: string;
-    lastSignInTime: string;
-  };
-}
-
-export interface FirebaseAuthError {
-  code: string;
-  message: string;
-  email?: string;
-  credential?: any;
-}
-
 export interface UserPreferences {
   dietaryRestrictions: string[];
   allergies: string[];
