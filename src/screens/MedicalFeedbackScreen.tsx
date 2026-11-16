@@ -29,7 +29,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 import { t } from '../config/i18n';
 import { medicalSyncService, SyncResult } from '../data/medicalSync';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 interface MedicalFeedbackScreenProps {
   navigation: any;
