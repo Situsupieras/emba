@@ -1,19 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { Card, Title, Paragraph, Button, Avatar, TextInput, ActivityIndicator, Chip } from 'react-native-paper';
-import { signOut, updateProfile, sendEmailVerification } from 'firebase/auth';
+import type { User } from '@supabase/supabase-js';
 import * as ImagePicker from 'expo-image-picker';
 import SecureStoreCompat from '../security/secureStore';
 import { Picker } from '@react-native-picker/picker';
-import { auth } from '../data/firebaseConfig';
+import { supabase } from '../data/supabaseClient';
 import { t } from '../config/i18n';
 import { useLanguage } from '../context/LanguageContext';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function ProfileScreen() {
-  const user = auth.currentUser;
-  const [displayName, setDisplayName] = useState(user?.displayName || '');
-  const [photoURL, setPhotoURL] = useState(user?.photoURL || '');
+  // undefined = cargando, null = sin sesión
+  const [user, setUser] = useState<User | null | undefined>(undefined);
+  const [displayName, setDisplayName] = useState('');
+  const [photoURL, setPhotoURL] = useState('');
+  const emailVerified = !!user?.email_confirmed_at;
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      const current = data.user ?? null;
+      setUser(current);
+      setDisplayName(current?.user_metadata?.display_name || '');
+      setPhotoURL(current?.user_metadata?.avatar_url || '');
+    });
+  }, []);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
@@ -138,7 +149,7 @@ export default function ProfileScreen() {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
+      await supabase.auth.signOut();
     } catch (error) {
       setError(t('profile.errorLogout'));
     }
@@ -163,10 +174,10 @@ export default function ProfileScreen() {
     setError('');
     setSuccess('');
     try {
-      await updateProfile(user!, {
-        displayName,
-        photoURL: photoURL || undefined,
+      const { error: updateError } = await supabase.auth.updateUser({
+        data: { display_name: displayName, avatar_url: photoURL || null },
       });
+      if (updateError) throw updateError;
       await saveUserProfile();
       await savePregnancyReference();
     } catch (e: any) {
@@ -180,7 +191,8 @@ export default function ProfileScreen() {
     setVerifMsg('');
     setError('');
     try {
-      await sendEmailVerification(user!);
+      const { error: resendError } = await supabase.auth.resend({ type: 'signup', email: user!.email! });
+      if (resendError) throw resendError;
       setVerifMsg(t('profile.verificationSent'));
     } catch (e: any) {
       setError(e.message);
@@ -343,12 +355,12 @@ export default function ProfileScreen() {
             <Title style={styles.sectionTitle}>{t('profile.emailVerification')}</Title>
             <View style={styles.verificationStatus}>
               <Chip 
-                icon={user?.emailVerified ? 'check-circle' : 'alert-circle'} 
-                style={[styles.verificationChip, user?.emailVerified ? styles.verifiedChip : styles.notVerifiedChip]}
+                icon={emailVerified ? 'check-circle' : 'alert-circle'} 
+                style={[styles.verificationChip, emailVerified ? styles.verifiedChip : styles.notVerifiedChip]}
               >
-                {user?.emailVerified ? t('profile.emailVerified') : t('profile.emailNotVerified')}
+                {emailVerified ? t('profile.emailVerified') : t('profile.emailNotVerified')}
               </Chip>
-              {!user?.emailVerified && (
+              {!emailVerified && (
                 <Button 
                   mode="outlined" 
                   onPress={handleSendVerification} 

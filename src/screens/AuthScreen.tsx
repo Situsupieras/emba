@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { TextInput, Button, Title, Paragraph, Card, Divider } from 'react-native-paper';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
-import { auth } from '../data/firebaseConfig';
+import { supabase } from '../data/supabaseClient';
 import { t } from '../config/i18n';
 import { Picker } from '@react-native-picker/picker';
 import * as SecureStore from 'expo-secure-store';
@@ -41,9 +40,15 @@ export default function AuthScreen({ navigation }: any) {
 
     try {
       if (isLogin) {
-        await signInWithEmailAndPassword(auth, email, password);
+        const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+        if (signInError) throw signInError;
       } else {
-        await createUserWithEmailAndPassword(auth, email, password);
+        const { error: signUpError } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { data: { display_name: name } },
+        });
+        if (signUpError) throw signUpError;
         // Guardar datos adicionales en SecureStore
         const userData = {
           name,
@@ -65,17 +70,18 @@ export default function AuthScreen({ navigation }: any) {
       console.log('Error de autenticación:', e);
       let errorMessage = 'Error de autenticación';
       
-      if (e.code === 'auth/email-already-in-use') {
+      // Códigos de error de Supabase Auth (AuthApiError.code)
+      if (e.code === 'user_already_exists') {
         errorMessage = 'Este correo ya está registrado. Intenta iniciar sesión.';
-      } else if (e.code === 'auth/weak-password') {
+      } else if (e.code === 'weak_password') {
         errorMessage = 'La contraseña debe tener al menos 6 caracteres';
-      } else if (e.code === 'auth/invalid-email') {
+      } else if (e.code === 'email_address_invalid' || e.code === 'validation_failed') {
         errorMessage = 'Correo electrónico inválido';
-      } else if (e.code === 'auth/user-not-found') {
-        errorMessage = 'Usuario no encontrado. Verifica tu correo.';
-      } else if (e.code === 'auth/wrong-password') {
-        errorMessage = 'Contraseña incorrecta';
-      } else if (e.code === 'auth/too-many-requests') {
+      } else if (e.code === 'invalid_credentials') {
+        errorMessage = 'Correo o contraseña incorrectos';
+      } else if (e.code === 'email_not_confirmed') {
+        errorMessage = 'Confirma tu correo antes de iniciar sesión.';
+      } else if (e.code === 'over_request_rate_limit' || e.code === 'over_email_send_rate_limit') {
         errorMessage = 'Demasiados intentos. Intenta más tarde.';
       }
       
@@ -97,7 +103,8 @@ export default function AuthScreen({ navigation }: any) {
       return;
     }
     try {
-      await sendPasswordResetEmail(auth, email);
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email);
+      if (resetError) throw resetError;
       setResetSent(true);
     } catch (e: any) {
       setError(e.message);

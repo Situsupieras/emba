@@ -84,7 +84,7 @@ export class GDPRManager {
         legalBasis: 'Ejecución del contrato',
         retentionPeriod: 'Mientras la cuenta esté activa',
         dataSubjects: ['Nombre', 'Email', 'Fecha de nacimiento'],
-        thirdParties: ['Firebase Auth'],
+        thirdParties: ['Supabase Auth'],
         safeguards: ['Encriptación AES-256', 'Autenticación biométrica']
       },
       {
