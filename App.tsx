@@ -9,16 +9,13 @@ import MedicalFeedbackScreen from './src/screens/MedicalFeedbackScreen';
 import SecureStoreCompat from './src/security/secureStore';
 import type { RootStackParamList, MainTabParamList } from './src/types/navigation';
 import { View, Text, Platform, ActivityIndicator } from 'react-native';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from './src/data/firebaseConfig';
+import { supabase } from './src/data/supabaseClient';
 import * as Notifications from 'expo-notifications';
 import { t } from './src/config/i18n';
 import { LanguageProvider } from './src/context/LanguageContext';
 import { UserProvider } from './src/context/UserContext';
 import LanguageAwareNavigator from './src/components/LanguageAwareNavigator';
 import { securityFramework } from './src/security';
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -62,10 +59,11 @@ export default function App() {
       setSecurityInitialized(true);
       
       // Luego inicializar el resto de la app
-      const auth = getAuth();
-      onAuthStateChanged(auth, (user) => {
-        setUser(user);
-        setLoading(false);
+      const { data } = await supabase.auth.getSession();
+      setUser(data.session?.user ?? null);
+      setLoading(false);
+      supabase.auth.onAuthStateChange((_event, session) => {
+        setUser(session?.user ?? null);
       });
     } catch (error) {
       console.error('App initialization failed:', error);
@@ -75,7 +73,6 @@ export default function App() {
   // Configuración de notificaciones
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
-      shouldShowAlert: true,
       shouldPlaySound: false,
       shouldSetBadge: false,
       shouldShowBanner: true,
